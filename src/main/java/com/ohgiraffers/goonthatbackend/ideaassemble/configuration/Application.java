@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend;
+package com.ohgiraffers.goonthatbackend.ideaassemble.configuration;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
