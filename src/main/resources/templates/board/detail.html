@@ -25,6 +25,9 @@
     vertical-align: top;
     border-bottom: 1px solid #ccc;
   }
+  .comment {
+    margin-top: 10px;
+  }
 
   h6 {
     display: block;
@@ -39,7 +42,7 @@
   }
 </style>
 <body>
-<form method="get" action="write_action.php">
+<form action="/board/detail" method="get">
   <table style="padding-top:50px" align="center" width=750 border=0 cellpadding=2>
     <tr>
       <td height=20 align=center bgcolor=#ccc><font color=white>자유게시판</font></td>
@@ -82,16 +85,15 @@
             </td>
           </tr>
         </table>
-
-        <center>
-          <button type="button">수정</button>
-          <button type="button">삭제</button>
-          <button type="button">목록</button>
-        </center>
       </td>
     </tr>
   </table>
 </form>
+        <center>
+          <button type="button">수정</button>
+          <button type="button">삭제</button>
+          <button onclick="location.href='/board/list'">목록</button>
+        </center>
 <script>
   // var likeCount = 0;
   // var comments = [];
