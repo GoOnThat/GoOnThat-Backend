@@ -14,4 +14,9 @@ public class MainController {
     }
 
 
+    @GetMapping("board/blog")
+    public String blog() {
+
+        return "board/blog";
+    }
 }
