@@ -5,25 +5,24 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/board/*")
+@RequestMapping("/board")
 public class BoardController {
 
+        @GetMapping("/list")
+        public String list() {
 
-        @GetMapping("")
-        public String List() {
-
-                return "board/list";
+                return  "board/list";
         }
 
-
         @GetMapping("/write")
-        public void Write() {
+        public String write() {
 
+                return "board/write";
         }
 
         @GetMapping("/detail")
-        public void Detail() {
-
+        public String detail() {
+                return "board/detail";
         }
     }
 
