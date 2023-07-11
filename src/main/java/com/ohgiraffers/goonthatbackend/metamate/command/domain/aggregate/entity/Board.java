@@ -3,6 +3,7 @@ package com.ohgiraffers.goonthatbackend.metamate.command.domain.aggregate.entity
 import lombok.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
 import java.util.Date;
 
 @Data
