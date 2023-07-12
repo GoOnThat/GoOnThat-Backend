@@ -1,18 +1,20 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.entity;
 
+import com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo.BoardDate;
+import com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo.BoardWriter;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 
-@Data
 @Entity
+@Table(name = "FREE_BOARD")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Board {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="BOARD_ID")
-    private int boardId;
+    @Column(name="BOARD_NO")
+    private Long boardNo;
 
     @Column(name="BOARD_CATEGORY", length=20, nullable = false)
     private String boardCategory;
@@ -34,8 +36,6 @@ public class Board {
 
     @Embedded
     private BoardDate boardDate;
-
-
 
     @Builder
     public Board(String boardTitle, String boardContent, BoardWriter boardWriter) {

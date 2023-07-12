@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
