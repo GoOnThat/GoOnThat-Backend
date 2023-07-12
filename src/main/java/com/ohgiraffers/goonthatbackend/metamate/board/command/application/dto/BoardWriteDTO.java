@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.command.application.dto;
+package com.ohgiraffers.goonthatbackend.metamate.board.command.application.dto;
 
 public class BoardWriteDTO {
 

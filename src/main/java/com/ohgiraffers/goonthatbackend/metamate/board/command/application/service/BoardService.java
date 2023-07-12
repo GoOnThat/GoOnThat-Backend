@@ -1,6 +1,5 @@
-package com.ohgiraffers.goonthatbackend.metamate.command.application.service;
+package com.ohgiraffers.goonthatbackend.metamate.board.command.application.service;
 
-import com.ohgiraffers.goonthatbackend.metamate.command.domain.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

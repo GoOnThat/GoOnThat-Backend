@@ -1,10 +1,9 @@
-package com.ohgiraffers.goonthatbackend.metamate.command.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
-import java.util.Date;
 
 @Data
 @Entity
@@ -24,8 +23,8 @@ public class Board {
     @Column(name="BOARD_CONTENT", columnDefinition = "TEXT",nullable = false)
     private String boardContent;
 
-    @Column(name="BOARD_WRITER",length =100,nullable = false)
-    private String boardWriter;
+    @Embedded
+    private BoardWriter boardWriter;
 
     @Column(name="BOARD_HITS",nullable = false)
     private int boardHits;
@@ -33,14 +32,13 @@ public class Board {
     @Column(name="BOARD_DELETE_YN",nullable = false)
     private String boardDeleteYn;
 
-    @Column(name="BOARD_CREATED_DATE",nullable = false)
-    private Date boardCreatedDate;
+    @Embedded
+    private BoardDate boardDate;
 
-    @Column(name="BOARD_MODIFIED_DATE",nullable = false)
-    private Date boardModifiedDate;
+
 
     @Builder
-    public Board(String boardTitle, String boardContent, String boardWriter) {
+    public Board(String boardTitle, String boardContent, BoardWriter boardWriter) {
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
         this.boardWriter = boardWriter;
