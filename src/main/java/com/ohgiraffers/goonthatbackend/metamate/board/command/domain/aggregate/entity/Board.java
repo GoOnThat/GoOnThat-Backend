@@ -1,7 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.entity;
 
-import com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo.BoardDate;
-import com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo.BoardWriter;
+import com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,20 +15,20 @@ public class Board {
     @Column(name="BOARD_NO")
     private Long boardNo;
 
-    @Column(name="BOARD_CATEGORY", length=20, nullable = false)
-    private String boardCategory;
+    @Embedded
+    private BoardCategory boardCategory;
 
-    @Column(name="BOARD_TITLE", length=100, nullable = false)
-    private String boardTitle;
+    @Embedded
+    private BoardTitle boardTitle;
 
-    @Column(name="BOARD_CONTENT", columnDefinition = "TEXT",nullable = false)
-    private String boardContent;
+    @Embedded
+    private BoardContent boardContent;
 
     @Embedded
     private BoardWriter boardWriter;
 
-    @Column(name="BOARD_HITS",nullable = false)
-    private int boardHits;
+    @Embedded
+    private BoardHits boardHits;
 
     @Column(name="BOARD_DELETE_YN",nullable = false)
     private String boardDeleteYn;
@@ -37,10 +36,5 @@ public class Board {
     @Embedded
     private BoardDate boardDate;
 
-    @Builder
-    public Board(String boardTitle, String boardContent, BoardWriter boardWriter) {
-        this.boardTitle = boardTitle;
-        this.boardContent = boardContent;
-        this.boardWriter = boardWriter;
-    }
+
 }

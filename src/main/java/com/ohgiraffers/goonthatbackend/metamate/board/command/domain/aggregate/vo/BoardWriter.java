@@ -14,11 +14,11 @@ public class BoardWriter {
 
     }
     public BoardWriter(Integer boardWriterMemberNo) {
-        validateNegativeMemberNo(boardWriterMemberNo);
+        validateMemberNo(boardWriterMemberNo);
         this.boardWriterMemberNo = boardWriterMemberNo;
     }
 
-    private void validateNegativeMemberNo(Integer boardWriterMemberNo) {
+    private void validateMemberNo(Integer boardWriterMemberNo) {
 
         if(boardWriterMemberNo < 0) {
             throw new IllegalArgumentException("회원번호는 음수일 수 없습니다.");
