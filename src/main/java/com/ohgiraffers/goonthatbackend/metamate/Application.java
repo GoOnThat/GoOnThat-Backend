@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.common;
+package com.ohgiraffers.goonthatbackend.metamate;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

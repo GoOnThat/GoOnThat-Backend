@@ -1,7 +1,12 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo;
 
-import javax.persistence.Column;
+import lombok.Getter;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
+@Getter
 public class BoardTitle {
 
     @Column(name="BOARD_TITLE", length=100, nullable = false)

@@ -1,9 +1,12 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo;
 
+import lombok.Getter;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
+@Getter
 public class BoardCategory {
 
     @Column(name="BOARD_CATEGORY", length=20, nullable = false)
