@@ -39,6 +39,10 @@ dependencies {
     annotationProcessor 'com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     runtimeOnly 'org.webjars:bootstrap:4.5.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
 
 }
