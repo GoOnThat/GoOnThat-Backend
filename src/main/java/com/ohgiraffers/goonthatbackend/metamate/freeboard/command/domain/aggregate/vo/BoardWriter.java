@@ -10,20 +10,22 @@ import javax.persistence.Embeddable;
 public class BoardWriter {
 
     @Column(name="BOARD_WRITER",nullable = false)
-    private Integer boardWriterMemberNo;
+    private String boardWriterMemberName;
 
     protected BoardWriter() {
 
     }
-    public BoardWriter(Integer boardWriterMemberNo) {
-        validateMemberNo(boardWriterMemberNo);
-        this.boardWriterMemberNo = boardWriterMemberNo;
+    public BoardWriter(String boardWriterMemberName) {
+        validateMemberNo(boardWriterMemberName);
+        this.boardWriterMemberName = boardWriterMemberName;
     }
 
-    private void validateMemberNo(Integer boardWriterMemberNo) {
+    private void validateMemberNo(String boardWriterMemberNo) {
 
-        if(boardWriterMemberNo < 0) {
-            throw new IllegalArgumentException("회원번호는 음수일 수 없습니다.");
+        if(boardWriterMemberName == null) {
+            throw new IllegalArgumentException("회원번호가 없습니다.");
+        }else if(boardWriterMemberName.equals("")){
+            throw new IllegalArgumentException("회원번호가 공백입니다.");
         }
     }
 

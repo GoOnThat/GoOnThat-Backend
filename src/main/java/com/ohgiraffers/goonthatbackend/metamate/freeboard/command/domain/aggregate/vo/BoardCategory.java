@@ -25,6 +25,8 @@ public class BoardCategory {
 
         if(boardCategoryNo==null){
             throw new IllegalArgumentException("카테고리를 지정해 주세요");
+        }else if(boardCategoryNo.equals("")){
+            throw new IllegalArgumentException("카테고리가 공백 입니다.");
         }
     }
 

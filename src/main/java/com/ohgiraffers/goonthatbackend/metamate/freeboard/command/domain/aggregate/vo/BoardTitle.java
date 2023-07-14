@@ -14,7 +14,6 @@ public class BoardTitle {
     protected  BoardTitle(){
 
     }
-
     public BoardTitle(String boardTitleName){
         validateTitleName(boardTitleName);
         this.boardTitleName=boardTitleName;
@@ -24,8 +23,8 @@ public class BoardTitle {
 
         if(boardTitleName==null){
             throw new IllegalArgumentException("제목을 입력해 주세요");
-        }else if(boardTitleName==""){
-            throw new IllegalArgumentException("제목을 입력해 주세요");
+        }else if(boardTitleName.equals("")){
+            throw new IllegalArgumentException("제목이 공백입니다.");
         }
     }
 }

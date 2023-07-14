@@ -30,11 +30,6 @@ public class BoardDate {
         this.boardModifiedDate = boardModifiedDate;
     }
 
-    private int getPeriod(LocalDate boardCreatedDate, LocalDate boardModifiedDate) {
-
-        return 1;
-    }
-
     private void validateIsPast(LocalDate boardCreatedDate) {
 
         if(boardCreatedDate.isAfter(LocalDate.now())) {

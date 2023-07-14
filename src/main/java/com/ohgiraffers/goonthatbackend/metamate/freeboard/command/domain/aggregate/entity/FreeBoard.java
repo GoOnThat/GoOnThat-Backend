@@ -3,7 +3,6 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggreg
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo.*;
 import lombok.*;
 import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Entity
 @Table(name="freeboard")
