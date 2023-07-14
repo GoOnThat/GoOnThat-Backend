@@ -16,11 +16,11 @@ public class BoardWriter {
 
     }
     public BoardWriter(String boardWriterMemberName) {
-        validateMemberNo(boardWriterMemberName);
+        validateMemberName(boardWriterMemberName);
         this.boardWriterMemberName = boardWriterMemberName;
     }
 
-    private void validateMemberNo(String boardWriterMemberNo) {
+    private void validateMemberName(String boardWriterMemberName) {
 
         if(boardWriterMemberName == null) {
             throw new IllegalArgumentException("회원번호가 없습니다.");

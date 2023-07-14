@@ -3,13 +3,13 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.d
 public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
-    private Integer boardWriter; //글 작성자
+    private String boardWriter; //글 작성자
     private String boardTitle;  //제목
     private String boardContent;    //내용
 
     public FreeBoardWriteDTO() {}
 
-    public FreeBoardWriteDTO(String boardCategory, Integer boardWriter, String boardTitle, String boardContent) {
+    public FreeBoardWriteDTO(String boardCategory, String boardWriter, String boardTitle, String boardContent) {
         this.boardCategory = boardCategory;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
@@ -24,11 +24,11 @@ public class FreeBoardWriteDTO {
         this.boardCategory = boardCategory;
     }
 
-    public Integer getBoardWriter() {
+    public String getBoardWriter() {
         return boardWriter;
     }
 
-    public void setBoardWriter(Integer boardWriter) {
+    public void setBoardWriter(String boardWriter) {
         this.boardWriter = boardWriter;
     }
 
