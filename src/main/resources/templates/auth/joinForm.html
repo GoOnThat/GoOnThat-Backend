@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="en"
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .container {
+      max-width: 560px;
+    }
+    .field-error {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+<section class="container">
+  <h1 class="text-center">회원가입</h1>
+  <form th:action="@{/auth/join}" method="POST" style="margin-left: 30%; margin-right: 30%; margin-bottom: 100px" th:object="${user}">
+    <fieldset>
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <div class="form-group">
+        <label for="email" class="form-label mt-2">이메일</label>
+        <input type="text" class="form-control" id="email"
+               th:field="*{email}" th:errorclass="form-err" placeholder="ID">
+        <small th:errors="*{email}" class="form-text form-err" >Err1</small>
+      </div>
+      <div class="form-group">
+        <label for="password" class="form-label mt-2">비밀번호</label>
+        <input type="password" class="form-control" id="password"
+               th:field="*{password}" th:errorclass="form-err" placeholder="PASSWORD">
+        <small th:errors="*{password}" class="form-text form-err">Err2</small>
+      </div>
+      <div class="form-group">
+        <label for="name" class="form-label mt-2">이름</label>
+        <input type="text" class="form-control" id="name"
+               th:field="*{name}" th:errorclass="form-err" placeholder="NAME">
+        <small th:errors="*{name}" class="form-text form-err">Err3</small>
+      </div>
+      <div class="form-group">
+        <label for="nickname" class="form-label mt-2">닉네임</label>
+        <input type="text" class="form-control" id="nickname"
+               th:field="*{nickname}" th:errorclass="form-err" placeholder="NICKNAME">
+        <small th:errors="*{nickname}" class="form-text form-err">Err4</small>
+      </div>
+      <div class="form-group">
+        <label for="number" class="form-label mt-2">기수</label>
+        <input type="number" class="form-control" id="number"
+               th:field="*{number}" th:errorclass="form-err" placeholder="EMAIL">
+        <small th:errors="*{number}" class="form-text form-err">Err5</small>
+      </div>
+      <div class="form-group">
+        <label for="major" class="form-label mt-2">전공</label>
+        <select id="major" th:field="*{major}" class="form-control text-white"
+                style="background-color: #479F76"
+                th:errorclass="form-error">
+          <option value="서버개발">서버개발</option>
+          <option value="3D모델링">3D모델링</option>
+          <option value="AI">AI</option>
+          <option value="XR-Unity">XR-Unity</option>
+          <option value="XR-Unreal">XR-Unreal</option>
+          <option value="컨텐츠기획">컨텐츠기획</option>
+          <option value="자율전공">자율전공</option>
+        </select>
+        <small th:errors="*{major}" class="form-text form-err">Err6</small>
+      </div>
+
+      <div th:if="${#fields.hasGlobalErrors()}" class="alert alert-dismissible alert-secondary"
+           style="margin-top: 20px">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Error Message</p>
+      </div>
+      <button type="submit" class="btn btn-primary" style="margin-top: 20px">회원가입</button>
+      <button type="button" onclick="window.location='/';" class="btn btn-outline-primary"
+              style="margin-top: 20px">홈으로</button>
+    </fieldset>
+  </form>
+</section>
+</body>
+</html>
