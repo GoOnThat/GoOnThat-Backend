@@ -1,22 +1,26 @@
-package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.board.command.domain.aggregate.vo;
+
+import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Temporal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Embeddable
+@Getter
 public class BoardDate {
 
+    @CreatedDate
     @Column(name="BOARD_CREATED_DATE",nullable = false)
     private LocalDate boardCreatedDate;
 
-    @Column(name="BOARD_MODIFIED_DATE",nullable = false)
+    @LastModifiedDate
+    @Column(name="BOARD_MODIFIED_DATE")
     private LocalDate boardModifiedDate;
 
-    @Column
-    private int period;
 
     protected BoardDate() {
     }
@@ -25,7 +29,6 @@ public class BoardDate {
         validateIsPast(boardCreatedDate);
         this.boardCreatedDate = boardCreatedDate;
         this.boardModifiedDate = boardModifiedDate;
-        this.period = getPeriod(boardCreatedDate, boardModifiedDate);
     }
 
     private int getPeriod(LocalDate boardCreatedDate, LocalDate boardModifiedDate) {
@@ -40,8 +43,4 @@ public class BoardDate {
         }
     }
 
-    public int getPeriod() {
-
-        return this.period;
-    }
 }
