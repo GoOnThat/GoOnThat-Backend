@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -7,6 +8,7 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class BoardDeleteYn {
 
     @Column(name="BOARD_DELETE_YN",nullable = false)
