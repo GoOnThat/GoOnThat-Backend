@@ -25,8 +25,8 @@ public class BoardContent {
 
         if(boardContentText==null){
             throw new IllegalArgumentException("내용을 입력해 주세요");
-        }else if(boardContentText==""){
-            throw new IllegalArgumentException("내용을 입력해 주세요");
+        }else if(boardContentText.equals("")){
+            throw new IllegalArgumentException("내용이 공백입니다.");
         }
 
     }
