@@ -19,7 +19,7 @@ public class FreeBoardMapper {
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         BoardDate boardDate = board.getBoardDate(); //글 작성일
         LocalDate boardCreateDate = board.getBoardDate().getBoardCreatedDate(); //글 작성일
-        Integer boardWriter = board.getBoardWriter().getBoardWriterMemberNo(); //글 작성자
+        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
         Integer boardHits = board.getBoardHits().getBoardHits(); //글 조회수
         String boardDeleteYn = board.getBoardDeleteYn().getBoardDeleteYn(); //글 삭제여부
 
@@ -45,7 +45,7 @@ public class FreeBoardMapper {
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
         BoardDate boardDate = board.getBoardDate(); //글 작성일
         LocalDate boardCreateDate = board.getBoardDate().getBoardCreatedDate(); //글 작성일
-        Integer boardWriter = board.getBoardWriter().getBoardWriterMemberNo(); //글 작성자
+        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         String boardContent = board.getBoardContent().getBoardContentText(); //내용
 
@@ -67,7 +67,7 @@ public class FreeBoardMapper {
 
         /* 엔티티에서 꺼냄 */
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
-        Integer boardWriter = board.getBoardWriter().getBoardWriterMemberNo(); //글 작성자
+        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         String boardContent = board.getBoardContent().getBoardContentText(); //내용
 

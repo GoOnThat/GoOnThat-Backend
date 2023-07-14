@@ -8,7 +8,7 @@ public class FreeBoardListDTO {
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목
     private LocalDate boardCreateDate; //글 작성일
-    private Integer boardWriter;    //글 작성자
+    private String boardWriter;    //글 작성자
     private Integer boardHits;      //글 조회수
     private String boardDeleteYn;    //글 삭제여부
 
@@ -16,7 +16,7 @@ public class FreeBoardListDTO {
 
     }
 
-    public FreeBoardListDTO(long boardNo, String boardCategory, String boardTitle, LocalDate boardCreateDate, Integer boardWriter, Integer boardHits, String boardDeleteYn) {
+    public FreeBoardListDTO(long boardNo, String boardCategory, String boardTitle, LocalDate boardCreateDate, String boardWriter, Integer boardHits, String boardDeleteYn) {
         this.boardNo = boardNo;
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
@@ -58,11 +58,11 @@ public class FreeBoardListDTO {
         this.boardCreateDate = boardCreateDate;
     }
 
-    public Integer getBoardWriter() {
+    public String getBoardWriter() {
         return boardWriter;
     }
 
-    public void setBoardWriter(Integer boardWriter) {
+    public void setBoardWriter(String boardWriter) {
         this.boardWriter = boardWriter;
     }
 

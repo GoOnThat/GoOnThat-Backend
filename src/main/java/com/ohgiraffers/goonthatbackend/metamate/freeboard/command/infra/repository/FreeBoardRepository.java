@@ -1,4 +1,4 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.infra.repository;
 
-public class Repository {
+public class FreeBoardRepository {
 }
