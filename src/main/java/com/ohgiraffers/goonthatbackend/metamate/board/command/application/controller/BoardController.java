@@ -3,26 +3,34 @@ package com.ohgiraffers.goonthatbackend.metamate.board.command.application.contr
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/board")
 public class BoardController {
 
         @GetMapping("/list")
-        public String list() {
+        public ModelAndView list(ModelAndView mv) {
 
-                return  "board/list";
+                mv.setViewName("/board/list");
+
+                return  mv;
         }
 
         @GetMapping("/write")
-        public String write() {
+        public ModelAndView write(ModelAndView mv) {
 
-                return "board/write";
+                mv.setViewName("/board/write");
+
+                return mv;
         }
 
         @GetMapping("/detail")
-        public String detail() {
-                return "board/detail";
+        public ModelAndView detail(ModelAndView mv) {
+
+                mv.setViewName("board/detail");
+
+                return mv;
         }
     }
 
