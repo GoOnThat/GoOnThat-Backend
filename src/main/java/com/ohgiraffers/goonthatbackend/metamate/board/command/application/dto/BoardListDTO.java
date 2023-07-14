@@ -1,20 +1,22 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.application.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BoardListDTO {
 
     private long boardNo;   //번호
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목
-    private java.util.Date boardCreateDate; //글 작성일
-    private String boardWriter;    //글 작성자
-    private int boardHits;      //글 조회수
-    private String boardDeleteYn;    //글 삭제야부
+    private LocalDate boardCreateDate; //글 작성일
+    private Integer boardWriter;    //글 작성자
+    private Integer boardHits;      //글 조회수
+    private String boardDeleteYn;    //글 삭제여부
 
-    public BoardListDTO() {}
+    public BoardListDTO() {
 
-    public BoardListDTO(long boardNo, String boardCategory, String boardTitle, Date boardCreateDate, String boardWriter, int boardHits, String boardDeleteYn) {
+    }
+
+    public BoardListDTO(long boardNo, String boardCategory, String boardTitle, LocalDate boardCreateDate, Integer boardWriter, Integer boardHits, String boardDeleteYn) {
         this.boardNo = boardNo;
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
@@ -48,27 +50,27 @@ public class BoardListDTO {
         this.boardTitle = boardTitle;
     }
 
-    public Date getBoardCreateDate() {
+    public LocalDate getBoardCreateDate() {
         return boardCreateDate;
     }
 
-    public void setBoardCreateDate(Date boardCreateDate) {
+    public void setBoardCreateDate(LocalDate boardCreateDate) {
         this.boardCreateDate = boardCreateDate;
     }
 
-    public String getBoardWriter() {
+    public Integer getBoardWriter() {
         return boardWriter;
     }
 
-    public void setBoardWriter(String boardWriter) {
+    public void setBoardWriter(Integer boardWriter) {
         this.boardWriter = boardWriter;
     }
 
-    public int getBoardHits() {
+    public Integer getBoardHits() {
         return boardHits;
     }
 
-    public void setBoardHits(int boardHits) {
+    public void setBoardHits(Integer boardHits) {
         this.boardHits = boardHits;
     }
 
@@ -87,9 +89,10 @@ public class BoardListDTO {
                 ", boardCategory='" + boardCategory + '\'' +
                 ", boardTitle='" + boardTitle + '\'' +
                 ", boardCreateDate=" + boardCreateDate +
-                ", boardWriter='" + boardWriter + '\'' +
+                ", boardWriter=" + boardWriter +
                 ", boardHits=" + boardHits +
                 ", boardDeleteYn='" + boardDeleteYn + '\'' +
                 '}';
     }
 }
+

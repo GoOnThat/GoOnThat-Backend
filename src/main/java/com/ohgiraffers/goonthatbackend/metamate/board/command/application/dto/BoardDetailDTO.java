@@ -1,18 +1,19 @@
 package com.ohgiraffers.goonthatbackend.metamate.board.command.application.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class BoardDetailDTO {
 
     private String boardCategory;   //카테고리
-    private java.util.Date boardCreateDate; //글 작성일
-    private String boardWriter; //글 작성자
+    private LocalDate boardCreateDate; //글 작성일
+    private Integer boardWriter; //글 작성자
     private String boardTitle;  //제목
     private String boardContent;    //내용
 
     public BoardDetailDTO() {}
 
-    public BoardDetailDTO(String boardCategory, Date boardCreateDate, String boardWriter, String boardTitle, String boardContent) {
+    public BoardDetailDTO(String boardCategory, LocalDate boardCreateDate, Integer boardWriter, String boardTitle, String boardContent) {
         this.boardCategory = boardCategory;
         this.boardCreateDate = boardCreateDate;
         this.boardWriter = boardWriter;
@@ -28,19 +29,19 @@ public class BoardDetailDTO {
         this.boardCategory = boardCategory;
     }
 
-    public Date getBoardCreateDate() {
+    public LocalDate getBoardCreateDate() {
         return boardCreateDate;
     }
 
-    public void setBoardCreateDate(Date boardCreateDate) {
+    public void setBoardCreateDate(LocalDate boardCreateDate) {
         this.boardCreateDate = boardCreateDate;
     }
 
-    public String getBoardWriter() {
+    public Integer getBoardWriter() {
         return boardWriter;
     }
 
-    public void setBoardWriter(String boardWriter) {
+    public void setBoardWriter(Integer boardWriter) {
         this.boardWriter = boardWriter;
     }
 
@@ -65,7 +66,7 @@ public class BoardDetailDTO {
         return "BoardDetailDTO{" +
                 "boardCategory='" + boardCategory + '\'' +
                 ", boardCreateDate=" + boardCreateDate +
-                ", boardWriter='" + boardWriter + '\'' +
+                ", boardWriter=" + boardWriter +
                 ", boardTitle='" + boardTitle + '\'' +
                 ", boardContent='" + boardContent + '\'' +
                 '}';

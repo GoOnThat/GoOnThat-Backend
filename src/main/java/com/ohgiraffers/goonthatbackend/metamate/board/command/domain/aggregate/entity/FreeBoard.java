@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class Board {
+public class FreeBoard {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="BOARD_NO")

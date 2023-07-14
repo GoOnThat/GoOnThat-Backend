@@ -3,19 +3,13 @@ package com.ohgiraffers.goonthatbackend.metamate.board.command.application.dto;
 public class BoardWriteDTO {
 
     private String boardCategory;   //카테고리
-    private String boardWriter; //글 작성자
+    private Integer boardWriter; //글 작성자
     private String boardTitle;  //제목
     private String boardContent;    //내용
 
     public BoardWriteDTO() {}
 
-    public BoardWriteDTO(String boardCategory, String boardTitle, String boardContent) {
-        this.boardCategory = boardCategory;
-        this.boardTitle = boardTitle;
-        this.boardContent = boardContent;
-    }
-
-    public BoardWriteDTO(String boardCategory, String boardWriter, String boardTitle, String boardContent) {
+    public BoardWriteDTO(String boardCategory, Integer boardWriter, String boardTitle, String boardContent) {
         this.boardCategory = boardCategory;
         this.boardWriter = boardWriter;
         this.boardTitle = boardTitle;
@@ -30,11 +24,11 @@ public class BoardWriteDTO {
         this.boardCategory = boardCategory;
     }
 
-    public String getBoardWriter() {
+    public Integer getBoardWriter() {
         return boardWriter;
     }
 
-    public void setBoardWriter(String boardWriter) {
+    public void setBoardWriter(Integer boardWriter) {
         this.boardWriter = boardWriter;
     }
 
@@ -58,7 +52,7 @@ public class BoardWriteDTO {
     public String toString() {
         return "BoardWriteDTO{" +
                 "boardCategory='" + boardCategory + '\'' +
-                ", boardWriter='" + boardWriter + '\'' +
+                ", boardWriter=" + boardWriter +
                 ", boardTitle='" + boardTitle + '\'' +
                 ", boardContent='" + boardContent + '\'' +
                 '}';
