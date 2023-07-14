@@ -31,6 +31,7 @@ public class FreeBoardController {
                 mv.setViewName("board/detail");
 
                 return mv;
+
         }
     }
 
