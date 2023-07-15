@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -7,23 +8,24 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class BoardHits {
 
-    @Column(name="BOARD_HITS",nullable = false)
+    @Column(name = "BOARD_HITS", nullable = false)
     private Integer boardHits;
 
-    protected BoardHits(){
+    protected BoardHits() {
 
     }
 
-    public BoardHits(Integer boardHits){
+    public BoardHits(Integer boardHits) {
         validateBoardHits(boardHits);
-        this.boardHits=boardHits;
+        this.boardHits = boardHits;
     }
 
     private void validateBoardHits(Integer boardHits) {
 
-        if(boardHits<0){
+        if (boardHits < 0) {
             throw new IllegalArgumentException("조회수는 음수일 수 없습니다.");
         }
     }
