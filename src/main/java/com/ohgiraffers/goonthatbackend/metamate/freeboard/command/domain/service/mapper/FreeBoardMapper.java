@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service.mapper;
 
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
@@ -18,9 +19,7 @@ public class FreeBoardMapper {
         Long boardNo = board.getBoardNo(); //번호
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
-        BoardDate boardDate = board.getBoardDate(); //글 작성일
-        LocalDate boardCreateDate = board.getBoardDate().getBoardCreatedDate(); //글 작성일
-        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
+        String boardWriter = board.getBoardWriter().getMetaUser().getNickname(); //글 작성자
         Integer boardHits = board.getBoardHits().getBoardHits(); //글 조회수
         String boardDeleteYn = board.getBoardDeleteYn().getBoardDeleteYn(); //글 삭제여부
 
@@ -29,8 +28,6 @@ public class FreeBoardMapper {
         boardListDTO.setBoardNo(boardNo);
         boardListDTO.setBoardCategory(boardCategory);
         boardListDTO.setBoardTitle(boardTitle);
-        boardListDTO.setBoardCreateDate(boardDate.getBoardCreatedDate());
-        boardListDTO.setBoardCreateDate(boardCreateDate);
         boardListDTO.setBoardWriter(boardWriter);
         boardListDTO.setBoardHits(boardHits);
         boardListDTO.setBoardDeleteYn(boardDeleteYn);
@@ -44,18 +41,13 @@ public class FreeBoardMapper {
 
         /* 엔티티에서 꺼냄 */
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
-        BoardDate boardDate = board.getBoardDate(); //글 작성일
-        LocalDate boardCreateDate = board.getBoardDate().getBoardCreatedDate(); //글 작성일
-//        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
-        String boardWriter = "남효정"; //글 작성자
+        String boardWriter = board.getBoardWriter().getMetaUser().getNickname();  //글 작성자
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         String boardContent = board.getBoardContent().getBoardContentText(); //내용
 
         /* 엔티티에서 꺼낸 값을 DTO로 옮김 */
         FreeBoardDetailDTO boardDetailDTO = new FreeBoardDetailDTO();
         boardDetailDTO.setBoardCategory(boardCategory);
-        boardDetailDTO.setBoardCreateDate(boardDate.getBoardCreatedDate());
-        boardDetailDTO.setBoardCreateDate(boardCreateDate);
         boardDetailDTO.setBoardWriter(boardWriter);
         boardDetailDTO.setBoardTitle(boardTitle);
         boardDetailDTO.setBoardContent(boardContent);
@@ -69,7 +61,7 @@ public class FreeBoardMapper {
 
         /* 엔티티에서 꺼냄 */
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
-        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
+        String boardWriter = board.getBoardWriter().getMetaUser().getNickname();  //글 작성자
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         String boardContent = board.getBoardContent().getBoardContentText(); //내용
 
@@ -90,7 +82,6 @@ public class FreeBoardMapper {
                  new BoardTitle(freeBoardWriteDTO.getBoardTitle())
                 ,new BoardContent(freeBoardWriteDTO.getBoardContent())
                 ,new BoardDeleteYn(freeBoardWriteDTO.getBoardDeleteYn())
-                ,new BoardDate(freeBoardWriteDTO.getBoardCreateDate(), freeBoardWriteDTO.getBoardModifiedDate())
                 ,new BoardCategory(freeBoardWriteDTO.getBoardCategory())
         );
 
@@ -112,7 +103,6 @@ public class FreeBoardMapper {
         FreeBoard freeBoard = new FreeBoard(
                     freeBoardListDTO.getBoardNo()
                 , new BoardTitle(freeBoardListDTO.getBoardTitle())
-                ,new BoardDate(freeBoardListDTO.getBoardCreateDate(), freeBoardListDTO.getBoardModifiedDate())
         );
 
         return freeBoard;

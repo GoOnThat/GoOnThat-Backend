@@ -13,8 +13,6 @@ public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목
-    private LocalDate boardCreateDate; //글 작성일
-    private LocalDate boardModifiedDate; //글 수정일
     private String boardWriter; //글 작성자
     private Integer boardHits; //글 조회수
     private String boardDeleteYn;    //글 삭제여부

@@ -1,32 +1,33 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.*;
 
 @Embeddable
 @Getter
 @EqualsAndHashCode
 public class BoardWriter {
 
-    @Column(name="BOARD_WRITER")
-    private String boardWriterMemberName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private MetaUser metaUser;
 
     protected BoardWriter() {
 
     }
-    public BoardWriter(String boardWriterMemberName) {
-        validateMemberName(boardWriterMemberName);
-        this.boardWriterMemberName = boardWriterMemberName;
+    public BoardWriter(MetaUser metaUser) {
+        validateMemberName(metaUser);
+        this.metaUser = metaUser;
     }
 
-    private void validateMemberName(String boardWriterMemberName) {
+    private void validateMemberName(MetaUser metaUser) {
 
-        if(boardWriterMemberName == null) {
+        if(metaUser.getId() == null) {
             throw new IllegalArgumentException("회원번호가 없습니다.");
-        }else if(boardWriterMemberName.equals("")){
+        }else if(metaUser.getId().equals("")){
             throw new IllegalArgumentException("회원번호가 공백입니다.");
         }
     }

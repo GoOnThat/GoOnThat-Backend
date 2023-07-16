@@ -9,6 +9,7 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.se
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,13 +50,14 @@ public class FreeBoardController {
 
     /* 글쓰기 페이지 작성 */
     @PostMapping("/write")
-    public String enrollContent(@LoginUser SessionMetaUser user,
-                                FreeBoardWriteDTO freeBoardWrite) {
-      
-        LocalDate currentTime = LocalDate.now();
-        freeBoardWrite.setBoardCreateDate(currentTime);
-        freeBoardWrite.setBoardModifiedDate(currentTime);
-        freeBoardWrite.setBoardDeleteYn("N");
+    public String enrollContent(
+            @LoginUser SessionMetaUser user,
+            @ModelAttribute("user") FreeBoardWriteDTO freeBoardWrite,
+            Model model) {
+
+        if(user==null){
+            return "redirect:/auth/login";
+        }
 
         freeBoardService.write(freeBoardWrite);
 

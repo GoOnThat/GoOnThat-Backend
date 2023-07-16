@@ -20,14 +20,13 @@ public class FreeBoardService {
 
     @Autowired
     public FreeBoardService(FreeBoardRepository freeBoardRepository, FreeBoardMapper freeBoardMapper) {
-        this.freeBoardMapper=freeBoardMapper;
+        this.freeBoardMapper = freeBoardMapper;
         this.freeBoardRepository = freeBoardRepository;
     }
 
     public void write(FreeBoardWriteDTO freeBoardWrite) {
 
         FreeBoard freeBoard = freeBoardMapper.toFreeBoardWrite(freeBoardWrite);
-
         freeBoard.setBoardDeleteYn(new BoardDeleteYn("N"));
 
         freeBoardRepository.save(freeBoard);
@@ -50,7 +49,7 @@ public class FreeBoardService {
     public FreeBoardDetailDTO detailBoard(Long boardNo) {
         FreeBoard freeBoard = freeBoardRepository.findById(boardNo).orElse(null);
 
-        FreeBoardDetailDTO board=FreeBoardDetailDTO.entityToDTO(freeBoard);
+        FreeBoardDetailDTO board = FreeBoardDetailDTO.entityToDTO(freeBoard);
         System.out.println(freeBoardMapper.boardDetailDTO(freeBoard));
         if (freeBoard != null) {
             return board;

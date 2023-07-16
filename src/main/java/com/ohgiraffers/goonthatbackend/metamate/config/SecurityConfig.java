@@ -64,6 +64,7 @@ public class SecurityConfig {
 //                        .mvcMatchers("/admin/**").hasAnyRole(Role.ADMIN.name())
 //                        .mvcMatchers("/associate").hasAnyRole(Role.ASSOCIATE.name())
 //                        .mvcMatchers("/api/**").permitAll()
+//                        .mvcMatchers("/board/**").hasRole(Role.USER.name())
                         .mvcMatchers(
 //                                HttpMethod.GET,
                                 "/**"
