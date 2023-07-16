@@ -31,5 +31,6 @@ public class FreeBoard extends AuditingFields {
 
     private BoardDeleteYn boardDeleteYn;
 
+
 }
 

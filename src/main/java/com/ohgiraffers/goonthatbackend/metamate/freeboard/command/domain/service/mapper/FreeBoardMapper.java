@@ -79,10 +79,10 @@ public class FreeBoardMapper {
     /* 엔티티로 바꿔서 글 등록 */
     public FreeBoard toFreeBoardWrite(FreeBoardWriteDTO freeBoardWriteDTO){
         FreeBoard freeBoard = new FreeBoard(
-                 new BoardTitle(freeBoardWriteDTO.getBoardTitle())
-                ,new BoardContent(freeBoardWriteDTO.getBoardContent())
-                ,new BoardDeleteYn(freeBoardWriteDTO.getBoardDeleteYn())
-                ,new BoardCategory(freeBoardWriteDTO.getBoardCategory())
+                new BoardTitle(freeBoardWriteDTO.getBoardTitle()),
+                new BoardContent(freeBoardWriteDTO.getBoardContent()),
+                new BoardDeleteYn(freeBoardWriteDTO.getBoardDeleteYn()),
+                new BoardCategory(freeBoardWriteDTO.getBoardCategory()),
         );
 
         return freeBoard;

@@ -27,7 +27,7 @@ public class FreeBoardService {
     public void write(FreeBoardWriteDTO freeBoardWrite) {
 
         FreeBoard freeBoard = freeBoardMapper.toFreeBoardWrite(freeBoardWrite);
-        freeBoard.setBoardDeleteYn(new BoardDeleteYn("N"));
+
 
         freeBoardRepository.save(freeBoard);
     }
