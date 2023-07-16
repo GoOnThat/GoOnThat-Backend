@@ -15,27 +15,34 @@ import java.time.LocalDate;
 public class BoardDate {
 
     @CreatedDate
-    @Column(name="BOARD_CREATED_DATE",nullable = false)
+    @Column(name = "BOARD_CREATED_DATE", nullable = false)
     private LocalDate boardCreatedDate;
 
     @LastModifiedDate
-    @Column(name="BOARD_MODIFIED_DATE")
+    @Column(name = "BOARD_MODIFIED_DATE")
     private LocalDate boardModifiedDate;
 
 
     protected BoardDate() {
     }
 
+    //등록
     public BoardDate(LocalDate boardCreatedDate, LocalDate boardModifiedDate) {
         validateIsPast(boardCreatedDate);
+        validateIsPast(boardModifiedDate);
         this.boardCreatedDate = boardCreatedDate;
         this.boardModifiedDate = boardModifiedDate;
     }
+    //수정
+    public BoardDate(LocalDate boardModifiedDate) {
+        validateIsPast(boardModifiedDate);
+        this.boardModifiedDate = boardModifiedDate;
+    }
 
-    private void validateIsPast(LocalDate boardCreatedDate) {
+    private void validateIsPast(LocalDate date) {
 
-        if(boardCreatedDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("작성일이 미래일 수 없습니다.");
+        if (date.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("작성이 미래일 수 없습니다.");
         }
     }
 
