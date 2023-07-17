@@ -28,7 +28,6 @@ public class CustomAuthFailureHandler extends SimpleUrlAuthenticationFailureHand
         String redirectUrl = "/auth/login?error=true&code=";
         int code;
 
-
         if (exception instanceof UsernameNotFoundException) {
             code = USER_NOT_FOUND.getCode();
         } else if (exception instanceof InternalAuthenticationServiceException) {

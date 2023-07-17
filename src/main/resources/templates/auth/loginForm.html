@@ -5,19 +5,10 @@
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
           href="../css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .container {
-            max-width: 560px;
-        }
-        .field-error {
-            border-color: #dc3545;
-            color: #dc3545;
-        }
-    </style>
 </head>
 <body>
 <section class="container">
-    <h1 class="text-center">로그인</h1>
+    <h1 class="py-5 text-center">로그인</h1>
     <form th:action="@{/auth/loginProc}" method="POST"
           style="margin-left: 30%; margin-right: 30%; margin-bottom: 100px">
         <fieldset>

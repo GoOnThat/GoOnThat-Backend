@@ -1,6 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.domain.user;
 
-import com.ohgiraffers.goonthatbackend.metamate.domain.BaseTimeEntity;
+import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import lombok.*;
 
 import javax.persistence.*;
@@ -8,7 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-public class MetaUser extends BaseTimeEntity {
+public class MetaUser extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,6 +35,7 @@ public class MetaUser extends BaseTimeEntity {
         this.major = major;
         this.role = role;
         this.provider = provider;
+
     }
 
     public void update(String nickname, String password) {

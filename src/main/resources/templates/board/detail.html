@@ -42,7 +42,6 @@
   }
 </style>
 <body>
-<form action="/board/detail" method="get">
   <table style="padding-top:50px" align="center" width=750 border=0 cellpadding=2>
     <tr>
       <td height=20 align=center bgcolor=#ccc><font color=white>자유게시판</font></td>
@@ -50,7 +49,7 @@
     <tr>
       <td bgcolor=white>
         <table class="table2">
-          <h6>2023.07.07</h6>
+          <h6 th:text="${detailBoard.boardCreateDate}"></h6>
           <tr>
             <td>작성자</td>
             <td></td>
@@ -58,14 +57,18 @@
 
           <tr>
             <td>제목</td>
-            <td></td>
+            <td th:text="${detailBoard.boardTitle}"></td>
           </tr>
 
           <tr>
             <td>내용</td>
             <td>
-              <div id="contentDisplay" style="border: 1px solid #ccc; padding: 5px; width: 600px; height: 200px; overflow-y: auto;"></div>
+              <div id="contentDisplay" style="border: 1px solid #ccc; padding: 5px; width: 600px; height: 200px; overflow-y: auto;" th:text="${detailBoard.boardContent}"></div>
             </td>
+          </tr>
+          <tr>
+            <td>카테고리</td>
+            <td th:text="${detailBoard.boardCategory}"></td>
           </tr>
           <tr>
             <td>좋아요</td>
@@ -88,27 +91,12 @@
       </td>
     </tr>
   </table>
-</form>
         <center>
           <button type="button">수정</button>
           <button type="button">삭제</button>
           <button onclick="location.href='/board/list'">목록</button>
         </center>
 <script>
-  // var likeCount = 0;
-  // var comments = [];
-  //
-  // function likePost() {
-  //   likeCount++;
-  //   document.getElementById("likeCount").textContent = likeCount;
-  // }
-  //
-  // function addComment() {
-  //   var commentInput = document.getElementById("commentInput").value;
-  //   comments.push(commentInput);
-  //   document.getElementById("commentDisplay").innerHTML += "<p>" + commentInput + "</p>";
-  //   document.getElementById("commentInput").value = "";
-  // }
 </script>
 </body>
 </html>

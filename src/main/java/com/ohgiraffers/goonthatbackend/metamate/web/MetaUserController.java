@@ -99,7 +99,8 @@ public class MetaUserController {
             Model model
     ) {
         if (user == null) {
-            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+//            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+            return "redirect:/auth/login";
         }
         model.addAttribute("sessionUser", user);
         return "auth/editForm";
