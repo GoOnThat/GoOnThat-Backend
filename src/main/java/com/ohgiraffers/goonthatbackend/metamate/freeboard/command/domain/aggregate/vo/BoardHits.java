@@ -12,20 +12,21 @@ import javax.persistence.Embeddable;
 public class BoardHits {
 
     @Column(name="BOARD_HITS")
+
     private Integer boardHits;
 
-    protected BoardHits(){
+    protected BoardHits() {
 
     }
 
-    public BoardHits(Integer boardHits){
+    public BoardHits(Integer boardHits) {
         validateBoardHits(boardHits);
-        this.boardHits=boardHits;
+        this.boardHits = boardHits;
     }
 
     private void validateBoardHits(Integer boardHits) {
 
-        if(boardHits<0){
+        if (boardHits < 0) {
             throw new IllegalArgumentException("조회수는 음수일 수 없습니다.");
         }
     }

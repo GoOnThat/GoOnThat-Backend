@@ -10,6 +10,7 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @EqualsAndHashCode
+
 @ToString
 public class BoardCategory {
 
