@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -7,9 +8,10 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class BoardTitle {
 
-    @Column(name="BOARD_TITLE", length=100, nullable = false)
+    @Column(name="BOARD_TITLE", length=100)
     private String boardTitleName;
     protected  BoardTitle(){
 
@@ -26,5 +28,10 @@ public class BoardTitle {
         }else if(boardTitleName.equals("")){
             throw new IllegalArgumentException("제목이 공백입니다.");
         }
+    }
+
+    @Override
+    public String toString() {
+        return boardTitleName;
     }
 }
