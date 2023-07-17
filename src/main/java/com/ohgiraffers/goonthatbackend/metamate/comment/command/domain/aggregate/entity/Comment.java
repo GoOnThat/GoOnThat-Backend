@@ -33,9 +33,9 @@ public class Comment {
     private CommentDate commentDate;
 
     private CommentDeleteYn commentDeleteYn;
-
-    @ElementCollection
-    private List<CommentChildren> children;
+//
+//    @ElementCollection
+//    private List<CommentChildren> children;
 
     private CommentParent parent;
 
