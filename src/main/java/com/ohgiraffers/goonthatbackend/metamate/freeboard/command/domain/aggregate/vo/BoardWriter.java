@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import javax.persistence.Column;
@@ -7,9 +8,10 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class BoardWriter {
 
-    @Column(name="BOARD_WRITER",nullable = false)
+    @Column(name="BOARD_WRITER")
     private String boardWriterMemberName;
 
     protected BoardWriter() {

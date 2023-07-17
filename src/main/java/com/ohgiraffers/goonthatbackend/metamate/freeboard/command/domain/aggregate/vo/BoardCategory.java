@@ -1,15 +1,19 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
+@ToString
 public class BoardCategory {
 
-    @Column(name="BOARD_CATEGORY", length=20, nullable = false)
+    @Column(name="BOARD_CATEGORY", length=20)
     private String boardCategoryNo;
 
     protected BoardCategory(){

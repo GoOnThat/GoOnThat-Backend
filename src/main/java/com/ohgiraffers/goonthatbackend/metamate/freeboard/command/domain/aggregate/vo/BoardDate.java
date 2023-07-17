@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -10,10 +11,11 @@ import java.time.LocalDate;
 
 @Embeddable
 @Getter
+@EqualsAndHashCode
 public class BoardDate {
 
     @CreatedDate
-    @Column(name="BOARD_CREATED_DATE",nullable = false)
+    @Column(name="BOARD_CREATED_DATE")
     private LocalDate boardCreatedDate;
 
     @LastModifiedDate

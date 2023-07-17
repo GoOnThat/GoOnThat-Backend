@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.coment.commnad.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name="commnet")
+@Table(name="comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
