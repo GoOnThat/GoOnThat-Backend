@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardDeleteYn {
 
-    @Column(name = "BOARD_DELETE_YN", nullable = false)
+    @Column(name = "FREE_BOARD_DELETE_YN", nullable = false)
     private String boardDeleteYn;
 
     public BoardDeleteYn() {

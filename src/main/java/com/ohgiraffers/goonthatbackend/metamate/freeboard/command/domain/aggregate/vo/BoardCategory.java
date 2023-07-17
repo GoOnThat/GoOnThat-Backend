@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardCategory {
 
-    @Column(name="BOARD_CATEGORY", length=20, nullable = false)
+    @Column(name="FREE_BOARD_CATEGORY", length=20, nullable = false)
     private String boardCategoryNo;
 
     protected BoardCategory(){

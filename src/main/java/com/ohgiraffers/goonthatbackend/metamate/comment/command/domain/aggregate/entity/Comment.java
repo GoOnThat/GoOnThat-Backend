@@ -1,13 +1,18 @@
 package com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity;
 
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.vo.CommentContent;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.vo.CommentDate;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.vo.*;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "comment")
@@ -23,11 +28,19 @@ public class Comment {
 
     private CommentContent commentContent;
 
-//    private CommentWriter commentWriter;
+    private CommentWriter commentWriter;
 
     private CommentDate commentDate;
 
-//    private CommentDeleteYn commentDeleteYn;
+    private CommentDeleteYn commentDeleteYn;
 
+    @ElementCollection
+    private List<CommentChildren> children;
+
+    private CommentParent parent;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "FREE_BOARD_NO")
+    private FreeBoard freeBoard;
 
 }

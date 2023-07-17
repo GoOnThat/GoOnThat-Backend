@@ -15,11 +15,11 @@ import java.time.LocalDate;
 public class BoardDate {
 
     @CreatedDate
-    @Column(name = "BOARD_CREATED_DATE", nullable = false)
+    @Column(name = "FREE_BOARD_CREATED_DATE", nullable = false)
     private LocalDate boardCreatedDate;
 
     @LastModifiedDate
-    @Column(name = "BOARD_MODIFIED_DATE")
+    @Column(name = "FREE_BOARD_MODIFIED_DATE")
     private LocalDate boardModifiedDate;
 
 

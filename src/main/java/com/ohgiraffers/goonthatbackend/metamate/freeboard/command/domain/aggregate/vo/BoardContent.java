@@ -11,7 +11,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardContent {
 
-    @Column(name = "BOARD_CONTENT", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "FREE_BOARD_CONTENT", columnDefinition = "TEXT", nullable = false)
     private String boardContentText;
 
     protected BoardContent() {
