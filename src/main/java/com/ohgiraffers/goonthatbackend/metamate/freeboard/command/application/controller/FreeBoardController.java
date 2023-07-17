@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
+
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -12,11 +13,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -50,7 +51,7 @@ public class FreeBoardController {
     @PostMapping("/write")
     public String enrollContent(@LoginUser SessionMetaUser user,
                                 FreeBoardWriteDTO freeBoardWrite) {
-
+      
         LocalDate currentTime = LocalDate.now();
         freeBoardWrite.setBoardCreateDate(currentTime);
         freeBoardWrite.setBoardModifiedDate(currentTime);
@@ -71,7 +72,6 @@ public class FreeBoardController {
         return "board/detail";
     }
 
-    /* 게시판 글 번호 별 세부 수정 ? ? */
     @PostMapping("/detail")
     public String detail(Model model, FreeBoardDetailDTO freeBoardDetailDTO) {
 

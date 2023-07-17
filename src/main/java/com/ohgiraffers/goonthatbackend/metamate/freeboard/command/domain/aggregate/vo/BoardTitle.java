@@ -11,6 +11,7 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardTitle {
 
+
     @Column(name="BOARD_TITLE", length=100)
     private String boardTitleName;
     protected  BoardTitle(){
@@ -20,12 +21,13 @@ public class BoardTitle {
         validateTitleName(boardTitleName);
         this.boardTitleName=boardTitleName;
     }
-
     private void validateTitleName(String boardTitleName) {
+
 
         if(boardTitleName==null){
             throw new IllegalArgumentException("제목을 입력해 주세요");
         }else if(boardTitleName.equals("")){
+
             throw new IllegalArgumentException("제목이 공백입니다.");
         }
     }

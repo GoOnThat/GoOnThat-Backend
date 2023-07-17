@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity;
 
+
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo.*;
 import lombok.*;
 import javax.persistence.*;
@@ -7,15 +8,16 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name="freeboard")
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
 public class FreeBoard {
 
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="BOARD_NO")
     private Long boardNo;
-
 
     private BoardCategory boardCategory;
 
@@ -31,6 +33,11 @@ public class FreeBoard {
 
     @Embedded
     private BoardDate boardDate;
+
+
+
+
+
 
     public FreeBoard(BoardTitle boardTitle, BoardContent boardContent, BoardDeleteYn boardDeleteYn, BoardDate boardDate, BoardCategory boardCategory){
         this.boardTitle = boardTitle;
@@ -70,3 +77,4 @@ public class FreeBoard {
                 '}';
     }
 }
+

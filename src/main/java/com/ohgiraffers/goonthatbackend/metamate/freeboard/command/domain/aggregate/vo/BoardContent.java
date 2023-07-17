@@ -14,22 +14,24 @@ public class BoardContent {
     @Column(name="BOARD_CONTENT", columnDefinition = "TEXT",nullable = false)
     private String boardContentText;
 
-    protected BoardContent(){
-
-    }
+    protected BoardContent(){}
 
     public BoardContent(String boardContentText){
         validateBoardContentText(boardContentText);
         this.boardContentText=boardContentText;
+
     }
 
     private void validateBoardContentText(String boardContentText) {
 
+
         if(boardContentText==null){
             throw new IllegalArgumentException("내용을 입력해 주세요");
         }else if(boardContentText.equals("")){
-            throw new IllegalArgumentException("내용이 공백입니다.");
+           throw new IllegalArgumentException("내용이 공백입니다.");
         }
 
     }
+
 }
+

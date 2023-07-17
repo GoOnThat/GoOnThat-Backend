@@ -21,12 +21,17 @@ public class BoardHits {
     public BoardHits(Integer boardHits){
         validateBoardHits(boardHits);
         this.boardHits=boardHits;
+
     }
 
     private void validateBoardHits(Integer boardHits) {
+
 
         if(boardHits<0){
             throw new IllegalArgumentException("조회수는 음수일 수 없습니다.");
         }
     }
+
+
 }
+

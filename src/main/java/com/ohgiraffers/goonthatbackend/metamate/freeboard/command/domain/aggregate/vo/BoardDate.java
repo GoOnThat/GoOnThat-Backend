@@ -14,7 +14,9 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class BoardDate {
 
+
     @CreatedDate
+
     @Column(name="BOARD_CREATED_DATE")
     private LocalDate boardCreatedDate;
 
@@ -25,6 +27,7 @@ public class BoardDate {
 
     protected BoardDate() {
     }
+
 
     public BoardDate(LocalDate boardCreatedDate, LocalDate boardModifiedDate) {
         validateIsPast(boardCreatedDate);
@@ -40,3 +43,5 @@ public class BoardDate {
     }
 
 }
+    
+

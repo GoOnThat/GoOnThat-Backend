@@ -11,11 +11,13 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardDeleteYn {
 
+
     @Column(name="BOARD_DELETE_YN")
     private String boardDeleteYn;
 
     public BoardDeleteYn() {
     }
+
 
     public BoardDeleteYn(String boardDeleteYn){
         validateBoardDeleteYn(boardDeleteYn);
