@@ -2,6 +2,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggreg
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -9,9 +10,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 @Getter
 @EqualsAndHashCode
+
+@ToString
 public class BoardCategory {
 
-    @Column(name="FREE_BOARD_CATEGORY", length=20, nullable = false)
+    @Column(name="BOARD_CATEGORY", length=20)
     private String boardCategoryNo;
 
     protected BoardCategory(){

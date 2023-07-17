@@ -11,8 +11,9 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardWriter {
 
-    @Column(name = "FREE_BOARD_WRITER", nullable = false)
-    private String boardMetaUser;
+    @Column(name="BOARD_WRITER")
+    private String boardWriterMemberName;
+
 
     protected BoardWriter() {
 

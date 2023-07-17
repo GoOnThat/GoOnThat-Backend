@@ -11,7 +11,8 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardHits {
 
-    @Column(name = "FREE_BOARD_HITS", nullable = false)
+    @Column(name="BOARD_HITS")
+
     private Integer boardHits;
 
     protected BoardHits() {

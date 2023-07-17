@@ -11,7 +11,9 @@ import javax.persistence.Embeddable;
 @EqualsAndHashCode
 public class BoardTitle {
 
-    @Column(name = "FREE_BOARD_TITLE", length = 100, nullable = false)
+
+    @Column(name="BOARD_TITLE", length=100)
+
     private String boardTitleName;
 
     protected BoardTitle() {
@@ -31,4 +33,13 @@ public class BoardTitle {
             throw new IllegalArgumentException("제목이 공백입니다.");
         }
     }
+
+
+
+
+    @Override
+    public String toString() {
+        return boardTitleName;
+    }
 }
+

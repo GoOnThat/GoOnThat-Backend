@@ -1,71 +1,40 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
+import lombok.*;
+
 import java.time.LocalDate;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class FreeBoardDetailDTO {
 
+    private Long boardNo;   //보드 번호
     private String boardCategory;   //카테고리
     private LocalDate boardCreateDate; //글 작성일
     private String boardWriter; //글 작성자
     private String boardTitle;  //제목
     private String boardContent;    //내용
-
-    public FreeBoardDetailDTO() {}
-
-    public FreeBoardDetailDTO(String boardCategory, LocalDate boardCreateDate, String boardWriter, String boardTitle, String boardContent) {
-        this.boardCategory = boardCategory;
-        this.boardCreateDate = boardCreateDate;
-        this.boardWriter = boardWriter;
-        this.boardTitle = boardTitle;
-        this.boardContent = boardContent;
-    }
-
-    public String getBoardCategory() {
-        return boardCategory;
-    }
-
-    public void setBoardCategory(String boardCategory) {
-        this.boardCategory = boardCategory;
-    }
-
-    public LocalDate getBoardCreateDate() {
-        return boardCreateDate;
-    }
-
-    public void setBoardCreateDate(LocalDate boardCreateDate) {
-        this.boardCreateDate = boardCreateDate;
-    }
-
-    public String getBoardWriter() {
-        return boardWriter;
-    }
-
-    public void setBoardWriter(String boardWriter) {
-        this.boardWriter = boardWriter;
-    }
-
-    public String getBoardTitle() {
-        return boardTitle;
-    }
-
-    public void setBoardTitle(String boardTitle) {
-        this.boardTitle = boardTitle;
-    }
-
-    public String getBoardContent() {
-        return boardContent;
-    }
-
-    public void setBoardContent(String boardContent) {
-        this.boardContent = boardContent;
+    public static FreeBoardDetailDTO entityToDTO(FreeBoard freeBoard){
+        FreeBoardDetailDTO boardDetailDTO=new FreeBoardDetailDTO();
+        boardDetailDTO.setBoardNo(freeBoard.getBoardNo());
+        boardDetailDTO.setBoardCategory(freeBoard.getBoardCategory().getBoardCategoryNo());
+        boardDetailDTO.setBoardCreateDate(freeBoard.getBoardDate().getBoardCreatedDate());
+        boardDetailDTO.setBoardWriter(String.valueOf(freeBoard.getBoardWriter()));
+        boardDetailDTO.setBoardTitle(String.valueOf(freeBoard.getBoardTitle().getBoardTitleName()));
+        boardDetailDTO.setBoardContent(String.valueOf(freeBoard.getBoardContent().getBoardContentText()));
+        return boardDetailDTO;
     }
 
     @Override
     public String toString() {
-        return "BoardDetailDTO{" +
-                "boardCategory='" + boardCategory + '\'' +
+        return "FreeBoardDetailDTO{" +
+                "boardNo=" + boardNo +
+                ", boardCategory='" + boardCategory + '\'' +
                 ", boardCreateDate=" + boardCreateDate +
-                ", boardWriter=" + boardWriter +
+                ", boardWriter='" + boardWriter + '\'' +
                 ", boardTitle='" + boardTitle + '\'' +
                 ", boardContent='" + boardContent + '\'' +
                 '}';

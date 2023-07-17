@@ -5,9 +5,10 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-
+@Component
 public class FreeBoardMapper {
 
     /* BoardListDTO */
@@ -45,7 +46,8 @@ public class FreeBoardMapper {
         String boardCategory = board.getBoardCategory().getBoardCategoryNo(); //카테고리
         BoardDate boardDate = board.getBoardDate(); //글 작성일
         LocalDate boardCreateDate = board.getBoardDate().getBoardCreatedDate(); //글 작성일
-        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
+//        String boardWriter = board.getBoardWriter().getBoardWriterMemberName(); //글 작성자
+        String boardWriter = "남효정"; //글 작성자
         String boardTitle = board.getBoardTitle().getBoardTitleName(); //제목
         String boardContent = board.getBoardContent().getBoardContentText(); //내용
 
@@ -81,4 +83,39 @@ public class FreeBoardMapper {
         /* 옮겨담은 DTO를 반환 */
         return boardWriteDTO;
     }
+
+    /* 엔티티로 바꿔서 글 등록 */
+    public FreeBoard toFreeBoardWrite(FreeBoardWriteDTO freeBoardWriteDTO){
+        FreeBoard freeBoard = new FreeBoard(
+                 new BoardTitle(freeBoardWriteDTO.getBoardTitle())
+                ,new BoardContent(freeBoardWriteDTO.getBoardContent())
+                ,new BoardDeleteYn(freeBoardWriteDTO.getBoardDeleteYn())
+                ,new BoardDate(freeBoardWriteDTO.getBoardCreateDate(), freeBoardWriteDTO.getBoardModifiedDate())
+                ,new BoardCategory(freeBoardWriteDTO.getBoardCategory())
+        );
+
+        return freeBoard;
+    }
+
+    /* 엔티티로 바꿔서 글 조회 */
+    public FreeBoard toFreeBoardDetail(FreeBoardDetailDTO freeBoardDetailDTO) {
+        FreeBoard freeBoard = new FreeBoard(
+                  new BoardCategory(freeBoardDetailDTO.getBoardCategory())
+                , new BoardTitle(freeBoardDetailDTO.getBoardTitle())
+                , new BoardContent(freeBoardDetailDTO.getBoardContent())
+        );
+
+        return freeBoard;
+    }
+
+    public FreeBoard toFreeBoardList(FreeBoardListDTO freeBoardListDTO) {
+        FreeBoard freeBoard = new FreeBoard(
+                    freeBoardListDTO.getBoardNo()
+                , new BoardTitle(freeBoardListDTO.getBoardTitle())
+                ,new BoardDate(freeBoardListDTO.getBoardCreateDate(), freeBoardListDTO.getBoardModifiedDate())
+        );
+
+        return freeBoard;
+    }
+
 }

@@ -111,108 +111,18 @@
           </ul>
         </li>
         <!-- 게시물이 출력될 영역 -->
-        <li>
+        <li th:each="board : ${boardList}">
           <ul>
-            <li>1</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
+            <!-- 게시판 글 번호 별 세부 조회 페이지 링크 -->
+            <li><a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}" th:text="${board.boardNo}"></a></li>
+            <li class="left">
+              <a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}" th:text="${board.boardTitle}"></a>
+            </li>
+            <li th:text="${board.boardDate.boardCreatedDate}"></li>
+            <li th:text="${board.boardWriter}"></li>
+            <li th:text="${board.boardHits}"></li>
           </ul>
         </li>
-
-        <li>
-          <ul>
-            <li>2</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>3</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>4</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        <li>
-
-    <li>
-      <ul>
-        <li>5</li>
-        <li class="left">제목제목제목제목1</li>
-        <li>2023.07.07</li>
-        <li>효정</li>
-        <li>0</li>
-      </ul>
-    </li>
-
-        <li>
-          <ul>
-            <li>6</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>7</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>8</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>9</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-
-        <li>
-          <ul>
-            <li>10</li>
-            <li class="left">제목제목제목제목1</li>
-            <li>2023.07.07</li>
-            <li>효정</li>
-            <li>0</li>
-          </ul>
-        </li>
-  </ul>
-  </li>
-
 
     <!-- 게시판 페이징 영역 -->
     <li>

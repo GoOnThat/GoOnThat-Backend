@@ -14,8 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 public class BoardDate {
 
-    @CreatedDate
-    @Column(name = "FREE_BOARD_CREATED_DATE", nullable = false)
+    @Column(name="BOARD_CREATED_DATE")
     private LocalDate boardCreatedDate;
 
     @LastModifiedDate
