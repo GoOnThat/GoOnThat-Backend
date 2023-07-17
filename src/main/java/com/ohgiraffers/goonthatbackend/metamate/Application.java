@@ -13,7 +13,6 @@ public class Application {
     BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
