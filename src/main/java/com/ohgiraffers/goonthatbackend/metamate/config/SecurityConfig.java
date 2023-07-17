@@ -1,60 +1,88 @@
 package com.ohgiraffers.goonthatbackend.metamate.config;
 
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import javax.servlet.DispatcherType;
+
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebSecurity(debug = true)
+public class SecurityConfig {
 
     private final AuthenticationFailureHandler authenticationFailureHandler;
     private final AuthenticationSuccessHandler authenticationSuccessHandler;
     private final AuthenticationProvider authenticationProvider;
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
-
-    @Override
-    public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/css/**", "/assets/**", "/templates/**");
-    }
-
-
     // CustomAuthenticationProvider 설정
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authenticationProvider);
+    @Bean
+    public AuthenticationManager authManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.authenticationProvider(authenticationProvider);
+        return authenticationManagerBuilder.build();
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("/auth/loginProc")
-                .failureHandler(authenticationFailureHandler)
-                .successHandler(authenticationSuccessHandler)
-                .and()
-                .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                .invalidateHttpSession(true).deleteCookies("JSESSIONID")
-                .logoutSuccessUrl("/");
+//    @Order(0)
+//    @Bean
+//    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
+//
+//        http
+//                .authorizeHttpRequests(auth -> auth
+//
+//                )
+//    }
+
+
+    @Order(1)
+    @Bean
+    public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable()
+                .cors().disable()
+                .authorizeHttpRequests(auth -> auth
+//                        .mvcMatchers("/api/posts/**").hasRole(Role.USER.name()) // 등록, 수정, 삭제
+//                        .mvcMatchers("/posts/add/**").hasRole(Role.USER.name()) // 등록 Form
+//                        .mvcMatchers("/posts/{\\d+}/edit").hasRole(Role.USER.name()) // 수정 Form
+//                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
+//                        .mvcMatchers("/admin/**").hasAnyRole(Role.ADMIN.name())
+//                        .mvcMatchers("/associate").hasAnyRole(Role.ASSOCIATE.name())
+//                        .mvcMatchers("/api/**").permitAll()
+                        .mvcMatchers(
+//                                HttpMethod.GET,
+                                "/**"
+//                                "/assets/**", "/css/**", "/images/**", "/js/**",
+//                                "/auth/**", "/management/**"
+//                                "/auth/loginProc"
+                        ).permitAll()
+                        .anyRequest().authenticated())
+                .formLogin(login -> login
+                        .loginPage("/auth/login")
+                        .loginProcessingUrl("/auth/loginProc")
+                        .failureHandler(authenticationFailureHandler)
+                        .successHandler(authenticationSuccessHandler)
+                        .and())
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                        .logoutSuccessUrl("/"))
+                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"));
+        return http.build();
     }
 }

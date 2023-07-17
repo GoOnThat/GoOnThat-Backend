@@ -24,11 +24,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
-        String email = authentication.getName();
+        String username = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
         PrincipalUserDetails userDetails =
-                (PrincipalUserDetails) principalUserDetailsService.loadUserByUsername(email);
+                (PrincipalUserDetails) principalUserDetailsService.loadUserByUsername(username);
 
         if(!this.passwordEncoder.matches(password, userDetails.getPassword())){
             throw new BadCredentialsException("이메일 또는 비밀번호가 일치하지 않습니다.");
@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         httpSession.setAttribute("user", SessionMetaUser.fromEntity(userDetails.getMetaUser()));
 
-        return new UsernamePasswordAuthenticationToken(email, password, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails, userDetails.getAuthorities());
     }
 
     // 커스터마이징한 Authentication Token을 사용하지 않으므로 supports true

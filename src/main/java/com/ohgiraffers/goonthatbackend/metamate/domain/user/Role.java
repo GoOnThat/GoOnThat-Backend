@@ -7,10 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Role {
 
-    GUEST("ROLE_GUEST"),
-    ASSOCIATE("ROLE_ASSOCIATE"),
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+    ASSOCIATE("ROLE_ASSOCIATE", "준회원"),
+    USER("ROLE_USER", "정회원"),
+    ADMIN("ROLE_ADMIN", "관리자");
 
     private String value;
+    private String description;
 }

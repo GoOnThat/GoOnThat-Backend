@@ -14,23 +14,22 @@ public class BoardWriter {
     @Column(name="BOARD_WRITER")
     private String boardWriterMemberName;
 
-
     protected BoardWriter() {
 
     }
-
-    public BoardWriter(String boardMetaUser) {
-        validateMemberName(boardMetaUser);
-        this.boardMetaUser = boardMetaUser;
+    public BoardWriter(String boardWriterMemberName) {
+        validateMemberName(boardWriterMemberName);
+        this.boardWriterMemberName = boardWriterMemberName;
     }
 
-    private void validateMemberName(String boardMetaUser) {
+    private void validateMemberName(String boardWriterMemberName) {
 
-        if (boardMetaUser == null) {
-            throw new IllegalArgumentException("회원정보가 없습니다.");
-        } else if (boardMetaUser.equals("")) {
-            throw new IllegalArgumentException("회원정보가 공백입니다.");
+        if(boardWriterMemberName == null) {
+            throw new IllegalArgumentException("회원번호가 없습니다.");
+        }else if(boardWriterMemberName.equals("")){
+            throw new IllegalArgumentException("회원번호가 공백입니다.");
         }
     }
 
 }
+

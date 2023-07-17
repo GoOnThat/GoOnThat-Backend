@@ -13,33 +13,27 @@ public class BoardTitle {
 
 
     @Column(name="BOARD_TITLE", length=100)
-
     private String boardTitleName;
-
-    protected BoardTitle() {
+    protected  BoardTitle(){
 
     }
-
-    public BoardTitle(String boardTitleName) {
+    public BoardTitle(String boardTitleName){
         validateTitleName(boardTitleName);
-        this.boardTitleName = boardTitleName;
+        this.boardTitleName=boardTitleName;
     }
-
     private void validateTitleName(String boardTitleName) {
 
-        if (boardTitleName == null) {
+
+        if(boardTitleName==null){
             throw new IllegalArgumentException("제목을 입력해 주세요");
-        } else if (boardTitleName.equals("")) {
+        }else if(boardTitleName.equals("")){
+
             throw new IllegalArgumentException("제목이 공백입니다.");
         }
     }
-
-
-
 
     @Override
     public String toString() {
         return boardTitleName;
     }
 }
-
