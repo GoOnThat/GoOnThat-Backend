@@ -1,48 +1,54 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
-//@Controller
-//@RequestMapping("/board")
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+
+@Controller
+@RequestMapping("/board")
 public class FreeBoardController {
-//
-//    private final FreeBoardService freeBoardService;
-//
-//    @Autowired
-//    public FreeBoardController(FreeBoardService freeBoardService) {
-//        this.freeBoardService = freeBoardService;
-//    }
+
+    private final FreeBoardService freeBoardService;
+
+    @Autowired
+    public FreeBoardController(FreeBoardService freeBoardService) {
+        this.freeBoardService = freeBoardService;
+    }
 
     /* 게시판 전체 목록 조회 */
-//    @GetMapping("/list")
-//    public String list(Model model, FreeBoardListDTO freeBoardListDTO) {
-//        List<FreeBoardPost> boardList = freeBoardService.getAllBoards(freeBoardListDTO);
-//        model.addAttribute("boardList", boardList);
-//        return "board/list";
-//    }
+    @GetMapping("/list")
+    public String list(Model model) {
+        List<FreeBoardListDTO> boardList = freeBoardService.getAllPosts();
+        model.addAttribute("boardList", boardList);
+        return "board/list";
+    }
 
     /* 글쓰기 페이지 조회 */
-//    @GetMapping("/write")
-//    public ModelAndView write(ModelAndView mv) {
-//
-//        mv.setViewName("/board/write");
-//
-//        return mv;
-//    }
+    @GetMapping("/write")
+    public String write(Model model) {
+
+//        model.addAttribute();
+
+        return "board/write";
+    }
 
     /* 글쓰기 페이지 작성 */
-//    @PostMapping("/write")
-//    public String enrollContent(
-//            @LoginUser SessionMetaUser user,
-//            @ModelAttribute("user") FreeBoardWriteDTO freeBoardWrite,
-//            Model model) {
-//
-//        if(user==null){
-//            return "redirect:/auth/login";
-//        }
-//
-//        freeBoardService.write(freeBoardWrite);
-//
-//        return "redirect:/board/list";
-//    }
+    @PostMapping("/write")
+    public String enrollContent(FreeBoardWriteDTO freeBoardWrite, Model model) {
+
+        freeBoardService.savePost(freeBoardWrite);
+
+        return "redirect:/board/list";
+    }
 
     /* 게시판 글 번호 별 세부 조회 */
 //    @GetMapping("/detail/{boardNo}")
@@ -68,7 +74,7 @@ public class FreeBoardController {
 //        freeBoardService.enrolledwrite(freeBoardDetailDTO);
 //
 //        return "board/detail";
-    }
+//    }
 
-//}
+}
 

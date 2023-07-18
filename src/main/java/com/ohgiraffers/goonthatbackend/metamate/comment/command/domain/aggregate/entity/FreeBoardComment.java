@@ -8,24 +8,25 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "comment")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FreeBoardComment extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "COMMENT_NO")
-    private Long id;
+    @Column
+    private Long commnetId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "FREE_BOARD_NO")
+    @JoinColumn(name = "board_no")
     private FreeBoardPost freeBoardPost;
 
     @Column
     private String commentContent;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "id")
     private MetaUser metauser;
 
     private String commentWriter;

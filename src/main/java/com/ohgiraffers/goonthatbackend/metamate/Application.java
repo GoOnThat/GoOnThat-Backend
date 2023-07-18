@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableJpaAuditing
-@ConfigurationPropertiesScan
+@ConfigurationPropertiesScan("com.ohgiraffers.goonthatbackend.metamate")
 @SpringBootApplication
 public class Application {
 
