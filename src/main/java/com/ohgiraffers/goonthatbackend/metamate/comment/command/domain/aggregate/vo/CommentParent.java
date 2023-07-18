@@ -1,6 +1,5 @@
 package com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.vo;
 
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.Comment;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
