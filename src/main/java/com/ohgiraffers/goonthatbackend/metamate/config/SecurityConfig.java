@@ -72,6 +72,9 @@ public class SecurityConfig {
 //                                "/auth/**", "/management/**"
 //                                "/auth/loginProc"
                         ).permitAll()
+
+                        .mvcMatchers(HttpMethod.POST,"/board/**").permitAll() // save test용
+
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/auth/login")

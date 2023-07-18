@@ -11,6 +11,7 @@ import java.util.List;
 
 
 @Entity
+@Table(name = "freeboard")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FreeBoardPost extends AuditingFields {
@@ -32,25 +33,27 @@ public class FreeBoardPost extends AuditingFields {
     @JoinColumn(name = "id")
     private MetaUser metaUser;
 
-    private String boarWriter;
+    private String boardWriter;
 
     private int boardHits;
 
-    @OneToMany(mappedBy = "post")
-    private List<FreeBoardComment> CommentList = new ArrayList<>();
+    @OneToMany(mappedBy = "", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("commnetId asc")
+    private List<FreeBoardComment> commentList = new ArrayList<>();
 
-    private boolean boardIsDeleted = false;
+    private boolean boardIsDeleted;
 
     @Builder
     public FreeBoardPost(String boardCategory, String boardTitle, String boardContent,
-                         MetaUser metaUser, String boarWriter, int boardHits, List<FreeBoardComment> CommentList,
+                         MetaUser metaUser, String boardWriter, int boardHits, List<FreeBoardComment> commentList,
                          boolean boardIsDeleted) {
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
-        this.boarWriter = boarWriter;
+        this.boardWriter = boardWriter;
         this.metaUser = metaUser;
         this.boardHits = boardHits;
+        this.commentList = commentList;
         this.boardIsDeleted = boardIsDeleted;
     }
 

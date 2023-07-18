@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FreeBoardRepository extends JpaRepository<FreeBoardPost,Long> {
-    FreeBoardPost findByBoardTitle(String boardTitle);
+
 }

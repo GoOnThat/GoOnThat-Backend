@@ -5,28 +5,28 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Setter
 @Getter
-@ToString
 public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
     private String boardWriter; //글 작성자
     private String boardTitle;  //제목
-    private String boardContent;    //내용
+    private String boardContent; //내용
     private Integer boardHits; //글 조회수
-    private String boardDeleteYn;    //글 삭제여부
+    private Boolean boardIsDeleted; //삭제여부
 
-    public FreeBoardWriteDTO toEntity(FreeBoardPost boardPost) {
-        return new FreeBoardWriteDTO(
-                boardPost.getBoardCategory()
-                , boardPost.getBoarWriter()
-                , boardPost.getBoardTitle()
-                , boardPost.getBoardContent()
-                , boardPost.getBoardHits()
-                , boardPost.getBoardDeleteYn()
-        );
+    public FreeBoardPost toEntity() {
+        return FreeBoardPost.builder()
+                .boardCategory(this.boardCategory)
+                .boardWriter(this.boardWriter)
+                .boardTitle(this.boardTitle)
+                .boardContent(this.boardContent)
+                .boardHits(0)
+                .boardIsDeleted(false)
+                .build();
+
     }
 }
