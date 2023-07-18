@@ -24,7 +24,7 @@ public class FreeBoardListDTO {
                 boardPost.getBoardNo()
                 , cal.calcCreateDate(boardPost.getCreatedAt())
                 , boardPost.getBoardCategory()
-                , boardPost.getBoarWriter()
+                , boardPost.getBoardWriter()
                 , boardPost.getBoardTitle()
                 , boardPost.getBoardContent()
                 , boardPost.getBoardHits()

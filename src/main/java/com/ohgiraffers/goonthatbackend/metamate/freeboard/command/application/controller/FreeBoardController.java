@@ -1,17 +1,5 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
-import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
-import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 //@Controller
 //@RequestMapping("/board")
 public class FreeBoardController {
@@ -82,5 +70,5 @@ public class FreeBoardController {
 //        return "board/detail";
     }
 
-}
+//}
 

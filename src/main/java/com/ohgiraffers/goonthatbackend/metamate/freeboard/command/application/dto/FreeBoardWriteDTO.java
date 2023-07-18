@@ -9,7 +9,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Setter
 @Getter
-@ToString
 public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
@@ -17,16 +16,14 @@ public class FreeBoardWriteDTO {
     private String boardTitle;  //제목
     private String boardContent;    //내용
     private Integer boardHits; //글 조회수
-    private String boardDeleteYn;    //글 삭제여부
 
     public FreeBoardWriteDTO toEntity(FreeBoardPost boardPost) {
         return new FreeBoardWriteDTO(
                 boardPost.getBoardCategory()
-                , boardPost.getBoarWriter()
+                , boardPost.getBoardWriter()
                 , boardPost.getBoardTitle()
                 , boardPost.getBoardContent()
                 , boardPost.getBoardHits()
-                , boardPost.getBoardDeleteYn()
         );
     }
 }
