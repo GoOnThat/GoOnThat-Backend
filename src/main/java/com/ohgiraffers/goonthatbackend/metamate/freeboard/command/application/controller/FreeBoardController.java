@@ -2,7 +2,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.c
 
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,10 +17,10 @@ import java.util.List;
 @RequestMapping("/board")
 public class FreeBoardController {
 
-    private final FreeBoardService freeBoardService;
+    private final FreeBoardPostService freeBoardService;
 
     @Autowired
-    public FreeBoardController(FreeBoardService freeBoardService) {
+    public FreeBoardController(FreeBoardPostService freeBoardService) {
         this.freeBoardService = freeBoardService;
     }
 
@@ -59,7 +59,7 @@ public class FreeBoardController {
 //        System.out.println(freeBoardDetailDTO);
 //        return "board/detail";
 //    }
-
+//
 //    @PostMapping("/detail")
 //    public String detail(Model model, FreeBoardDetailDTO freeBoardDetailDTO) {
 //

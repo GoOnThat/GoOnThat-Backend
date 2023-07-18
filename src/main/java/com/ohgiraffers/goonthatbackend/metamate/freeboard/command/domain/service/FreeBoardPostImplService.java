@@ -3,9 +3,9 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.servic
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardRepository;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardPostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class FreeBoardImplService implements FreeBoardService {
+public class FreeBoardPostImplService implements FreeBoardPostService {
 
-    private final FreeBoardRepository repository;
+    private final FreeBoardPostRepository repository;
     @Autowired
-    public FreeBoardImplService(FreeBoardRepository repository) {
+    public FreeBoardPostImplService(FreeBoardPostRepository repository) {
         this.repository = repository;
     }
 
@@ -34,7 +34,7 @@ public class FreeBoardImplService implements FreeBoardService {
     @Override
     public List<FreeBoardListDTO> getAllPosts() {
 
-        List<FreeBoardPost> allPosts = repository.findAll();
+        List<FreeBoardPost> allPosts = repository.findByBoardIsDeleted(false);
         List<FreeBoardListDTO> postList =new ArrayList<>();
 
         for(FreeBoardPost boardPost : allPosts) {
