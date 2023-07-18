@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FreeBoardImplService implements FreeBoardService {
@@ -41,20 +43,16 @@ public class FreeBoardImplService implements FreeBoardService {
         }
         return postList;
     }
-//
-//    public FreeBoardDetailDTO detailBoard(Long boardNo) {
-//        return null;
-//    }
-//
-//    public FreeBoardDetailDTO detailBoard(Long boardNo) {
-//        FreeBoard freeBoard = freeBoardRepository.findById(boardNo).orElse(null);
-//
-//        FreeBoardDetailDTO board = FreeBoardDetailDTO.entityToDTO(freeBoard);
-//        if (freeBoard != null) {
-//            return board;
-//        } else {
-//            throw new RuntimeException("해당 게시물을 찾을 수 없습니다.");
-//        }
-//
-//    }
+
+    @Transactional
+    @Override
+    public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
+
+        Optional<FreeBoardPost> freeBoard = repository.findById(boardNo);
+        FreeBoardDetailDTO board= new FreeBoardDetailDTO();
+//        board.fromEntity(freeBoard);
+
+        return board;
+
+    }
 }

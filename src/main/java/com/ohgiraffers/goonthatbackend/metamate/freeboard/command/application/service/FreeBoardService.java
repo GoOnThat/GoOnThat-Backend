@@ -1,6 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service;
 
 
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 
@@ -13,6 +14,6 @@ public interface FreeBoardService {
 //    public void updatePost();
 //    public void deletePost();
     public List<FreeBoardListDTO> getAllPosts();
+    public FreeBoardDetailDTO getDetailPosts(Long boardNo);
 //    public List<FreeBoardListDTO> getSearchPosts();
-//    public FreeBoardDetailDTO getDetailPosts();
 }
