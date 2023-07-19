@@ -16,7 +16,7 @@ public class FreeBoardComment extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
-    private Long commnetId;
+    private Long commentNo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_no")
@@ -29,18 +29,11 @@ public class FreeBoardComment extends AuditingFields {
     @JoinColumn(name = "id")
     private MetaUser metauser;
 
-    private String commentWriter;
-
-    @Column
-    private String commentDeleteYn;
-
     @Builder
     public FreeBoardComment(FreeBoardPost freeBoardPost, String commentContent,
-                            MetaUser metauser, String commentWriter, String commentDeleteYn) {
+                            MetaUser metauser) {
         this.freeBoardPost = freeBoardPost;
         this.commentContent = commentContent;
         this.metauser = metauser;
-        this.commentWriter = commentWriter;
-        this.commentDeleteYn = commentDeleteYn;
     }
 }

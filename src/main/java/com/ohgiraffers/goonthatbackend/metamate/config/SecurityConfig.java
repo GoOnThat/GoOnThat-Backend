@@ -23,7 +23,6 @@ import javax.servlet.DispatcherType;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final AuthenticationFailureHandler authenticationFailureHandler;
@@ -72,9 +71,6 @@ public class SecurityConfig {
 //                                "/auth/**", "/management/**"
 //                                "/auth/loginProc"
                         ).permitAll()
-
-                        .mvcMatchers(HttpMethod.POST,"/board/**").permitAll() // save test용
-
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/auth/login")

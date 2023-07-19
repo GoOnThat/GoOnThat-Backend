@@ -33,24 +33,21 @@ public class FreeBoardPost extends AuditingFields {
     @JoinColumn(name = "id")
     private MetaUser metaUser;
 
-    private String boardWriter;
-
     private int boardHits;
 
-    @OneToMany(mappedBy = "", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("commnetId asc")
+    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OrderBy("commentNo asc")
     private List<FreeBoardComment> commentList = new ArrayList<>();
 
     private boolean boardIsDeleted;
 
     @Builder
     public FreeBoardPost(String boardCategory, String boardTitle, String boardContent,
-                         MetaUser metaUser, String boardWriter, int boardHits, List<FreeBoardComment> commentList,
+                         MetaUser metaUser, int boardHits, List<FreeBoardComment> commentList,
                          boolean boardIsDeleted) {
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
-        this.boardWriter = boardWriter;
         this.metaUser = metaUser;
         this.boardHits = boardHits;
         this.commentList = commentList;

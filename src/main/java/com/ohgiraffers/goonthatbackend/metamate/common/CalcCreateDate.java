@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
+package com.ohgiraffers.goonthatbackend.metamate.common;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

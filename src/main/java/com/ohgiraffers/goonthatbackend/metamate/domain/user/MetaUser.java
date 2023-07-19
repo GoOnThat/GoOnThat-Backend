@@ -1,9 +1,12 @@
 package com.ohgiraffers.goonthatbackend.metamate.domain.user;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -22,7 +25,8 @@ public class MetaUser extends AuditingFields {
     @Enumerated(EnumType.STRING)
     private Role role;
     private String provider;
-
+    @OneToMany(mappedBy = "metaUser")
+    private List<FreeBoardPost> posts = new ArrayList<>();
     @Builder
     public MetaUser(String email, String password, String name,
                     String nickname, String number, String major,
