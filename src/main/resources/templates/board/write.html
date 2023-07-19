@@ -30,8 +30,7 @@
   }
 </style>
 <body>
-<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-<form action="/board/write" method="post" th:object="${freeBoardPost}">
+<form th:action="@{/board/write}" method="post" th:object="${freeBoardWriteDTO}">
   <table style="padding-top:50px" align="center" width="800" border="0" cellpadding="2">
     <tr>
       <td height="20" align="center" bgcolor="#ccc"><font color="white">글쓰기</font></td>
@@ -58,9 +57,9 @@
             <td>카테고리</td>
             <td>
               <select th:field="*{boardCategory}">
-                <option value="free" selected>선택</option>
-                <option value="free">소통</option>
-                <option value="announce">공지</option>
+                <option value="잡담" selected>잡담</option>
+                <option value="정보">정보</option>
+                <option value="공지">공지</option>
               </select>
 
             </td>

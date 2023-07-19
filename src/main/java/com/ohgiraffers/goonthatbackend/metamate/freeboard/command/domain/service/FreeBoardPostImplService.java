@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,38 +33,34 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Transactional
     public void savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
 
-//        MetaUser metaUser= MetaUser.builder()
-//                                .orElseThrow(
-//                                        () -> new CustomException(ErrorCode.COMMENT_NOT_FOUND)
-//                                );
-//                FreeBoardPost freeBoardPost= boardDTO.toEntity(metaUser);
-//                freeBoardPostRepository.save(freeBoardPost);
+        MetaUser metaUser = metaUserRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        FreeBoardPost freeBoardPost = boardDTO.toEntity(metaUser);
+        freeBoardPostRepository.save(freeBoardPost);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<FreeBoardListDTO> getAllPosts() {
-
-        List<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardIsDeleted(false);
+        List<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse();
         List<FreeBoardListDTO> postList = new ArrayList<>();
 
         for (FreeBoardPost boardPost : allPosts) {
-            FreeBoardListDTO freeBoardListDTO = new FreeBoardListDTO().fromEntity(boardPost);
+            FreeBoardListDTO freeBoardListDTO = FreeBoardListDTO.fromEntity(boardPost);
             postList.add(freeBoardListDTO);
         }
+
         return postList;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
+        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        List<FreeBoardComment> commentList = boardPost.getCommentList();
 
-        Optional<FreeBoardPost> freeBoard = freeBoardPostRepository.findById(boardNo);
-        FreeBoardDetailDTO board = new FreeBoardDetailDTO();
-//        board.fromEntity(freeBoard);
-
-        return board;
-
+        return new FreeBoardDetailDTO().fromEntity(boardPost, commentList);
     }
 }

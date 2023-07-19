@@ -16,5 +16,6 @@ public interface FreeBoardPostService {
 //    public void deletePost();
     public List<FreeBoardListDTO> getAllPosts();
     public FreeBoardDetailDTO getDetailPosts(Long boardNo);
+
 //    public List<FreeBoardListDTO> getSearchPosts();
 }

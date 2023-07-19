@@ -4,28 +4,30 @@ import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FreeBoardListDTO {
+    private Long boardNo;   // 글 번호
+    private String createdAt; // 작성일시
+    private String boardCategory;   // 글 카테고리
+    private String boardTitle;  // 글 제목
+    private String boardContent;    // 글 내용
+    private Integer boardHits;      // 조회수
+    private String boardWriter;
 
-    private Long boardNo;   //번호
-    private String createdAt; // 생성일시
-    private String boardCategory;   //카테고리
-    private String boardTitle;  //제목
-    private String boardContent;    //내용
-    private Integer boardHits;      //글 조회수
-
-
-    public FreeBoardListDTO fromEntity(FreeBoardPost boardPost) {
-        CalcCreateDate cal= new CalcCreateDate();
+    public static FreeBoardListDTO fromEntity(FreeBoardPost boardPost) {
+        CalcCreateDate cal = new CalcCreateDate();
+        String boardWriter = boardPost.getMetaUser().getNickname();
         return new FreeBoardListDTO(
-                boardPost.getBoardNo()
-                , cal.calcCreateDate(boardPost.getCreatedAt())
-                , boardPost.getBoardCategory()
-                , boardPost.getBoardTitle()
-                , boardPost.getBoardContent()
-                , boardPost.getBoardHits()
+                boardPost.getBoardNo(),
+                cal.calcCreateDate(boardPost.getCreatedAt()),
+                boardPost.getBoardCategory(),
+                boardPost.getBoardTitle(),
+                boardPost.getBoardContent(),
+                boardPost.getBoardHits(),
+                boardWriter
         );
     }
 }
