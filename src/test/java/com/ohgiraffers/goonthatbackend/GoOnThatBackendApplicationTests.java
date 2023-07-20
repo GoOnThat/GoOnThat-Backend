@@ -8,6 +8,7 @@ class GoOnThatBackendApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("anytest");
     }
 
 }
