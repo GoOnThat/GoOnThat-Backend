@@ -7,14 +7,14 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
 server:
-  port: 8082
+  port: 15000
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/db_test1
-    username: test1
-    password: 1234
+    url: jdbc:mysql://localhost:3306/metamate
+    username: admin
+    password: admin
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

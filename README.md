@@ -11,7 +11,7 @@
 |권은지|김태현|남효정|
 |-------------------------------------------------|-------------------------------------------------|--------------------------------------------------|
 |<img width="160px" src="https://avatars.githubusercontent.com/u/139085498?v=4" />|<img width="160px" src="https://avatars.githubusercontent.com/u/136583226?v=4" />|<img width="160px" src="https://avatars.githubusercontent.com/u/122511826?v=4" />|
-|<center>[@kej2971](https://github.com/taedyyyyy)| <center>[@taedyyyyy](https://github.com/taedyyyyy)|<center>[@namhyojeong](https://github.com/namhyojeong)|
+|<center>[@kej2971](https://github.com/kej2971)| <center>[@taedyyyyy](https://github.com/taedyyyyy)|<center>[@namhyojeong](https://github.com/namhyojeong)|
 
 |정민호|정재민|조평훈|
 |-------------------------------------------------|-------------------------------------------------|--------------------------------------------------|

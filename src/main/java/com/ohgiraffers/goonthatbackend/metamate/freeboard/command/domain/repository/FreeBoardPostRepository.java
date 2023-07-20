@@ -10,7 +10,7 @@ import java.util.List;
 public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost,Long> {
 
     List<FreeBoardPost> findByBoardIsDeletedFalse(); //삭제여부 false만 조회
-    
+
 
 
 }
