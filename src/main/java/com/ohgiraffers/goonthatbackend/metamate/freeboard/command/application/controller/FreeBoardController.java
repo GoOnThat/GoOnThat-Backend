@@ -6,17 +6,14 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardService;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.List;
 
 @Controller
@@ -33,7 +30,7 @@ public class FreeBoardController {
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
     public String list(Model model, FreeBoardListDTO freeBoardListDTO) {
-        List<FreeBoard> boardList = freeBoardService.getAllBoards(freeBoardListDTO);
+        List<FreeBoardPost> boardList = freeBoardService.getAllBoards(freeBoardListDTO);
         model.addAttribute("boardList", boardList);
         return "board/list";
     }
@@ -51,11 +48,8 @@ public class FreeBoardController {
     @PostMapping("/write")
     public String enrollContent(@LoginUser SessionMetaUser user,
                                 FreeBoardWriteDTO freeBoardWrite) {
-      
-        LocalDate currentTime = LocalDate.now();
-        freeBoardWrite.setBoardCreateDate(currentTime);
-        freeBoardWrite.setBoardModifiedDate(currentTime);
-        freeBoardWrite.setBoardDeleteYn("N");
+
+//        freeBoardWrite.setBoardDeleteYn("N");
 
         freeBoardService.write(freeBoardWrite);
 

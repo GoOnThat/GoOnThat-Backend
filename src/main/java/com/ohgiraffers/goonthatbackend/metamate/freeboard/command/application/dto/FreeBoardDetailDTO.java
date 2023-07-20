@@ -1,9 +1,18 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
-import lombok.*;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
+import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,31 +21,27 @@ import java.time.LocalDate;
 public class FreeBoardDetailDTO {
 
     private Long boardNo;   //보드 번호
+    private String createdAt; // 생성일시
     private String boardCategory;   //카테고리
-    private LocalDate boardCreateDate; //글 작성일
     private String boardWriter; //글 작성자
     private String boardTitle;  //제목
     private String boardContent;    //내용
-    public static FreeBoardDetailDTO entityToDTO(FreeBoard freeBoard){
-        FreeBoardDetailDTO boardDetailDTO=new FreeBoardDetailDTO();
-        boardDetailDTO.setBoardNo(freeBoard.getBoardNo());
-        boardDetailDTO.setBoardCategory(freeBoard.getBoardCategory().getBoardCategoryNo());
-        boardDetailDTO.setBoardCreateDate(freeBoard.getBoardDate().getBoardCreatedDate());
-        boardDetailDTO.setBoardWriter(String.valueOf(freeBoard.getBoardWriter()));
-        boardDetailDTO.setBoardTitle(String.valueOf(freeBoard.getBoardTitle().getBoardTitleName()));
-        boardDetailDTO.setBoardContent(String.valueOf(freeBoard.getBoardContent().getBoardContentText()));
-        return boardDetailDTO;
+    private int boardHits; //조회수
+    private List<FreeBoardComment> commentList = new ArrayList<>();
+
+    public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,
+                                         List<FreeBoardComment> commentList) {
+        CalcCreateDate cal= new CalcCreateDate();
+        return new FreeBoardDetailDTO(
+                boardPost.getBoardNo()
+                , cal.calcCreateDate(boardPost.getCreatedAt())
+                , boardPost.getBoardCategory()
+                , boardPost.getBoardWriter()
+                , boardPost.getBoardTitle()
+                , boardPost.getBoardContent()
+                , boardPost.getBoardHits()
+                , commentList
+                );
     }
 
-    @Override
-    public String toString() {
-        return "FreeBoardDetailDTO{" +
-                "boardNo=" + boardNo +
-                ", boardCategory='" + boardCategory + '\'' +
-                ", boardCreateDate=" + boardCreateDate +
-                ", boardWriter='" + boardWriter + '\'' +
-                ", boardTitle='" + boardTitle + '\'' +
-                ", boardContent='" + boardContent + '\'' +
-                '}';
-    }
 }

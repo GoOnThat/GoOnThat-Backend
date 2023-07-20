@@ -3,7 +3,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.s
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoard;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.vo.BoardDeleteYn;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardRepository;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service.mapper.FreeBoardMapper;
@@ -26,7 +26,7 @@ public class FreeBoardService {
 
     public void write(FreeBoardWriteDTO freeBoardWrite) {
 
-        FreeBoard freeBoard = freeBoardMapper.toFreeBoardWrite(freeBoardWrite);
+        FreeBoardPost freeBoard = freeBoardMapper.toFreeBoardWrite(freeBoardWrite);
 
         freeBoard.setBoardDeleteYn(new BoardDeleteYn("N"));
 
@@ -35,20 +35,20 @@ public class FreeBoardService {
 
     public void enrolledwrite(FreeBoardDetailDTO freeBoardDetailDTO) {
 
-        FreeBoard freeBoard = freeBoardMapper.toFreeBoardDetail(freeBoardDetailDTO);
+        FreeBoardPost freeBoard = freeBoardMapper.toFreeBoardDetail(freeBoardDetailDTO);
 
         freeBoardRepository.save(freeBoard);
     }
 
-    public List<FreeBoard> getAllBoards(FreeBoardListDTO freeBoardListDTO) {
+    public List<FreeBoardPost> getAllBoards(FreeBoardListDTO freeBoardListDTO) {
 
-        List<FreeBoard> boards = freeBoardRepository.findAll();
+        List<FreeBoardPost> boards = freeBoardRepository.findAll();
 
         return boards;
     }
 
     public FreeBoardDetailDTO detailBoard(Long boardNo) {
-        FreeBoard freeBoard = freeBoardRepository.findById(boardNo).orElse(null);
+        FreeBoardPost freeBoard = freeBoardRepository.findById(boardNo).orElse(null);
 
         FreeBoardDetailDTO board=FreeBoardDetailDTO.entityToDTO(freeBoard);
         System.out.println(freeBoardMapper.boardDetailDTO(freeBoard));

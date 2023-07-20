@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,12 +13,18 @@ import java.time.LocalDate;
 public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
-    private String boardTitle;  //제목
-    private LocalDate boardCreateDate; //글 작성일
-    private LocalDate boardModifiedDate; //글 수정일
     private String boardWriter; //글 작성자
-    private Integer boardHits; //글 조회수
-    private String boardDeleteYn;    //글 삭제여부
+    private String boardTitle;  //제목
     private String boardContent;    //내용
+    private Integer boardHits; //글 조회수
 
+    public FreeBoardWriteDTO toEntity(FreeBoardPost boardPost) {
+        return new FreeBoardWriteDTO(
+                boardPost.getBoardCategory()
+                , boardPost.getBoardWriter()
+                , boardPost.getBoardTitle()
+                , boardPost.getBoardContent()
+                , boardPost.getBoardHits()
+        );
+    }
 }
