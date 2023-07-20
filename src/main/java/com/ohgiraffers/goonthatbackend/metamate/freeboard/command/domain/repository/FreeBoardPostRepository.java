@@ -12,5 +12,4 @@ public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost,Lon
     List<FreeBoardPost> findByBoardIsDeletedFalse(); //삭제여부 false만 조회
 
 
-
 }

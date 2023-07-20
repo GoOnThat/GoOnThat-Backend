@@ -16,6 +16,12 @@ spring:
     username: admin
     password: admin
 
+  thymeleaf:
+    cache: false # Set to true for production; false for development (disabled caching for faster development)
+    mode: HTML5
+    encoding: UTF-8
+
+
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     open-in-view: false

@@ -1,6 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.auth;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.Role;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -5,6 +5,8 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
+
+
 import javax.persistence.*;
 
 @Entity

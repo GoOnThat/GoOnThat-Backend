@@ -29,7 +29,7 @@
         <attr sel="td[3]" th:text="${userAccount.nickname}" />
         <attr sel="td[4]" th:text="${userAccount.number}" />
         <attr sel="td[5]" th:text="${userAccount.major}" />
-        <attr sel="td[6]" th:text="${userAccount.role.description}" />
+        <attr sel="td[6]" th:text="${userAccount.role}" />
         <attr sel="td[7]/time" th:datetime="${userAccount.createdAt}" th:text="${#temporals.format(userAccount.createdAt, 'yyyy-MM-dd HH:mm:ss')}" />
       </attr>
     </attr>

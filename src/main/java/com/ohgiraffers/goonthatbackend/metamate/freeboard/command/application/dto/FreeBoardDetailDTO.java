@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @Getter
 public class FreeBoardDetailDTO {
-    //이력 test
+
     private Long boardNo; //글 번호
     private String createdAt; // 생성일시
     private String boardCategory;//카테고리

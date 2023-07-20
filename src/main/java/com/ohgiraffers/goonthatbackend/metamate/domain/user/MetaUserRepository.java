@@ -10,5 +10,10 @@ public interface MetaUserRepository extends JpaRepository<MetaUser, Long> {
     boolean existsByNickname(String nickname);
     Optional<MetaUser> findByEmail(String email);
     Optional<MetaUser> findById(Long id);
+
+    MetaUser findByNickname(String nickname);
+
+
     void deleteById(Long id);
+    void deleteByEmail(String email);
 }

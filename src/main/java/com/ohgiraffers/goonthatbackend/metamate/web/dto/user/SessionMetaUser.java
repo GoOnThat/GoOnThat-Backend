@@ -16,19 +16,17 @@ public class SessionMetaUser {
     private String number;
     private String major;
     private Role role;
-    private String provider;
 
     public static SessionMetaUser fromEntity(MetaUser metaUser) {
-         return new SessionMetaUser(
-                 metaUser.getId(),
-                 metaUser.getEmail(),
-                 metaUser.getPassword(),
-                 metaUser.getName(),
-                 metaUser.getNickname(),
-                 metaUser.getNumber(),
-                 metaUser.getMajor(),
-                 metaUser.getRole(),
-                 metaUser.getProvider()
-         );
+        return new SessionMetaUser(
+                metaUser.getId(),
+                metaUser.getEmail(),
+                metaUser.getPassword(),
+                metaUser.getName(),
+                metaUser.getNickname(),
+                metaUser.getNumber(),
+                metaUser.getMajor(),
+                metaUser.getRole()
+        );
     }
 }

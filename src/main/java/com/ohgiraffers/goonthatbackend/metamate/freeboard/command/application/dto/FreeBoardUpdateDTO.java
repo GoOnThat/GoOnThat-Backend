@@ -20,5 +20,6 @@ public class FreeBoardUpdateDTO {
                 .boardTitle(this.boardTitle)
                 .boardContent(this.boardContent)
                 .build();
-    }//이력 test
+
+    }
 }

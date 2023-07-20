@@ -58,6 +58,7 @@ public class FreeBoardController {
     @GetMapping("/detail/{boardNo}")
     public String detail(@PathVariable Long boardNo, @ModelAttribute("freeBoardDetailDTO") FreeBoardDetailDTO freeBoardDetailDTO,
                           @LoginUser SessionMetaUser user, Model model) {
+
         if (user != null) {
             model.addAttribute("user", user);
         }

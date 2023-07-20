@@ -3,7 +3,8 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.d
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
-//이력 test
+
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter

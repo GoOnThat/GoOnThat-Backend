@@ -5,12 +5,11 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
-
-
 import java.util.List;
 
 public interface FreeBoardPostService {
-    //이력 test
+
+
     public void savePost(FreeBoardWriteDTO boardDTO,SessionMetaUser user);
 //    public void updatePost();
 //    public void deletePost();

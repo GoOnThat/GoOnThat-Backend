@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
   <meta charset="utf-8">
@@ -8,6 +8,8 @@
   <title>MetaMate</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
@@ -96,11 +98,17 @@
         <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center text-center text-lg-start">
           <h2>Welcome to <span>MetaMate</span></h2>
           <p>메타버스아카데미 커뮤니티에 오신 것을 환영합니다.</p>
-          <div class="d-flex justify-content-center justify-content-lg-start">
-            <!--로그인, 회원가입 할 수 있는 페이지로 매핑-->
-            <a href="#about" class="btn-get-started">Get Started</a>
+
+          <div class="d-flex justify-content-center justify-content-lg-start" th:if="${user == null}">
+            <button onclick="location.href='/auth/login';" type="button" class="btn-get-started">Get Started</button>
             <a href="https://www.youtube.com/watch?v=c5YdX588Tvo&pp=ygUY66mU7YOA67KE7Iqk7JWE7Lm0642w66-4" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
           </div>
+
+          <div class="d-flex justify-content-center justify-content-lg-start" th:if="${user != null}">
+            <button onclick="location.href='/auth/edit';" type="button" class="btn-get-started">정보수정</button>
+            <a href="https://www.youtube.com/watch?v=c5YdX588Tvo&pp=ygUY66mU7YOA67KE7Iqk7JWE7Lm0642w66-4" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+          </div>
+
         </div>
         <div class="col-lg-6 order-1 order-lg-2">
           <img src="assets/img/hero-img.svg" class="img-fluid" alt="" data-aos="zoom-out" data-aos-delay="100">

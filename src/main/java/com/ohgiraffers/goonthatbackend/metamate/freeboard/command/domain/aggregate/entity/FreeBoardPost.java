@@ -5,10 +5,11 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import lombok.*;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-//이력 test
+
 
 @Entity
 @Table(name = "freeboard")

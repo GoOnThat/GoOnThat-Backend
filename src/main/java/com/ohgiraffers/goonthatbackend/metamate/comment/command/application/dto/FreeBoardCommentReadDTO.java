@@ -2,7 +2,12 @@ package com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto
 
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
