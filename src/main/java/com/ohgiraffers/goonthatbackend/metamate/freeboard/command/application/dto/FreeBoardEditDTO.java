@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter
-public class FreeBoardUpdateDTO {
+public class FreeBoardEditDTO {
 
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목

@@ -8,6 +8,7 @@ import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.AccessService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardPostRepository;
@@ -15,12 +16,8 @@ import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,9 +25,10 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 
     private final FreeBoardPostRepository freeBoardPostRepository;
     private final MetaUserRepository metaUserRepository;
+    private final AccessService accessControl;
 
-    @Override
     @Transactional
+    @Override
     public void savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
 
         MetaUser metaUser = metaUserRepository.findById(user.getId())
@@ -62,5 +60,30 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         List<FreeBoardComment> commentList = boardPost.getCommentList();
 
         return new FreeBoardDetailDTO().fromEntity(boardPost, commentList);
+    }
+
+
+    @Transactional
+    @Override
+    public void updatePost(Long boardNo, FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
+        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        accessControl.validateUserAccess(boardPost, user);
+
+        boardPost.update(boardDTO.getBoardCategory(), boardDTO.getBoardTitle(), boardDTO.getBoardContent());
+
+        freeBoardPostRepository.save(boardPost);
+    }
+
+    @Transactional
+    @Override
+    public void deletePost(Long boardNo, SessionMetaUser user) {
+        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        accessControl.validateUserAccess(boardPost, user);
+
+        boardPost.delete();
+
+        freeBoardPostRepository.save(boardPost);
     }
 }

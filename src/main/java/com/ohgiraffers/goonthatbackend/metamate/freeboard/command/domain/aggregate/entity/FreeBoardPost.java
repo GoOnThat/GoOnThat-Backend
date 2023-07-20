@@ -56,5 +56,14 @@ public class FreeBoardPost extends AuditingFields {
     }
 
 
+    public void update(String newCategory, String newTitle, String newContent) {
+        this.boardCategory = newCategory;
+        this.boardTitle = newTitle;
+        this.boardContent = newContent;
+    }
+
+    public void delete() {
+        this.boardIsDeleted = true;
+    }
 }
 

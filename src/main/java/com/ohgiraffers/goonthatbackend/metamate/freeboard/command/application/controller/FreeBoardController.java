@@ -62,26 +62,48 @@ public class FreeBoardController {
         if (user != null) {
             model.addAttribute("user", user);
         }
+
         model.addAttribute("boardDetail", freeBoardService.getDetailPosts(boardNo));
         return "board/detail";
     }
 
+    /* 게시글 수정 페이지 조회 */
+    @GetMapping("/edit/{boardNo}")
+    public String edit(@PathVariable Long boardNo, @ModelAttribute("freeBoardWriteDTO") FreeBoardWriteDTO freeBoardWriteDTO,
+                       @LoginUser SessionMetaUser user, Model model) {
 
-//    @PostMapping("/detail")
-//    public String detail(Model model, FreeBoardDetailDTO freeBoardDetailDTO) {
-//
-//        String boardTitle = freeBoardDetailDTO.getBoardTitle();
-//        String boardContent = freeBoardDetailDTO.getBoardContent();
-//        String boardCategory = freeBoardDetailDTO.getBoardCategory();
-//
-//        model.addAttribute("boardTitle", boardTitle);
-//        model.addAttribute("boardContent", boardContent);
-//        model.addAttribute("boardCategory", boardCategory);
-//
-//        freeBoardService.enrolledwrite(freeBoardDetailDTO);
-//
-//        return "board/detail";
-//    }
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
 
+        model.addAttribute("boardDetail", boardDetail);
+        return "board/edit";
+    }
+
+    /* 게시글 수정 */
+    @PostMapping("/edit/{boardNo}")
+    public String editSave(@PathVariable Long boardNo, @ModelAttribute("freeBoardEditDTO") FreeBoardWriteDTO freeBoardWriteDTO,
+                           @LoginUser SessionMetaUser user, Model model) {
+
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        freeBoardService.updatePost(boardNo, freeBoardWriteDTO, user);
+
+        return "redirect:/board/detail/" + boardNo;
+    }
+
+    /* 게시글 삭제 */
+    @GetMapping("/delete/{boardNo}")
+    public String delete(@PathVariable Long boardNo, @LoginUser SessionMetaUser user, Model model) {
+
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        freeBoardService.deletePost(boardNo, user);
+
+        return "redirect:/board/list";
+    }
 }
 
