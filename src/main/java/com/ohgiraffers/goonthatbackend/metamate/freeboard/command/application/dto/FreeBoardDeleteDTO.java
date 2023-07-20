@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+//이력 test
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Setter

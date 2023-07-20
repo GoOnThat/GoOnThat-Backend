@@ -16,7 +16,7 @@ public class FreeBoardListDTO {
     private String boardContent;    // 글 내용
     private Integer boardHits;      // 조회수
     private String boardWriter;
-
+    //이력 test
     public static FreeBoardListDTO fromEntity(FreeBoardPost boardPost) {
         CalcCreateDate cal = new CalcCreateDate();
         String boardWriter = boardPost.getMetaUser().getNickname();

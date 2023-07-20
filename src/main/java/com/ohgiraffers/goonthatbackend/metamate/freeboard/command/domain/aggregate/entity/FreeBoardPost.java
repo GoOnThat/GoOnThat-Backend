@@ -8,7 +8,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+//이력 test
 
 @Entity
 @Table(name = "freeboard")

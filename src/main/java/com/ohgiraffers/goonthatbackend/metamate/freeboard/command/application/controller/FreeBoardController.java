@@ -57,7 +57,7 @@ public class FreeBoardController {
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
     public String detail(@PathVariable Long boardNo, @ModelAttribute("freeBoardDetailDTO") FreeBoardDetailDTO freeBoardDetailDTO,
-                         @LoginUser SessionMetaUser user, Model model) {
+                          @LoginUser SessionMetaUser user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
         }
