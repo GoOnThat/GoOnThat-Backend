@@ -43,6 +43,7 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
+
                         .mvcMatchers("/assets/**","/auth/**", "/css/**", "/images/**", "/js/**",
                                 "/", "/index").permitAll()
                         .mvcMatchers("/admin/**", "/management/**").hasRole("ADMIN")

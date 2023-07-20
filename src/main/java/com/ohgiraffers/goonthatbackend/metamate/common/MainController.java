@@ -1,10 +1,13 @@
 package com.ohgiraffers.goonthatbackend.metamate.common;
 
+
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,5 +24,7 @@ public class MainController {
 
         return "index"; //html 이름
     }
+
+
 }
 
