@@ -23,7 +23,6 @@ import javax.servlet.DispatcherType;
 
 @Configuration
 @RequiredArgsConstructor
-@EnableWebSecurity(debug = true)
 public class SecurityConfig {
 
     private final AuthenticationFailureHandler authenticationFailureHandler;
@@ -39,45 +38,21 @@ public class SecurityConfig {
         return authenticationManagerBuilder.build();
     }
 
-//    @Order(0)
-//    @Bean
-//    public SecurityFilterChain adminFilterChain(HttpSecurity http) throws Exception {
-//
-//        http
-//                .authorizeHttpRequests(auth -> auth
-//
-//                )
-//    }
-
-
-    @Order(1)
     @Bean
-    public SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().disable()
                 .authorizeHttpRequests(auth -> auth
-//                        .mvcMatchers("/api/posts/**").hasRole(Role.USER.name()) // 등록, 수정, 삭제
-//                        .mvcMatchers("/posts/add/**").hasRole(Role.USER.name()) // 등록 Form
-//                        .mvcMatchers("/posts/{\\d+}/edit").hasRole(Role.USER.name()) // 수정 Form
-//                        .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-//                        .mvcMatchers("/admin/**").hasAnyRole(Role.ADMIN.name())
-//                        .mvcMatchers("/associate").hasAnyRole(Role.ASSOCIATE.name())
-//                        .mvcMatchers("/api/**").permitAll()
-                        .mvcMatchers(
-//                                HttpMethod.GET,
-                                "/**"
-//                                "/assets/**", "/css/**", "/images/**", "/js/**",
-//                                "/auth/**", "/management/**"
-//                                "/auth/loginProc"
-                        ).permitAll()
+                        .mvcMatchers("/assets/**","/auth/**", "/css/**", "/images/**", "/js/**",
+                                "/", "/index").permitAll()
+                        .mvcMatchers("/admin/**", "/management/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/loginProc")
                         .failureHandler(authenticationFailureHandler)
                         .successHandler(authenticationSuccessHandler)
-                        .and())
+                        .permitAll())
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
                         .invalidateHttpSession(true).deleteCookies("JSESSIONID")

@@ -1,6 +1,5 @@
-<!DOCTYPE>
-
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
 </head>
@@ -29,51 +28,50 @@
   .center {
     text-align: center;
   }
-
 </style>
 <body>
-<form action="/board/write" method="post">
-  <table  style="padding-top:50px" align = center width=800 border=0 cellpadding=2 >
+<form th:action="@{/board/write}" method="post" th:object="${freeBoardWriteDTO}">
+  <table style="padding-top:50px" align="center" width="800" border="0" cellpadding="2">
     <tr>
-      <td height=20 align= center bgcolor=#ccc><font color=white> 글쓰기</font></td>
+      <td height="20" align="center" bgcolor="#ccc"><font color="white">글쓰기</font></td>
     </tr>
     <tr>
-      <td bgcolor=white>
-        <table class = "table2">
+      <td bgcolor="white">
+        <table class="table2">
           <tr>
             <td>작성자</td>
-            <td></td>
+            <td>
+              <span th:if="${user != null}" th:text="${user.nickname}"></span>
+              <span th:unless="${user != null}">로그인하세요</span>
+            </td>
           </tr>
-
           <tr>
             <td>제목</td>
-            <td><input type="text" name = "boardTitle" size=60></td>
+            <td><input type="text" th:field="*{boardTitle}" size="60"></td>
           </tr>
-
           <tr>
             <td>내용</td>
-            <td><textarea name = "boardContent" cols=85 rows=15></textarea></td>
+            <td><textarea th:field="*{boardContent}" cols="85" rows="15"></textarea></td>
           </tr>
           <tr>
-            <td>카테고리<br>
-            <select name="boardCategory">
-              <option value="" selected>선택</option>
-              <option value="free" selected>소통</option>
-              <option value="announce" selected>공지</option>
-            </select>
+            <td>카테고리</td>
             <td>
+              <select th:field="*{boardCategory}">
+                <option value="잡담" selected>잡담</option>
+                <option value="정보">정보</option>
+                <option value="공지">공지</option>
+              </select>
+
+            </td>
           </tr>
         </table>
-
-        <center>
-        </center>
+        <div class="center">
+          <button onclick="location.href='/board/list'">작성</button>
+          <input type="submit" style="display: none;">
+        </div>
       </td>
     </tr>
   </table>
-<div class="center">
-  <button onclick="location.href='/board/list'">작성</button>
-  <input type="submit" style="display: none;">
-</div>
 </form>
 </body>
 </html>

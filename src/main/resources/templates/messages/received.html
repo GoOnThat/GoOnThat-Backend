@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>받은 편지함</title>
+</head>
+<body>
+<h1>받은 편지함</h1>
+<table>
+  <tr>
+    <th>보낸 사람</th>
+    <th>제목</th>
+    <th>내용</th>
+  </tr>
+  <tr th:each="message : ${receivedMessage}">
+    <td th:text="${message.senderNickname}"></td>
+    <td th:text="${message.title}"></td>
+    <td th:text="${message.content}"></td>
+  </tr>
+</table>
+</body>
+</html>

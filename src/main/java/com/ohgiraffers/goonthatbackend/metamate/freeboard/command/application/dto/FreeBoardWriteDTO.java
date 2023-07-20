@@ -1,23 +1,30 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
-import lombok.*;
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
-
-@AllArgsConstructor
-@NoArgsConstructor
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@ToString
+@Setter
 public class FreeBoardWriteDTO {
 
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목
-    private LocalDate boardCreateDate; //글 작성일
-    private LocalDate boardModifiedDate; //글 수정일
-    private String boardWriter; //글 작성자
-    private Integer boardHits; //글 조회수
-    private String boardDeleteYn;    //글 삭제여부
-    private String boardContent;    //내용
+    private String boardContent; //내용
 
+    public FreeBoardPost toEntity(MetaUser metaUser) {
+        return FreeBoardPost.builder()
+                .boardCategory(this.boardCategory)
+                .boardTitle(this.boardTitle)
+                .boardContent(this.boardContent)
+                .metaUser(metaUser)
+                .boardHits(0)
+                .boardIsDeleted(false)
+                .build();
+
+    }
 }
