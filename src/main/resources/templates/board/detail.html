@@ -130,50 +130,53 @@
 </table>
 <center>
     <button type="button">수정</button>
-    <button type="button" onclick="openModal()">삭제</button>
+    <!-- 아래 버튼에서 openModal 함수 호출 시 게시물 번호를 전달합니다 -->
+    <button type="button" th:onclick="'openModal(' + ${boardNo} + ')'">삭제</button>
     <button onclick="location.href='/board/list'">목록</button>
 </center>
 <div id="modal" class="modal">
     <div class="modal-content">
         <p>게시글을 삭제하시겠습니까?</p>
-        <button class="modal-button" onclick="deletePost()">삭제</button>
+        <button class="modal-button confirm" onclick="deletePost()">삭제</button>
         <button class="modal-button cancel" onclick="closeModal()">취소</button>
     </div>
 </div>
 <script>
-    // 모달 창 열기
-    function openModal() {
-        const modal = document.getElementById('modal');
-        modal.style.display = 'block';
+    let currentBoardNo;
+
+    function openModal(boardNo) {
+        document.getElementById('modal').style.display = 'block';
+        currentBoardNo = boardNo;
+        document.querySelector('.modal-content p').textContent = currentBoardNo +`번 게시글을 삭제하시겠습니까?`;
     }
 
-    // 모달 창 닫기
     function closeModal() {
-        const modal = document.getElementById('modal');
-        modal.style.display = 'none';
+        document.getElementById('modal').style.display = 'none';
+        currentBoardNo = null;
     }
 
-    // 게시글 삭제 요청 보내기
-    function deletePost(boardNo) {
-        const url = '/board/delete/' + boardNo;
+    function deletePost() {
+        if (!currentBoardNo) {
+            alert('게시물 번호가 잘못되었습니다.');
+            return;
+        }
 
-        // AJAX 요청 보내기
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // 성공적으로 삭제되었을 경우 처리
+        let url = '/board/detail/' + currentBoardNo;
+        fetch(url, { method: 'DELETE' })
+            .then(response => {
+                if (response.status === 204) {
                     alert('게시글이 삭제되었습니다.');
-                    closeModal(); // 모달 창 닫기
-                    window.location.href = '/board/list'; // 목록 페이지로 이동
+                    closeModal();
+                    window.location.href = '/board/list';
                 } else {
-                    // 삭제 실패 시 처리
-                    alert('게시글 삭제에 실패했습니다.');
+                    return response.text().then(text => {
+                        throw new Error(text || '게시글 삭제에 실패했습니다.');
+                    });
                 }
-            }
-        };
-        xhr.send();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
     }
 </script>
 </body>

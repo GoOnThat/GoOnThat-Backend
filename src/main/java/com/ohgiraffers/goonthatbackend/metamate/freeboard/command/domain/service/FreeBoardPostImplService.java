@@ -21,6 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FreeBoardPostImplService implements FreeBoardPostService {
 
     private final FreeBoardPostRepository freeBoardPostRepository;
@@ -68,7 +69,6 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     public void updatePost(Long boardNo, FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        accessControl.validateUserAccess(boardPost, user);
 
         boardPost.update(boardDTO.getBoardCategory(), boardDTO.getBoardTitle(), boardDTO.getBoardContent());
 
@@ -78,12 +78,9 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Transactional
     @Override
     public void deletePost(Long boardNo, SessionMetaUser user) {
-        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo).orElseThrow(()->
+                        new CustomException(ErrorCode.POST_NOT_FOUND));
         accessControl.validateUserAccess(boardPost, user);
-
         boardPost.delete();
-
-        freeBoardPostRepository.save(boardPost);
     }
 }

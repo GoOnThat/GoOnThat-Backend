@@ -7,6 +7,7 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -57,11 +58,12 @@ public class FreeBoardController {
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
     public String detail(@PathVariable Long boardNo, @ModelAttribute("freeBoardDetailDTO") FreeBoardDetailDTO freeBoardDetailDTO,
-                          @LoginUser SessionMetaUser user, Model model) {
+                         @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
+        model.addAttribute("boardNo", boardNo);
 
         model.addAttribute("boardDetail", freeBoardService.getDetailPosts(boardNo));
         return "board/detail";
@@ -95,14 +97,19 @@ public class FreeBoardController {
     }
 
     /* 게시글 삭제 */
-    @GetMapping("/delete/{boardNo}")
+    @DeleteMapping(value = "/board/detail/{boardNo}")
     public String delete(@PathVariable Long boardNo, @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
-        freeBoardService.deletePost(boardNo, user);
 
+        try {
+            freeBoardService.deletePost(boardNo,user);
+            model.addAttribute("successMessage", "게시글이 삭제되었습니다.");
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "게시글 삭제에 실패했습니다.");
+        }
         return "redirect:/board/list";
     }
 }
