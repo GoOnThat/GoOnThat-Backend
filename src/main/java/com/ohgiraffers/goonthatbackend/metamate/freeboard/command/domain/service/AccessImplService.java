@@ -10,8 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class AccessImplService implements AccessService {
 
+    @Override
     public void validateUserAccess(FreeBoardPost boardPost, SessionMetaUser user) {
-        // 게시물의 작성자와 로그인한 사용자를 비교하여 권한 검증
+
         if (!boardPost.getMetaUser().getId().equals(user.getId())) {
             throw new CustomException(ErrorCode.USER_BAD_REQUEST);
         }

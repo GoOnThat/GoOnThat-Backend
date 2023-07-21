@@ -80,7 +80,9 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     public void deletePost(Long boardNo, SessionMetaUser user) {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo).orElseThrow(()->
                         new CustomException(ErrorCode.POST_NOT_FOUND));
+
         accessControl.validateUserAccess(boardPost, user);
+
         boardPost.delete();
     }
 }
