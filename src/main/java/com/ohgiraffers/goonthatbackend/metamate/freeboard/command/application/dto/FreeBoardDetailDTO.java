@@ -2,6 +2,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.d
 
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
+import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,10 @@ public class FreeBoardDetailDTO {
     private String boardTitle;  //제목
     private String boardContent; //내용
     private int boardHits; //조회수
+    private boolean boardIsDeleted;// 삭제여부
     private List<FreeBoardComment> commentList = new ArrayList<>();
     private String boardWriter;
+    private MetaUser metaUser;
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardComment> commentList) {
         CalcCreateDate cal= new CalcCreateDate();
@@ -36,8 +39,10 @@ public class FreeBoardDetailDTO {
                 , boardPost.getBoardTitle()
                 , boardPost.getBoardContent()
                 , boardPost.getBoardHits()
+                , boardPost.isBoardIsDeleted()
                 , commentList
                 , boardWriter
+                , boardPost.getMetaUser()
                 );
     }
 
