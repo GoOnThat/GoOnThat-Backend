@@ -22,30 +22,11 @@ public class FreeBoardCommentController {
     private final FreeBoardCommentService freeBoardCommentService;
     private final FreeBoardPostRepository freeBoardPostRepository;
 
-
-        @GetMapping("/comment/{refBoardNo}")
-        public String showBoardDetail(@PathVariable Long refBoardNo,
-                                      @ModelAttribute("freeBoardCommentReadDTO") FreeBoardCommentReadDTO freeBoardCommentReadDTO,
-                                      @LoginUser SessionMetaUser user, Model model) {
-
-            if (user != null) {
-                model.addAttribute("user", user);
-            }
-
-            // 댓글 목록 조회
-            List<FreeBoardCommentReadDTO> commentList = freeBoardCommentService.getCommentList(refBoardNo);
-            model.addAttribute("commentList", commentList);
-
-            return "/comment/{refBoardNo}";
-        }
-
-
     @ResponseBody
     @PostMapping("/comment/{refBoardNo}")
-    public List<FreeBoardCommentWriteDTO> addComment(@PathVariable("refBoardNo") Long refBoardNo,
-                                                     @LoginUser SessionMetaUser user, Model model,
-                                                     FreeBoardCommentWriteDTO freeBoardCommentWriteDTO){
-
+    public List<FreeBoardCommentReadDTO> addComment(@PathVariable("refBoardNo") Long refBoardNo,
+                                                    @LoginUser SessionMetaUser user, Model model,
+                                                    FreeBoardCommentWriteDTO freeBoardCommentWriteDTO) {
 
         if (user != null) {
             model.addAttribute("user", user);
@@ -53,15 +34,9 @@ public class FreeBoardCommentController {
         FreeBoardPost refBoardPost = freeBoardPostRepository.findById(refBoardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        List<FreeBoardCommentWriteDTO> commentList = freeBoardCommentService.addComment(refBoardPost, freeBoardCommentWriteDTO, user);
+        List<FreeBoardCommentReadDTO> commentList = freeBoardCommentService.addComment(refBoardPost, freeBoardCommentWriteDTO, user);
 
         System.out.println("commentList = " + commentList);
         return commentList;
     }
-
-//    @PostMapping("/error")
-//    @ResponseBody
-//    public String error() {
-//        return "error";
-//    }
 }

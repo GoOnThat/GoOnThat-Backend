@@ -131,7 +131,9 @@
 
         $.ajax({
                     url: `/comment/${refBoardNo}`,
-                    data: {refBoardNo: refBoardNo},
+                    data: {refBoardNo: refBoardNo,
+                        commentContent:replyContents
+                    },
                     type: "POST",
                     success: function(data, status, xhr) {
                         // console.log("status = ", status);
@@ -139,7 +141,8 @@
                         if (status === "success") {
                             alert("등록 성공");
                             $('#replyContents').val('');
-                            getReplyList(); // 댓글 목록 갱신
+
+                            //getReplyList(); // 댓글 목록 갱신
                         } else {
                             alert("등록 실패");
                         }
@@ -156,19 +159,19 @@
         var refBoardNo = "[[${boardNo}]]";
         $.ajax({
             url: `/comment/${refBoardNo}`,
-            type: "POST",
+            type: "GET",
             data: {refBoardNo: refBoardNo},
-            success: function(result) {
+            success: function(data,status,xhr) {
                 var $tableBody = $('#rtb tbody');
                 $tableBody.html('');
-                $('#rCount').text("댓글 (" + result.length + ")");
-                if (result != null) {
-                    console.log(result);
-                    for (var i = 0; i < result.length; i++) {
+                $('#rCount').text("댓글 (" + data.length + ")");
+                if (data != null) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
                         var $tr = $("<tr>");
-                        var $rWriter = $("<td width='100'>").text(result[i].replyWirter);
-                        var $rContent = $("<td>").text(result[i].replyContents);
-                        var $rCreateDate = $("<td width='100'>").text(result[i].rCreateDate);
+                        var $rWriter = $("<td width='100'>").text(data[i].replyWirter);
+                        var $rContent = $("<td>").text(data[i].replyContents);
+                        var $rCreateDate = $("<td width='100'>").text(data[i].rCreateDate);
                         var $btnArea = $("<td width='80'>").append("<a href='modifyreply(" + board + ")'>수정</a>").append("<a href='#'>삭제</a>");
 
                         $tr.append($rWriter);
