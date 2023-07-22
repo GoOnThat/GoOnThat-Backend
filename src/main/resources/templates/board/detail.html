@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta class="test" name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <style>
         table.table2 {
             border-collapse: separate;
@@ -79,27 +81,109 @@
                         <button type="button">좋아요</button>
                         <span>0</span>
                     </td>
-                </tr>
-                <tr>
-                    <td>댓글</td>
-                    <td>
-                        <div>
-                            <input type="text" id="commentInput" placeholder="댓글 작성">
-                            <button type="button">등록</button>
-                        </div>
-                        <div id="commentDisplay"></div>
-                    </td>
-                </tr>
+
             </table>
         </td>
     </tr>
 </table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<input type="hidden" name="refBoardNo" value="${board.boardNo}">
+<table align="center" width="500" border="0">
+    <tr>
+        <td>댓글</td>
+        <td><textarea rows="5" cols="50" placeholder="내용을 작성하세요"
+                      name="replyContents" id="replyContents" required="required"></textarea></td>
+        <td>
+            <button id="rSubmit">등록하기</button>
+        </td>
+    </tr>
+
+</table>
+<table align="center" width="500" border="1" id="rtb">
+    <thead>
+    <td colspan="4"><b id="rCount">댓글목록</b></td>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 <center>
     <button type="button">수정</button>
     <button type="button">삭제</button>
-    <button onclick="location.href='/board/list'">목록</button>
+    <button type="button" onclick="location.href='/board/list'">목록</button>
 </center>
+
 <script>
+    $('#rSubmit').on("click", function() {
+        var replyContents = $("#replyContents").val();
+        var refBoardNo = "[[${boardNo}]]";
+        // console.log(document.getElementsByClassName("test"))
+        // var refBoardNo = "";
+
+        console.log(replyContents);
+        console.log(refBoardNo);
+
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+            if (options['type'].toLowerCase() === "post") {
+                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            }
+        });
+
+        $.ajax({
+                    url: `/comment/${refBoardNo}`,
+                    data: {refBoardNo: refBoardNo},
+                    type: "POST",
+                    success: function(data, status, xhr) {
+                        // console.log("status = ", status);
+                        // console.log("data = " , data);
+                        if (status === "success") {
+                            alert("등록 성공");
+                            $('#replyContents').val('');
+                            getReplyList(); // 댓글 목록 갱신
+                        } else {
+                            alert("등록 실패");
+                        }
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        alert("등록 실패");
+                    }
+                });
+
+    });
+
+    function getReplyList() {
+        var refBoardNo = "[[${boardNo}]]";
+        $.ajax({
+            url: `/comment/${refBoardNo}`,
+            type: "POST",
+            data: {refBoardNo: refBoardNo},
+            success: function(result) {
+                var $tableBody = $('#rtb tbody');
+                $tableBody.html('');
+                $('#rCount').text("댓글 (" + result.length + ")");
+                if (result != null) {
+                    console.log(result);
+                    for (var i = 0; i < result.length; i++) {
+                        var $tr = $("<tr>");
+                        var $rWriter = $("<td width='100'>").text(result[i].replyWirter);
+                        var $rContent = $("<td>").text(result[i].replyContents);
+                        var $rCreateDate = $("<td width='100'>").text(result[i].rCreateDate);
+                        var $btnArea = $("<td width='80'>").append("<a href='modifyreply(" + board + ")'>수정</a>").append("<a href='#'>삭제</a>");
+
+                        $tr.append($rWriter);
+                        $tr.append($rContent);
+                        $tr.append($rCreateDate);
+                        $tr.append($btnArea);
+                        $tableBody.append($tr);
+                    }
+                }
+            },
+            error: function() {
+                console.log("요청실패");
+            }
+        });
+    }
 </script>
 </body>
 
