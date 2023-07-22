@@ -11,8 +11,8 @@ public interface FreeBoardPostService {
 
 
     public void savePost(FreeBoardWriteDTO boardDTO,SessionMetaUser user);
-//    public void updatePost();
-//    public void deletePost();
+    public void updatePost(Long boardNo, FreeBoardWriteDTO boardDTO, SessionMetaUser user);
+    public void deletePost(Long boardNo, SessionMetaUser user);
     public List<FreeBoardListDTO> getAllPosts();
     public FreeBoardDetailDTO getDetailPosts(Long boardNo);
 
