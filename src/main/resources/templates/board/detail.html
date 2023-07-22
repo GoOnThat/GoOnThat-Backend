@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta class="test" name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <style>
         table.table2 {
             border-collapse: separate;
@@ -119,20 +121,30 @@
                         <button type="button">좋아요</button>
                         <span>0</span>
                     </td>
-                </tr>
-                <tr>
-                    <td>댓글</td>
-                    <td>
-                        <div>
-                            <input type="text" id="commentInput" placeholder="댓글 작성">
-                            <button type="button">등록</button>
-                        </div>
-                        <div id="commentDisplay"></div>
-                    </td>
-                </tr>
+
             </table>
         </td>
     </tr>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<input type="hidden" name="refBoardNo" value="${board.boardNo}">
+<table align="center" width="500" border="0">
+    <tr>
+        <td>댓글</td>
+        <td><textarea rows="5" cols="50" placeholder="내용을 작성하세요"
+                      name="replyContents" id="replyContents" required="required"></textarea></td>
+        <td>
+            <button id="rSubmit">등록하기</button>
+        </td>
+    </tr>
+
+</table>
+<table align="center" width="500" border="1" id="rtb">
+    <thead>
+    <td colspan="4"><b id="rCount">댓글목록</b></td>
+    </thead>
+    <tbody>
+    </tbody>
 </table>
 <div class="centered-content">
 
@@ -148,56 +160,81 @@
 
     <button onclick="location.href='/board/list'">목록</button>
 </div>
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <p>게시글을 삭제하시겠습니까?</p>
-        <button class="modal-button confirm" onclick="deletePost()">삭제</button>
-        <button class="modal-button cancel" onclick="closeModal()">취소</button>
-    </div>
-</div>
+
 <script>
-    let currentBoardNo;
+    $('#rSubmit').on("click", function() {
+        var replyContents = $("#replyContents").val();
+        var refBoardNo = "[[${boardNo}]]";
+        // console.log(document.getElementsByClassName("test"))
+        // var refBoardNo = "";
 
-    function openModal(boardNo) {
-        document.getElementById('modal').style.display = 'block';
-        currentBoardNo = boardNo;
-        document.querySelector('.modal-content p').textContent = `게시글을 삭제하시겠습니까?`;
-    }
+        console.log(replyContents);
+        console.log(refBoardNo);
 
-    function closeModal() {
-        document.getElementById('modal').style.display = 'none';
-        currentBoardNo = null;
-    }
-
-    function deletePost() {
-        if (!currentBoardNo) {
-            alert('게시물 번호가 잘못되었습니다.');
-            return;
-        }
-
-        let url = '/board/detail/' + currentBoardNo;
-        let csrfToken = document.querySelector('input[name="_csrf"]').value;  // CSRF 토큰 가져오기
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': csrfToken  // CSRF 토큰을 요청 헤더에 추가
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR){
+            if (options['type'].toLowerCase() === "post") {
+                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             }
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert('게시글이 삭제되었습니다.');
-                    closeModal();
-                    window.location.href = '/board/list';
-                } else {
-                    return response.text().then(text => {
-                        throw new Error(text);
-                    });
+        });
+
+        $.ajax({
+                    url: `/comment/${refBoardNo}`,
+                    data: {refBoardNo: refBoardNo,
+                        commentContent:replyContents
+                    },
+                    type: "POST",
+                    success: function(data, status, xhr) {
+                        // console.log("status = ", status);
+                        // console.log("data = " , data);
+                        if (status === "success") {
+                            alert("등록 성공");
+                            $('#replyContents').val('');
+
+                            //getReplyList(); // 댓글 목록 갱신
+                        } else {
+                            alert("등록 실패");
+                        }
+                    },
+                    error: function(result) {
+                        console.log(result);
+                        alert("등록 실패");
+                    }
+                });
+
+    });
+
+    function getReplyList() {
+        var refBoardNo = "[[${boardNo}]]";
+        $.ajax({
+            url: `/comment/${refBoardNo}`,
+            type: "GET",
+            data: {refBoardNo: refBoardNo},
+            success: function(data,status,xhr) {
+                var $tableBody = $('#rtb tbody');
+                $tableBody.html('');
+                $('#rCount').text("댓글 (" + data.length + ")");
+                if (data != null) {
+                    console.log(data);
+                    for (var i = 0; i < data.length; i++) {
+                        var $tr = $("<tr>");
+                        var $rWriter = $("<td width='100'>").text(data[i].replyWirter);
+                        var $rContent = $("<td>").text(data[i].replyContents);
+                        var $rCreateDate = $("<td width='100'>").text(data[i].rCreateDate);
+                        var $btnArea = $("<td width='80'>").append("<a href='modifyreply(" + board + ")'>수정</a>").append("<a href='#'>삭제</a>");
+
+                        $tr.append($rWriter);
+                        $tr.append($rContent);
+                        $tr.append($rCreateDate);
+                        $tr.append($btnArea);
+                        $tableBody.append($tr);
+                    }
                 }
-            })
-            .catch(error => {
-                alert(error.message);
-            });
-    }
+            },
+            error: function() {
+                console.log("요청실패");
+            }
+        });
 </script>
 </body>
 </html>
