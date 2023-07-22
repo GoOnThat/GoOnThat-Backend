@@ -6,6 +6,7 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.AccessService;
@@ -26,17 +27,18 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 
     private final FreeBoardPostRepository freeBoardPostRepository;
     private final MetaUserRepository metaUserRepository;
-    private final AccessService accessControl;
+    private final AccessService accessService;
 
     @Transactional
     @Override
-    public void savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
+    public String savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
 
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         FreeBoardPost freeBoardPost = boardDTO.toEntity(metaUser);
         freeBoardPostRepository.save(freeBoardPost);
+        return "게시글이 등록되었습니다.";
     }
 
     @Transactional(readOnly = true)
@@ -56,6 +58,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Transactional(readOnly = true)
     @Override
     public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
+
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         List<FreeBoardComment> commentList = boardPost.getCommentList();
@@ -66,23 +69,36 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 
     @Transactional
     @Override
-    public void updatePost(Long boardNo, FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
+    public String updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user) {
+
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        boardPost.update(boardDTO.getBoardCategory(), boardDTO.getBoardTitle(), boardDTO.getBoardContent());
+        if (!accessService.postValidateUserAccess(boardPost, user)) {
+            return "권한이 없습니다.";
+        }
 
+        boardPost.update(
+                freeBoardEditDTO.getBoardCategory()
+                , freeBoardEditDTO.getBoardTitle()
+                , freeBoardEditDTO.getBoardContent()
+        );
         freeBoardPostRepository.save(boardPost);
+
+        return  "게시글이 수정되었습니다.";
     }
 
     @Transactional
     @Override
-    public void deletePost(Long boardNo, SessionMetaUser user) {
+    public String deletePost(Long boardNo, SessionMetaUser user) {
+
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo).orElseThrow(()->
                         new CustomException(ErrorCode.POST_NOT_FOUND));
-
-        accessControl.validateUserAccess(boardPost, user);
-
+        if (!accessService.postValidateUserAccess(boardPost, user)) {
+            return "권한이 없습니다.";
+        }
         boardPost.delete();
+
+        return "게시글이 삭제되었습니다.";
     }
 }
