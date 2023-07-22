@@ -155,12 +155,10 @@
 
     <form th:action="@{'/board/detail/' + ${boardNo}}" method="post">
         <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-        <button type="button" th:onclick="'openModal(' + ${boardNo} + ')'">삭제</button>
+        <button type="submit">삭제</button>
     </form>
-
     <button onclick="location.href='/board/list'">목록</button>
 </div>
-
 <script>
     $('#rSubmit').on("click", function() {
         var replyContents = $("#replyContents").val();
