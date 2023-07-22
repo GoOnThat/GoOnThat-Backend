@@ -1,8 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
-import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -10,8 +8,6 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

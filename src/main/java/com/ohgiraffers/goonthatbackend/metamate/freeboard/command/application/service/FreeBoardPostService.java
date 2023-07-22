@@ -12,15 +12,15 @@ import java.util.List;
 public interface FreeBoardPostService {
 
 
-    public String savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user);
+    String savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user);
 
-    public String updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user);
+    String updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user);
 
-    public String deletePost(Long boardNo, SessionMetaUser user);
+    String deletePost(Long boardNo, SessionMetaUser user);
 
-    public List<FreeBoardListDTO> getAllPosts();
+    List<FreeBoardListDTO> getAllPosts();
 
-    public FreeBoardDetailDTO getDetailPosts(Long boardNo);
+    FreeBoardDetailDTO getDetailPosts(Long boardNo);
 
-//    public List<FreeBoardListDTO> getSearchPosts();
+//     List<FreeBoardListDTO> getSearchPosts();
 }
