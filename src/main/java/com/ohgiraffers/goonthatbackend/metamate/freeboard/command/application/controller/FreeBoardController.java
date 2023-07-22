@@ -1,8 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
-import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -10,8 +8,6 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -68,7 +64,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-        if (boardDetail.isBoardIsDeleted()){
+        if (boardDetail.isBoardIsDeleted()) {
             return "board/list";
         }
 
@@ -89,15 +85,15 @@ public class FreeBoardController {
         }
 
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-        if(boardDetail.getMetaUser().getId().equals(user.getId())) {
+        if (boardDetail.getMetaUser().getId().equals(user.getId())) {
             model.addAttribute("boardDetail", boardDetail);
             freeBoardEditDTO.setBoardTitle(boardDetail.getBoardTitle());
             freeBoardEditDTO.setBoardContent(boardDetail.getBoardContent());
             freeBoardEditDTO.setBoardCategory(boardDetail.getBoardCategory());
             return "board/edit";
-        }else{
+        } else {
             model.addAttribute("Message", "게시글을 수정할 권한이 없습니다.");
-            return "redirect:/board/detail/"+boardNo;
+            return "redirect:/board/detail/" + boardNo;
         }
     }
 
@@ -111,7 +107,7 @@ public class FreeBoardController {
         }
 
         String message = freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
-        model.addAttribute("Message",message);
+        model.addAttribute("Message", message);
 
         return "redirect:/board/detail/" + boardNo;
     }
@@ -123,15 +119,14 @@ public class FreeBoardController {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        String message=freeBoardService.deletePost(boardNo,user);
+        String message = freeBoardService.deletePost(boardNo, user);
         model.addAttribute("Message", message);
 
         if (message.equals("게시글이 삭제되었습니다.")) {
-            return "board/list";
+            return "redirect:/board/list";
         } else {
             return "redirect:/board/detail/" + boardNo;
         }
 
     }
 }
-
