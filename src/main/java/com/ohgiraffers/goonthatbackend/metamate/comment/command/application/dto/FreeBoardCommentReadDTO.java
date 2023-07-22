@@ -16,7 +16,6 @@ import lombok.ToString;
 public class FreeBoardCommentReadDTO {
 
     private Long commentNo;
-    private Long writerUserId;
     private String commentContent;
     private String commentWriter;
     private String createdDate;
@@ -27,7 +26,6 @@ public class FreeBoardCommentReadDTO {
         CalcCreateDate calc = new CalcCreateDate();
 
         return new FreeBoardCommentReadDTO(
-                freeBoardComment.getMetauser().getId(),
                 freeBoardComment.getCommentNo(),
                 freeBoardComment.getCommentContent(),
                 freeBoardComment.getMetauser().getNickname(),
