@@ -25,7 +25,7 @@ public class FreeBoardDetailDTO {
     private String boardContent; //내용
     private int boardHits; //조회수
     private boolean boardIsDeleted;// 삭제여부
-    private List<FreeBoardComment> commentList = new ArrayList<>();
+    private List<FreeBoardComment> commentList;
     private String boardWriter;
     private MetaUser metaUser;
 

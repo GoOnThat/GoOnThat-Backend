@@ -12,4 +12,7 @@ import java.util.List;
 public interface FreeBoardCommentRepository extends JpaRepository<FreeBoardComment,Long> {
 
     List<FreeBoardComment> findByFreeBoardPost(FreeBoardPost freeBoardPost);
+
+    List<FreeBoardComment> findByFreeBoardPost_BoardNo(Long boardNo); //글번호로 댓글조회
+
 }

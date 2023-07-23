@@ -96,7 +96,6 @@
     <tr>
         <td bgcolor=white>
             <table class="table2">
-                <h6 th:text="${boardDetail.getCreatedAt()}"></h6>
                 <tr>
                     <td>작성자</td>
                     <td th:text="${boardDetail.boardWriter}"></td>
@@ -118,12 +117,19 @@
                     <td th:text="${boardDetail.boardCategory}"></td>
                 </tr>
                 <tr>
+                    <td>작성일</td>
+                    <td th:text="${boardDetail.getCreatedAt()}"></td>
+                </tr>
+                <tr>
+                    <td>조회수</td>
+                    <td th:text="${boardDetail.boardHits}"></td>
+                </tr>
+                <tr>
                     <td>좋아요</td>
                     <td>
                         <button type="button">좋아요</button>
                         <span>0</span>
                     </td>
-
             </table>
         </td>
     </tr>

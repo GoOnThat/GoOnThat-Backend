@@ -36,9 +36,9 @@ public class FreeBoardPost extends AuditingFields {
 
     private int boardHits;
 
-    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.EAGER)
     @OrderBy("commentNo asc")
-    private List<FreeBoardComment> commentList = new ArrayList<>();
+    private List<FreeBoardComment> commentList;
 
     private boolean boardIsDeleted;
 

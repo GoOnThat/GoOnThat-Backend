@@ -64,13 +64,13 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+
         if (boardDetail.isBoardIsDeleted()) {
-            return "board/list";
+            return "redirect:board/list";
         }
 
-        model.addAttribute("boardNo", boardNo);
-
-        model.addAttribute("boardDetail", freeBoardService.getDetailPosts(boardNo));
+        model.addAttribute("commentList", boardDetail.getCommentList());
+        model.addAttribute("boardDetail", boardDetail);
 
         return "board/detail";
     }

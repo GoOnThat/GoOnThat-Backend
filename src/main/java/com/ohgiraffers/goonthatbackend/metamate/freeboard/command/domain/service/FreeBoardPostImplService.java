@@ -1,6 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
@@ -26,6 +27,7 @@ import java.util.List;
 public class FreeBoardPostImplService implements FreeBoardPostService {
 
     private final FreeBoardPostRepository freeBoardPostRepository;
+    private final FreeBoardCommentRepository freeBoardCommentRepository;
     private final MetaUserRepository metaUserRepository;
     private final AccessService accessService;
 
@@ -58,14 +60,13 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Transactional(readOnly = true)
     @Override
     public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
-
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-        List<FreeBoardComment> commentList = boardPost.getCommentList();
+
+        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost(boardPost);
 
         return new FreeBoardDetailDTO().fromEntity(boardPost, commentList);
     }
-
 
     @Transactional
     @Override
