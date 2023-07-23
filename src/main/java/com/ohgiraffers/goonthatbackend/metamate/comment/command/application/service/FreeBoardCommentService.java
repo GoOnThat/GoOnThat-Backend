@@ -25,22 +25,25 @@ public class FreeBoardCommentService {
     private final MetaUserRepository metaUserRepository;
 
     @Transactional
-    public List<FreeBoardCommentReadDTO> addComment(FreeBoardPost refBoardPost, FreeBoardCommentWriteDTO freeBoardCommentWriteDTO, SessionMetaUser user) {
+    public List<FreeBoardCommentReadDTO> addComment(FreeBoardPost freeBoardPost, FreeBoardCommentWriteDTO freeBoardCommentWriteDTO, SessionMetaUser user) {
 
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        FreeBoardComment freeBoardComment = freeBoardCommentWriteDTO.toEntity(metaUser, refBoardPost);
+        FreeBoardComment freeBoardComment = freeBoardCommentWriteDTO.toEntity(metaUser, freeBoardPost);
+
         freeBoardCommentRepository.save(freeBoardComment);
 
-        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost(refBoardPost);
+        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost(freeBoardPost);
 
-        List<FreeBoardCommentReadDTO> commentDTOList = new ArrayList<>();
+        List<FreeBoardCommentReadDTO> commentReadList = new ArrayList<>();
+
 
         for (FreeBoardComment comment : commentList) {
-            FreeBoardCommentReadDTO commentDTO = new FreeBoardCommentReadDTO().fromEntity(comment);
-            commentDTOList.add(commentDTO);
+            FreeBoardCommentReadDTO commentRead = new FreeBoardCommentReadDTO().fromEntity(comment);
+            commentReadList.add(commentRead);
         }
-        return commentDTOList;
+
+        return commentReadList;
     }
 }

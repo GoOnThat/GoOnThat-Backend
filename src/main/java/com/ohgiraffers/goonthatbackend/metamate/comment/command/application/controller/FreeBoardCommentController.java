@@ -27,16 +27,15 @@ public class FreeBoardCommentController {
     public List<FreeBoardCommentReadDTO> addComment(@PathVariable("refBoardNo") Long refBoardNo,
                                                     @LoginUser SessionMetaUser user, Model model,
                                                     FreeBoardCommentWriteDTO freeBoardCommentWriteDTO) {
-
         if (user != null) {
             model.addAttribute("user", user);
         }
-        FreeBoardPost refBoardPost = freeBoardPostRepository.findById(refBoardNo)
+
+        FreeBoardPost freeBoardPost = freeBoardPostRepository.findById(refBoardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        List<FreeBoardCommentReadDTO> commentList = freeBoardCommentService.addComment(refBoardPost, freeBoardCommentWriteDTO, user);
+        List<FreeBoardCommentReadDTO> commentList = freeBoardCommentService.addComment(freeBoardPost, freeBoardCommentWriteDTO, user);
 
-        System.out.println("commentList = " + commentList);
         return commentList;
     }
 }
