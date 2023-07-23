@@ -135,97 +135,58 @@
     </tr>
 </table>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<input type="hidden" name="refBoardNo" value="${board.boardNo}">
+<!--<input type="hidden" name="refBoardNo" th:value="${boardDetail.boardNo}">-->
+<!--<table align="center" width="500" border="0">-->
+<!--    <tr>-->
+<!--        <td>댓글</td>-->
+<!--        <td><textarea rows="5" cols="50" placeholder="내용을 작성하세요"-->
+<!--                      name="replyContents" id="replyContents" required="required"></textarea></td>-->
+<!--        <td>-->
+<!--            <button id="rSubmit">등록하기</button>-->
+<!--        </td>-->
+<!--    </tr>-->
+<input type="hidden" name="refBoardNo" th:value="${boardDetail.boardNo}">
 <table align="center" width="500" border="0">
     <tr>
         <td>댓글</td>
         <td><textarea rows="5" cols="50" placeholder="내용을 작성하세요"
                       name="replyContents" id="replyContents" required="required"></textarea></td>
         <td>
-            <button id="rSubmit">등록하기</button>
+            <button id="rSubmit" th:onclick="'submitComment(\'' + ${boardDetail.boardNo} + '\')'">등록하기</button>
         </td>
     </tr>
+</table>
+
 
 </table>
 <table align="center" width="500" border="1" id="rtb">
     <thead>
     <td colspan="4"><b id="rCount">댓글목록</b></td>
     </thead>
-    <tbody>
+    <tbody id="commentList">
+    <tr>
+        <td width="100">작성자</td>
+        <td>내용</td>
+        <td width="100">시간</td>
+        <td width="80"></td>
+    </tr>
+    <!-- 타임리프 반복문으로 댓글 목록을 표시 -->
+    <tr th:each="comment : ${boardDetail.commentList}">
+        <td th:text="${comment.metauser.getNickname()}"></td>
+        <td th:text="${comment.commentContent}"></td>
+        <td th:text="${comment.createdAt}"></td>
+        <td>
+            <a href="#" th:href="'modifyreply/' + ${boardDetail.boardNo}">수정</a>
+            <a href="#">삭제</a>
+        </td>
+    </tr>
     </tbody>
 </table>
-<div class="centered-content">
-
-    <form th:action="@{'/board/edit/' + ${boardNo}}" method="get">
-        <input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-        <button type="submit">수정</button>
-    </form>
-
-    <form th:action="@{'/board/detail/' + ${boardNo}}" method="post">
-        <input type="hidden" th:name="_csrf" th:value="${_csrf.token}"/>
-        <button type="submit">삭제</button>
-    </form>
-    <button onclick="location.href='/board/list'">목록</button>
-</div>
-
 <script>
-    window.onload = function(){
-        var csrfToken = $("meta[name='_csrf']").attr("content");
-        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
-            if (options['type'].toLowerCase() === "post") {
-                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-            }
-        });
-        //페이지에 들어오자마자 댓글 로딩 하는 코드
-        var data = "[[${boardDetail.commentList}]]";
-        console.log(data);
-        var size = data.length;
-        console.log(size);
+    function submitComment(boardNo) {
+        const replyContents = $("#replyContents").val();
+        const csrfToken = $("meta[name='_csrf']").attr("content");
 
-        $('#replyContents').val('');
-        var $tableBody = $('#rtb tbody'); //$는 의미없음 그냥 변수명 중 하나
-        $tableBody.html(''); //tbody를 초기화 시켜야 댓글 목록의 중첩을 막을수 있음 아니면 등록할떄마다 append로 이어짐
-        $('#rCount').text("댓글 (" + data.length + ")") //댓글수 출력
-
-        var $tr = $("<tr>");
-        var $rWriter = $("<td width='100'>").text(
-            "작성자");
-        var $rContent = $("<td>").text(
-            "내용");
-        var $rCreatDate = $("<td width='100'>").text(
-            "시간");
-        var $btnArea = $("<td width='80'>").append("");
-        $tr.append($rWriter);
-        $tr.append($rContent);
-        $tr.append($rCreatDate);
-        $tr.append($btnArea);
-        $tableBody.append($tr);
-
-        for (var i in data) {
-            var $tr = $("<tr>");
-            var $rWriter = $("<td width='100'>").text(
-                data[i].commentWriter);
-            var $rContent = $("<td>").text(
-                data[i].commentContent);
-            var $rCreatDate = $("<td width='100'>").text(
-                data[i].createdDate);
-            var $btnArea = $("<td width='80'>").append(
-                "<a href='modifyreply(${board.boardNo})'>수정</a>").append(
-                "<a href='#'>삭제</a>");
-            $tr.append($rWriter);
-            $tr.append($rContent);
-            $tr.append($rCreatDate);
-            $tr.append($btnArea);
-            $tableBody.append($tr);
-        }
-
-    }
-
-    $('#rSubmit').on("click", function () {
-        var replyContents = $("#replyContents").val();
-        var refBoardNo = "[[${boardNo}]]";
-        /* spring security token*/
-        var csrfToken = $("meta[name='_csrf']").attr("content");
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             if (options['type'].toLowerCase() === "post") {
                 jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -233,69 +194,155 @@
         });
 
         $.ajax({
-            url: `/comment/${refBoardNo}`,
+            url: `/comment/${boardNo}`,
             data: {
-                refBoardNo: refBoardNo,
+                refBoardNo: boardNo,
                 commentContent: replyContents
             },
             type: "POST",
             success: function (data, status, xhr) {
-                console.log(data[0].commentWriter);
-                var size = data.length;
-
-                if (status === "success") {
-                    alert("등록 성공");
-                    $('#replyContents').val('');
-                    var $tableBody = $('#rtb tbody'); //$는 의미없음 그냥 변수명 중 하나
-                    $tableBody.html(''); //tbody를 초기화 시켜야 댓글 목록의 중첩을 막을수 있음 아니면 등록할떄마다 append로 이어짐
-                    $('#rCount').text("댓글 (" + data.length + ")") //댓글수 출력
-
-                    var $tr = $("<tr>");
-                    var $rWriter = $("<td width='100'>").text(
-                        "작성자");
-                    var $rContent = $("<td>").text(
-                        "내용");
-                    var $rCreatDate = $("<td width='100'>").text(
-                        "시간");
-                    var $btnArea = $("<td width='80'>").append("");
-                    $tr.append($rWriter);
-                    $tr.append($rContent);
-                    $tr.append($rCreatDate);
-                    $tr.append($btnArea);
-                    $tableBody.append($tr);
-
-
-                    for (var i in data) {
-                        var $tr = $("<tr>");
-                        var $rWriter = $("<td width='100'>").text(
-                            data[i].commentWriter);
-                        var $rContent = $("<td>").text(
-                            data[i].commentContent);
-                        var $rCreatDate = $("<td width='100'>").text(
-                            data[i].createdDate);
-                        var $btnArea = $("<td width='80'>").append(
-                            "<a href='modifyreply(${board.boardNo})'>수정</a>").append(
-                            "<a href='#'>삭제</a>");
-                        $tr.append($rWriter);
-                        $tr.append($rContent);
-                        $tr.append($rCreatDate);
-                        $tr.append($btnArea);
-                        $tableBody.append($tr);
-                    }
-                    //getReplyList(); // 댓글 목록 갱신
-                } else {
-                    alert("등록 실패");
-                }
+                // 등록 성공시 처리
+                console.log(data);
+                alert("댓글 등록 성공");
+                location.reload();
+                // 댓글 목록을 다시 로딩하는 등의 작업 수행
             },
             error: function (data) {
+                // 등록 실패시 처리
                 console.log(data);
-                alert("등록 실패");
+                alert("댓글 등록 실패");
             }
         });
-
-    });
-
+    }
 </script>
+<!--<script>-->
+<!--    window.onload = function(){-->
+<!--        var csrfToken = $("meta[name='_csrf']").attr("content");-->
+<!--        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {-->
+<!--            if (options['type'].toLowerCase() === "post") {-->
+<!--                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);-->
+<!--            }-->
+<!--        });-->
+<!--        //페이지에 들어오자마자 댓글 로딩 하는 코드-->
+<!--        var data = "[[${boardDetail.commentList}]]";-->
+<!--        console.log(data);-->
+<!--        var size = data.length;-->
+<!--        console.log(size);-->
+
+<!--        $('#replyContents').val('');-->
+<!--        var $tableBody = $('#rtb tbody'); //$는 의미없음 그냥 변수명 중 하나-->
+<!--        $tableBody.html(''); //tbody를 초기화 시켜야 댓글 목록의 중첩을 막을수 있음 아니면 등록할떄마다 append로 이어짐-->
+<!--        $('#rCount').text("댓글 (" + data.length + ")") //댓글수 출력-->
+
+<!--        var $tr = $("<tr>");-->
+<!--        var $rWriter = $("<td width='100'>").text(-->
+<!--            "작성자");-->
+<!--        var $rContent = $("<td>").text(-->
+<!--            "내용");-->
+<!--        var $rCreatDate = $("<td width='100'>").text(-->
+<!--            "시간");-->
+<!--        var $btnArea = $("<td width='80'>").append("");-->
+<!--        $tr.append($rWriter);-->
+<!--        $tr.append($rContent);-->
+<!--        $tr.append($rCreatDate);-->
+<!--        $tr.append($btnArea);-->
+<!--        $tableBody.append($tr);-->
+
+<!--        for (var i in data) {-->
+<!--            var $tr = $("<tr>");-->
+<!--            var $rWriter = $("<td width='100'>").text(-->
+<!--                data[i].commentWriter);-->
+<!--            var $rContent = $("<td>").text(-->
+<!--                data[i].commentContent);-->
+<!--            var $rCreatDate = $("<td width='100'>").text(-->
+<!--                data[i].createdDate);-->
+<!--            var $btnArea = $("<td width='80'>").append(-->
+<!--                "<a href='modifyreply(${board.boardNo})'>수정</a>").append(-->
+<!--                "<a href='#'>삭제</a>");-->
+<!--            $tr.append($rWriter);-->
+<!--            $tr.append($rContent);-->
+<!--            $tr.append($rCreatDate);-->
+<!--            $tr.append($btnArea);-->
+<!--            $tableBody.append($tr);-->
+<!--        }-->
+
+<!--    }-->
+
+<!--    $('#rSubmit').on("click", function () {-->
+<!--        var replyContents = $("#replyContents").val();-->
+<!--        var refBoardNo = "[[${boardNo}]]";-->
+<!--        /* spring security token*/-->
+<!--        var csrfToken = $("meta[name='_csrf']").attr("content");-->
+<!--        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {-->
+<!--            if (options['type'].toLowerCase() === "post") {-->
+<!--                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);-->
+<!--            }-->
+<!--        });-->
+
+<!--        $.ajax({-->
+<!--            url: `/comment/${refBoardNo}`,-->
+<!--            data: {-->
+<!--                refBoardNo: refBoardNo,-->
+<!--                commentContent: replyContents-->
+<!--            },-->
+<!--            type: "POST",-->
+<!--            success: function (data, status, xhr) {-->
+<!--                console.log(data[0].commentWriter);-->
+<!--                var size = data.length;-->
+
+<!--                if (status === "success") {-->
+<!--                    alert("등록 성공");-->
+<!--                    $('#replyContents').val('');-->
+<!--                    var $tableBody = $('#rtb tbody'); //$는 의미없음 그냥 변수명 중 하나-->
+<!--                    $tableBody.html(''); //tbody를 초기화 시켜야 댓글 목록의 중첩을 막을수 있음 아니면 등록할떄마다 append로 이어짐-->
+<!--                    $('#rCount').text("댓글 (" + data.length + ")") //댓글수 출력-->
+
+<!--                    var $tr = $("<tr>");-->
+<!--                    var $rWriter = $("<td width='100'>").text(-->
+<!--                        "작성자");-->
+<!--                    var $rContent = $("<td>").text(-->
+<!--                        "내용");-->
+<!--                    var $rCreatDate = $("<td width='100'>").text(-->
+<!--                        "시간");-->
+<!--                    var $btnArea = $("<td width='80'>").append("");-->
+<!--                    $tr.append($rWriter);-->
+<!--                    $tr.append($rContent);-->
+<!--                    $tr.append($rCreatDate);-->
+<!--                    $tr.append($btnArea);-->
+<!--                    $tableBody.append($tr);-->
+
+
+<!--                    for (var i in data) {-->
+<!--                        var $tr = $("<tr>");-->
+<!--                        var $rWriter = $("<td width='100'>").text(-->
+<!--                            data[i].commentWriter);-->
+<!--                        var $rContent = $("<td>").text(-->
+<!--                            data[i].commentContent);-->
+<!--                        var $rCreatDate = $("<td width='100'>").text(-->
+<!--                            data[i].createdDate);-->
+<!--                        var $btnArea = $("<td width='80'>").append(-->
+<!--                            "<a href='modifyreply(${board.boardNo})'>수정</a>").append(-->
+<!--                            "<a href='#'>삭제</a>");-->
+<!--                        $tr.append($rWriter);-->
+<!--                        $tr.append($rContent);-->
+<!--                        $tr.append($rCreatDate);-->
+<!--                        $tr.append($btnArea);-->
+<!--                        $tableBody.append($tr);-->
+<!--                    }-->
+<!--                    //getReplyList(); // 댓글 목록 갱신-->
+<!--                } else {-->
+<!--                    alert("등록 실패");-->
+<!--                }-->
+<!--            },-->
+<!--            error: function (data) {-->
+<!--                console.log(data);-->
+<!--                alert("등록 실패");-->
+<!--            }-->
+<!--        });-->
+
+<!--    });-->
+
+<!--</script>-->
 </body>
 
 </html>
