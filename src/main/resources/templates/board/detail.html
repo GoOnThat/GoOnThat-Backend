@@ -289,6 +289,27 @@
 
     });
 
+    function pushLike(arg) {
+        boardNo=arg.value
+        $.ajax({
+            url: "/like", // (Required) 요청이 전송될 URL 주소
+            type: "POST", // (default: ‘GET’) http 요청 방식
+            data: {
+                boardNo:boardNo
+            },
+            success: function (data, status, xhr) {
+
+                document.getElementsByClassName("no1")[0].style.display = "none";
+                document.getElementsByClassName("no2")[0].style.display = "inline-block";
+                document.getElementsByClassName("NumberOfLike")[0].value = data.numberOfLike
+            },
+            error: function (xhr, status, error) {
+                // 응답을 받지 못하거나 정상적인 응답이지만 데이터 형식을 확인할 수 없는 경우
+            },
+
+        });
+    }
+
 </script>
 </body>
 

@@ -55,4 +55,12 @@ public class MetaUser extends AuditingFields {
         this.name = name;
         this.nickname = nickname;
     }
+
+    public MetaUser orElseThrow(MetaUser metaUser) {
+        return orElseThrow(metaUser);
+    }
+
+    public boolean isPresent() {
+        return true;
+    }
 }

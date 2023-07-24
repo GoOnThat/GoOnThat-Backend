@@ -65,5 +65,17 @@ public class FreeBoardPost extends AuditingFields {
     public void delete() {
         this.boardIsDeleted = true;
     }
+
+    public void increaseLikeCount() {
+    }
+
+    public void decreaseLikeCount() {
+    }
+
+    public void getLiked() {
+    }
+
+    public void setLiked(int liked) {
+    }
 }
 

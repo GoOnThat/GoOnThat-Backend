@@ -33,4 +33,5 @@ public abstract class AuditingFields {
 
     @LastModifiedBy
     protected String modifiedBy; // 수정자
+
 }
