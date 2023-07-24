@@ -1,9 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
@@ -21,16 +19,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.apache.tomcat.util.file.ConfigurationSource;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -40,7 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+
 
 @Controller
 @RequestMapping("/board")
@@ -53,7 +46,7 @@ public class FreeBoardController {
 
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
-    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=0, size=10, sort="boardNo",
+    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=1, size=10, sort="boardNo",
                         direction= Sort.Direction.DESC) Pageable pageable, Model model) {
 
         if (user != null) {
@@ -61,9 +54,11 @@ public class FreeBoardController {
         }
         Page<FreeBoardListDTO> boardList = freeBoardService.getAllPosts(pageable);
 
-        int nowPage = boardList.getPageable().getPageNumber();
-        int startPage= Math.max(nowPage -4, 1);
-        int endPage= Math.min(nowPage+9, boardList.getTotalPages());
+        int nowPage = boardList.getPageable().getPageNumber(); // 현재 페이지 번호를 1부터 시작하도록 수정
+        int totalPages = boardList.getTotalPages();
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, totalPages);
+        endPage = Math.min(endPage, startPage + 9); // 최대 10개 페이지 링크를 표시하도록 수정
 
         model.addAttribute("nowPage",nowPage);
         model.addAttribute("startPage", startPage);
