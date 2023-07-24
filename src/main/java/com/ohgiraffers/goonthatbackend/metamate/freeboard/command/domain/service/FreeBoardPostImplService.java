@@ -17,6 +17,9 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggrega
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardPostRepository;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
@@ -46,16 +49,17 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<FreeBoardListDTO> getAllPosts() {
-        List<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse();
+    public Page<FreeBoardListDTO> getAllPosts(Pageable pageable) {
+        Page<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse(pageable);
         List<FreeBoardListDTO> postList = new ArrayList<>();
+
 
         for (FreeBoardPost boardPost : allPosts) {
             FreeBoardListDTO freeBoardListDTO = FreeBoardListDTO.fromEntity(boardPost);
             postList.add(freeBoardListDTO);
         }
 
-        return postList;
+        return new PageImpl<>(postList, pageable, allPosts.getTotalElements());
     }
 
     @Transactional(readOnly = true)

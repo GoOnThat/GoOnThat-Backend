@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,6 +27,7 @@ public class FreeBoardDetailDTO {
     private List<FreeBoardCommentReadDTO> commentList;
     private String boardWriter;
     private MetaUser metaUser;
+
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardCommentReadDTO> commentList) {
         CalcCreateDate cal= new CalcCreateDate();

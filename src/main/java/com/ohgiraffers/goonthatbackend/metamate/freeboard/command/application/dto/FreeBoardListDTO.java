@@ -15,7 +15,7 @@ public class FreeBoardListDTO {
     private String boardTitle;  // 글 제목
     private String boardContent;    // 글 내용
     private Integer boardHits;      // 조회수
-    private String boardWriter;
+    private String boardWriter; //작성자
 
     public static FreeBoardListDTO fromEntity(FreeBoardPost boardPost) {
         CalcCreateDate cal = new CalcCreateDate();
