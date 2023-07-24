@@ -4,6 +4,9 @@ import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
+import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -11,10 +14,25 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.file.ConfigurationSource;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 
@@ -25,6 +43,7 @@ public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
     private final FreeBoardCommentService commentService;
+    private final FileService fileService;
 
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
@@ -51,11 +70,41 @@ public class FreeBoardController {
     /* 글쓰기 페이지 작성 */
     @PostMapping("/write")
     public String writeSave(@ModelAttribute("freeBoardWriteDTO") FreeBoardWriteDTO freeBoardWriteDTO,
+                            @RequestParam("file") MultipartFile files,
                             @LoginUser SessionMetaUser user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        freeBoardService.savePost(freeBoardWriteDTO, user);
+
+        try {
+            String originFileName = files.getOriginalFilename();
+            String fileName = new MD5Generator(originFileName).toString();
+            String savePath = System.getProperty("user.dir") + "\\files";
+
+            if(!new File(savePath).exists()) {
+                new File(savePath).mkdirs();
+            }
+
+            String filePath = savePath + "\\" + fileName;
+            files.transferTo(new File(filePath));
+
+            FileDTO fileDTO = new FileDTO();
+            fileDTO.setOriginFileName(originFileName);
+            fileDTO.setFilename(fileName);
+            fileDTO.setFilePath(filePath);
+
+            Long fileNo = fileService.saveFile(fileDTO);
+            freeBoardWriteDTO.setFileNo(fileNo);
+            freeBoardService.savePost(freeBoardWriteDTO, user);
+
+
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return "redirect:/board/list";
     }
@@ -133,5 +182,17 @@ public class FreeBoardController {
             return "redirect:/board/detail/" + boardNo;
         }
 
+    }
+
+    /* 첨부파일 다운로드 */
+    @GetMapping("/dowmload/{fileNo}")
+    public ResponseEntity<Resource> fileDownload(@PathVariable("fileNo") Long fileNo) throws IOException {
+
+        FileDTO fileDTO = fileService.getFile(fileNo);
+        Path path = Paths.get(fileDTO.getFilePath());
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDTO.getOriginFileName() + "\"").body(resource);
     }
 }

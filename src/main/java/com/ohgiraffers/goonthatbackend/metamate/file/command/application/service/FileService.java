@@ -15,10 +15,10 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
-//    @Transactional
-//    public Long saveFile(FileDTO fileDTO) {
-//        return fileRepository.save(fileDTO.toEntity().getFileNo());
-//    }
+    @Transactional
+    public Long saveFile(FileDTO fileDTO) {
+        return fileRepository.save(fileDTO.toEntity()).getFileNo();
+    }
 
     @Transactional
     public FileDTO getFile(Long fileNo) {
