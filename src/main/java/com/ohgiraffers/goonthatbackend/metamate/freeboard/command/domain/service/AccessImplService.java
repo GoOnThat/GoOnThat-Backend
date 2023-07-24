@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.AccessService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
@@ -13,6 +14,12 @@ public class AccessImplService implements AccessService {
     public boolean postValidateUserAccess(FreeBoardPost boardPost, SessionMetaUser user) {
 
         return boardPost.getMetaUser().getId().equals(user.getId());
+    }
+
+    @Override
+    public boolean commentValidateUserAccess(FreeBoardComment freeBoardComment, SessionMetaUser user) {
+
+        return freeBoardComment.getMetauser().getId().equals(user.getId());
     }
 
 }

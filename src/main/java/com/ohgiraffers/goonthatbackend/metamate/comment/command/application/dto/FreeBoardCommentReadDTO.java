@@ -8,14 +8,15 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
 @Getter
-
 public class FreeBoardCommentReadDTO {
 
     private Long commentNo;
     private String commentContent;
     private String commentWriter;
     private String createdDate;
+    private boolean commentIsDeleted;
 
 
     public static FreeBoardCommentReadDTO fromEntity(FreeBoardComment freeBoardComment) {
@@ -26,7 +27,8 @@ public class FreeBoardCommentReadDTO {
                 freeBoardComment.getCommentNo(),
                 freeBoardComment.getCommentContent(),
                 freeBoardComment.getMetauser().getNickname(),
-                calc.calcCreateDate(freeBoardComment.getCreatedAt()));
+                calc.calcCreateDate(freeBoardComment.getCreatedAt()),
+                freeBoardComment.isCommentIsDeleted());
     }
 
 }

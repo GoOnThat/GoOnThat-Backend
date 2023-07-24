@@ -8,6 +8,7 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
+import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.AccessService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class FreeBoardCommentService {
 
     private final FreeBoardCommentRepository freeBoardCommentRepository;
     private final MetaUserRepository metaUserRepository;
+    private final AccessService accessService;
 
     @Transactional
     public List<FreeBoardCommentReadDTO> addComment(FreeBoardPost freeBoardPost, FreeBoardCommentWriteDTO freeBoardCommentWriteDTO, SessionMetaUser user) {
@@ -45,5 +47,17 @@ public class FreeBoardCommentService {
         }
 
         return commentReadList;
+    }
+
+    @Transactional
+    public void removeComment(Long commentNo, SessionMetaUser user) {
+        FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!accessService.commentValidateUserAccess(freeBoardComment, user)) {
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+
+        freeBoardComment.delete();
     }
 }

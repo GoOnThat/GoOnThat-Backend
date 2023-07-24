@@ -72,6 +72,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         List<FreeBoardCommentReadDTO> commentRead= new ArrayList<>();
         for (FreeBoardComment comment : commentList) {
             FreeBoardCommentReadDTO freeBoardComment = FreeBoardCommentReadDTO.fromEntity(comment);
+            freeBoardComment.setCommentIsDeleted(comment.isCommentIsDeleted());
             commentRead.add(freeBoardComment);
         }
 

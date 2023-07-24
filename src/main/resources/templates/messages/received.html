@@ -11,11 +11,13 @@
     <th>보낸 사람</th>
     <th>제목</th>
     <th>내용</th>
+    <th>받은 날짜</th>
   </tr>
   <tr th:each="message : ${receivedMessage}">
     <td th:text="${message.senderNickname}"></td>
     <td th:text="${message.title}"></td>
     <td th:text="${message.content}"></td>
+    <td th:text="${message.createdAt}"></td>
   </tr>
 </table>
 </body>

@@ -42,6 +42,12 @@ public class MetaUserController {
         }
 
         boolean isError = false;
+
+        if (!user.getPassword().equals(user.getConfirmPassword())) {
+            bindingResult.reject("confirmPassword", "비밀번호가 일치하지 않습니다.");
+            isError = true;
+        }
+
         // 중복 이메일 (global error)
         if (metaUserService.hasEmail(user.getEmail())) {
             bindingResult.reject("duplicateEmail", "이미 존재하는 이메일 입니다.");
