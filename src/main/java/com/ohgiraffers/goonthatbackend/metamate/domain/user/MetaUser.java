@@ -3,6 +3,7 @@ package com.ohgiraffers.goonthatbackend.metamate.domain.user;
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MetaUser extends AuditingFields {
     private String major;
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String provider;
+
     @OneToMany(mappedBy = "metaUser")
     private List<FreeBoardPost> posts = new ArrayList<>();
 

@@ -1,6 +1,5 @@
 package com.ohgiraffers.goonthatbackend.metamate.service;
 
-import com.ohgiraffers.goonthatbackend.metamate.domain.user.Role;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.EditRequestDto;

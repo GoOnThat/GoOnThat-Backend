@@ -33,21 +33,21 @@ public class MessageController {
         return "messages/received";
     }
 
-    @GetMapping("/sent-form")
+    @GetMapping("/sendForm")
     public String sendMessageForm(
             @LoginUser SessionMetaUser loginUser,
             @ModelAttribute("messageDto") MessageDto messageDto,
             Model model) {
 
         if (loginUser == null) {
-            return "redirect:/messages/sent-form";
+            return "redirect:/messages/sendForm";
         }
         model.addAttribute("sessionUser", loginUser);
 
-        return "/messages/sent-form";
+        return "/messages/sendForm";
     }
 
-    @PostMapping("/sent-form")
+    @PostMapping("/sendForm")
     public String sendMessage(
             @LoginUser SessionMetaUser loginUser,
             @ModelAttribute("messageDto") MessageDto messageDto) {
@@ -57,7 +57,7 @@ public class MessageController {
         messageDto.setSenderNickname(user.getNickname());
         messageService.write(messageDto);
 
-        return "redirect:/messages/sent-form";
+        return "redirect:/messages/sendForm";
     }
 
 
@@ -100,4 +100,3 @@ public class MessageController {
 
 
 }
-
