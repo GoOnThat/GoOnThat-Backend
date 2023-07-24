@@ -1,6 +1,9 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -21,6 +24,7 @@ import java.util.List;
 public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
+    private final FreeBoardCommentService commentService;
 
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
@@ -29,6 +33,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         List<FreeBoardListDTO> boardList = freeBoardService.getAllPosts();
+
         model.addAttribute("boardList", boardList);
         return "board/list";
     }
@@ -64,13 +69,13 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        freeBoardService.hitsUp(boardNo,boardDetail);
+
         if (boardDetail.isBoardIsDeleted()) {
-            return "board/list";
+            return "redirect:board/list";
         }
 
-        model.addAttribute("boardNo", boardNo);
-
-        model.addAttribute("boardDetail", freeBoardService.getDetailPosts(boardNo));
+        model.addAttribute("boardDetail", boardDetail);
 
         return "board/detail";
     }
