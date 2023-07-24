@@ -6,8 +6,9 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface FreeBoardPostService {
 
@@ -18,9 +19,10 @@ public interface FreeBoardPostService {
 
     String deletePost(Long boardNo, SessionMetaUser user);
 
-    List<FreeBoardListDTO> getAllPosts();
+    Page<FreeBoardListDTO> getAllPosts(Pageable pageable);
 
     FreeBoardDetailDTO getDetailPosts(Long boardNo);
 
+    void hitsUp(Long boardNo, FreeBoardDetailDTO freeBoardDetailDTO);
 //     List<FreeBoardListDTO> getSearchPosts();
 }

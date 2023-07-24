@@ -7,7 +7,6 @@ import lombok.*;
 
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -15,6 +14,7 @@ import java.util.List;
 @Table(name = "freeboard")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@Setter
 public class FreeBoardPost extends AuditingFields {
 
 
@@ -27,6 +27,12 @@ public class FreeBoardPost extends AuditingFields {
 
     private String boardTitle;
 
+    @Column
+    private Long fileNo;
+
+    @Column
+    private String fileName;
+
     @Column(columnDefinition = "TEXT")
     private String boardContent;
 
@@ -36,16 +42,16 @@ public class FreeBoardPost extends AuditingFields {
 
     private int boardHits;
 
-    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.EAGER)
     @OrderBy("commentNo asc")
-    private List<FreeBoardComment> commentList = new ArrayList<>();
+    private List<FreeBoardComment> commentList;
 
     private boolean boardIsDeleted;
 
     @Builder
     public FreeBoardPost(String boardCategory, String boardTitle, String boardContent,
                          MetaUser metaUser, int boardHits, List<FreeBoardComment> commentList,
-                         boolean boardIsDeleted) {
+                         boolean boardIsDeleted, Long fileNo, String fileName) {
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
@@ -53,6 +59,8 @@ public class FreeBoardPost extends AuditingFields {
         this.boardHits = boardHits;
         this.commentList = commentList;
         this.boardIsDeleted = boardIsDeleted;
+        this.fileNo = fileNo;
+        this.fileName = fileName;
     }
 
 
@@ -66,16 +74,8 @@ public class FreeBoardPost extends AuditingFields {
         this.boardIsDeleted = true;
     }
 
-    public void increaseLikeCount() {
-    }
-
-    public void decreaseLikeCount() {
-    }
-
-    public void getLiked() {
-    }
-
-    public void setLiked(int liked) {
+    public void hitsUp(int boardHits){
+        this.boardHits=boardHits;
     }
 }
 

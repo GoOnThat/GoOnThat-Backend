@@ -1,6 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,11 +24,14 @@ public class FreeBoardDetailDTO {
     private String boardContent; //내용
     private int boardHits; //조회수
     private boolean boardIsDeleted;// 삭제여부
-    private List<FreeBoardComment> commentList = new ArrayList<>();
+    private List<FreeBoardCommentReadDTO> commentList;
     private String boardWriter;
     private MetaUser metaUser;
+    private Long fileNo;
+    private String fileName;
 
-    public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardComment> commentList) {
+
+    public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardCommentReadDTO> commentList) {
         CalcCreateDate cal= new CalcCreateDate();
         String boardWriter=boardPost.getMetaUser().getNickname();
         return new FreeBoardDetailDTO(
@@ -43,6 +45,8 @@ public class FreeBoardDetailDTO {
                 , commentList
                 , boardWriter
                 , boardPost.getMetaUser()
+                , boardPost.getFileNo()
+                , boardPost.getFileName()
                 );
     }
 
