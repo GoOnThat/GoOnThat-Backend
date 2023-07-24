@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -30,6 +29,7 @@ public class FreeBoardDetailDTO {
     private MetaUser metaUser;
     private Long fileNo;
     private String fileName;
+
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardCommentReadDTO> commentList) {
         CalcCreateDate cal= new CalcCreateDate();

@@ -14,6 +14,13 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.apache.tomcat.util.file.ConfigurationSource;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.InputStreamResource;
@@ -35,7 +42,6 @@ import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor
@@ -47,12 +53,21 @@ public class FreeBoardController {
 
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
-    public String list(@LoginUser SessionMetaUser user, Model model) {
+    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=0, size=10, sort="boardNo",
+                        direction= Sort.Direction.DESC) Pageable pageable, Model model) {
+
         if (user != null) {
             model.addAttribute("user", user);
         }
-        List<FreeBoardListDTO> boardList = freeBoardService.getAllPosts();
+        Page<FreeBoardListDTO> boardList = freeBoardService.getAllPosts(pageable);
 
+        int nowPage = boardList.getPageable().getPageNumber();
+        int startPage= Math.max(nowPage -4, 1);
+        int endPage= Math.min(nowPage+9, boardList.getTotalPages());
+
+        model.addAttribute("nowPage",nowPage);
+        model.addAttribute("startPage", startPage);
+        model.addAttribute("endPage", endPage);
         model.addAttribute("boardList", boardList);
         return "board/list";
     }

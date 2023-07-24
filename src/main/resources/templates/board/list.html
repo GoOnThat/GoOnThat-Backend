@@ -77,7 +77,11 @@
         #ulTable > li > ul > li:first-child + li + li + li + li {
             width: 10%;
         }
-
+        /* 페이징  */
+        #divPaging ul li {
+            display: inline-block;  /* 이 부분을 추가 */
+            margin-right: 5px;     /* 오른쪽 여백 추가 (선택적) */
+        }
         /* 조회수 열 크기 */
 
         #divPaging {
@@ -137,32 +141,28 @@
                 <li th:each="board : ${boardList}">
                     <ul>
                         <!-- 게시판 글 번호 별 세부 조회 페이지 링크 -->
-                        <li><a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}"
-                               th:text="${board.boardNo}"></a></li>
+                        <li th:text="${board.boardNo}"></li>
                         <li class="left">
                             <a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}"
                                th:text="${board.boardTitle}"></a>
                         </li>
-                        <li th:text="${board.createdAt}"></li>
+                        <li th:text="${board.getCreatedAt()}"></li>
                         <li th:text="${board.getBoardWriter()}"></li>
                         <li th:text="${board.boardHits}"></li>
                     </ul>
                 </li>
             </ul>
         </li>
-
-        <!-- 게시판 페이징 영역 -->
-        <li>
-            <div id="divPaging">
-                <div>◀</div>
-                <div><b>1</b></div>
-                <div>2</div>
-                <div>3</div>
-                <div>4</div>
-                <div>5</div>
-                <div>▶</div>
-            </div>
-        </li>
+    </ul>
+</div>
+<div id="divPaging">
+    <ul>
+        <th:block th:each="page:${#numbers.sequence(startPage,endPage)}">
+            <li>
+                <a th:if="${page != nowPage}" th:href="@{/board/list(page=|${page}|)}" th:text="${page}"></a>
+                <strong th:if="${page == nowPage}" th:text="${page}" style="color:red"></strong>
+            </li>
+        </th:block>
     </ul>
 </div>
 <div class="center">
