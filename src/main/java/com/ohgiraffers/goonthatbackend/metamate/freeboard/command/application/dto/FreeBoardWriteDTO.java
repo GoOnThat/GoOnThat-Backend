@@ -13,6 +13,7 @@ public class FreeBoardWriteDTO {
     private String boardCategory;   //카테고리
     private String boardTitle;  //제목
     private String boardContent; //내용
+    private Long fileNo;
 
     public FreeBoardPost toEntity(MetaUser metaUser) {
         return FreeBoardPost.builder()
@@ -22,6 +23,7 @@ public class FreeBoardWriteDTO {
                 .metaUser(metaUser)
                 .boardHits(0)
                 .boardIsDeleted(false)
+                .fileNo(this.fileNo)
                 .build();
 
     }
