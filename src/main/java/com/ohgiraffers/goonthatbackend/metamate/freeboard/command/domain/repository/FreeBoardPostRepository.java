@@ -13,6 +13,6 @@ public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost,Lon
 
     Page<FreeBoardPost> findByBoardIsDeletedFalse(Pageable pageable); //삭제여부 false만 조회
 
-    Page<FreeBoardPost> findByBoardContaining(String searchKeyword, Pageable pageable);
+//    Page<FreeBoardPost> findByBoardContaining(String searchKeyword, Pageable pageable);
 
 }
