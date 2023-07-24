@@ -28,6 +28,8 @@ public class FreeBoardDetailDTO {
     private List<FreeBoardCommentReadDTO> commentList;
     private String boardWriter;
     private MetaUser metaUser;
+    private Long fileNo;
+    private String fileName;
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardCommentReadDTO> commentList) {
         CalcCreateDate cal= new CalcCreateDate();
@@ -43,6 +45,8 @@ public class FreeBoardDetailDTO {
                 , commentList
                 , boardWriter
                 , boardPost.getMetaUser()
+                , boardPost.getFileNo()
+                , boardPost.getFileName()
                 );
     }
 

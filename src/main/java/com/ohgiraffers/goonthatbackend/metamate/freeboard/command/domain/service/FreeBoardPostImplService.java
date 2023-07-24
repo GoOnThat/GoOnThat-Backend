@@ -65,6 +65,8 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        boardPost.setFileNo(boardNo);
+
         //댓글 조회 로직
         List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNo(boardNo);
         List<FreeBoardCommentReadDTO> commentRead= new ArrayList<>();
@@ -73,6 +75,10 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
             freeBoardComment.setCommentIsDeleted(comment.isCommentIsDeleted());
             commentRead.add(freeBoardComment);
         }
+
+
+
+
         return new FreeBoardDetailDTO().fromEntity(boardPost, commentRead);
     }
 
