@@ -64,5 +64,9 @@ public class FreeBoardPost extends AuditingFields {
     public void delete() {
         this.boardIsDeleted = true;
     }
+
+    public void hitsUp(int boardHits){
+        this.boardHits=boardHits;
+    }
 }
 

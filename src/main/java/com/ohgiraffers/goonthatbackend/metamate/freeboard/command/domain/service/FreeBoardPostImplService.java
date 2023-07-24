@@ -1,5 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
@@ -60,13 +61,30 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Transactional(readOnly = true)
     @Override
     public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
+        //게시글 조회 로직
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost(boardPost);
-
-        return new FreeBoardDetailDTO().fromEntity(boardPost, commentList);
+        //댓글 조회 로직
+        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNo(boardNo);
+        List<FreeBoardCommentReadDTO> commentRead= new ArrayList<>();
+        for (FreeBoardComment comment : commentList) {
+            FreeBoardCommentReadDTO freeBoardComment = FreeBoardCommentReadDTO.fromEntity(comment);
+            commentRead.add(freeBoardComment);
+        }
+        return new FreeBoardDetailDTO().fromEntity(boardPost, commentRead);
     }
+
+    @Transactional
+    @Override
+    public void hitsUp(Long boardNo, FreeBoardDetailDTO freeBoardDetailDTO){
+        FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        boardPost.hitsUp(freeBoardDetailDTO.getBoardHits());
+    }
+
+
 
     @Transactional
     @Override

@@ -69,6 +69,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        freeBoardService.hitsUp(boardNo,boardDetail);
 
         if (boardDetail.isBoardIsDeleted()) {
             return "redirect:board/list";

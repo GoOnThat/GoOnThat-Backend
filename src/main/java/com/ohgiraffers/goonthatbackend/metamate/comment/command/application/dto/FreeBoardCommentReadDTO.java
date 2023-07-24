@@ -3,16 +3,13 @@ package com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+
 public class FreeBoardCommentReadDTO {
 
     private Long commentNo;
@@ -21,7 +18,7 @@ public class FreeBoardCommentReadDTO {
     private String createdDate;
 
 
-    public FreeBoardCommentReadDTO fromEntity(FreeBoardComment freeBoardComment) {
+    public static FreeBoardCommentReadDTO fromEntity(FreeBoardComment freeBoardComment) {
 
         CalcCreateDate calc = new CalcCreateDate();
 

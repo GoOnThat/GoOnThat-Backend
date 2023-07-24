@@ -131,6 +131,19 @@
                         <span>0</span>
                     </td>
             </table>
+            <div class="centered-content">
+
+                <form th:action="@{'/board/edit/' + ${boardNo}}" method="get">
+                    <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">수정</button>
+                </form>
+
+                <form th:action="@{'/board/detail/' + ${boardNo}}" method="post">
+                    <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
+                    <button type="submit">삭제</button>
+                </form>
+                <button onclick="location.href='/board/list'">목록</button>
+            </div>
         </td>
     </tr>
 </table>
@@ -172,9 +185,9 @@
     </tr>
     <!-- 타임리프 반복문으로 댓글 목록을 표시 -->
     <tr th:each="comment : ${boardDetail.commentList}">
-        <td th:text="${comment.metauser.getNickname()}"></td>
+        <td th:text="${comment.getCommentWriter()}"></td>
         <td th:text="${comment.commentContent}"></td>
-        <td th:text="${comment.createdAt}"></td>
+        <td th:text="${comment.getCreatedDate()}"></td>
         <td>
             <a href="#" th:href="'modifyreply/' + ${boardDetail.boardNo}">수정</a>
             <a href="#">삭제</a>
@@ -182,6 +195,7 @@
     </tr>
     </tbody>
 </table>
+
 <script>
     function submitComment(boardNo) {
         const replyContents = $("#replyContents").val();
