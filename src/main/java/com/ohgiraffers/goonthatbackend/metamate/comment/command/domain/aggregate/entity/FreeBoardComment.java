@@ -31,11 +31,18 @@ public class FreeBoardComment extends AuditingFields {
     @JoinColumn(name = "id")
     private MetaUser metauser;
 
+    private boolean commentIsDeleted;
+
     @Builder
     public FreeBoardComment(FreeBoardPost freeBoardPost, String commentContent,
-                            MetaUser metauser) {
+                            MetaUser metauser, boolean commentIsDeleted) {
         this.freeBoardPost = freeBoardPost;
         this.commentContent = commentContent;
         this.metauser = metauser;
+        this.commentIsDeleted = commentIsDeleted;
+    }
+
+    public void delete() {
+        this.commentIsDeleted = true;
     }
 }
