@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>보낸 편지함</title>
+  <meta charset="UTF-8">
+  <title>보낸 편지함</title>
 </head>
 <body>
 <h1>보낸 편지함</h1>
 <table>
-    <tr>
-        <th>받은 사람</th>
-        <th>제목</th>
-        <th>내용</th>
-    </tr>
-    <tr th:each="message : ${sentMessage}">
-        <td th:text="${message.receiverNickname}"></td>
-        <td th:text="${message.title}"></td>
-        <td th:text="${message.content}"></td>
-    </tr>
+  <tr>
+    <th>받은 사람</th>
+    <th>제목</th>
+    <th>내용</th>
+    <th>보낸 날짜</th>
+  </tr>
+  <tr th:each="message : ${sentMessage}">
+    <td th:text="${message.receiverNickname}"></td>
+    <td th:text="${message.title}"></td>
+    <td th:text="${message.content}"></td>
+    <td th:text="${message.createdAt}"></td>
+  </tr>
 </table>
 </body>
 </html>
