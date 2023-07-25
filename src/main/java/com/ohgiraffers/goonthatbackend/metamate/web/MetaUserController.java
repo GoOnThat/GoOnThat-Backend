@@ -124,8 +124,15 @@ public class MetaUserController {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
         model.addAttribute("sessionUser", user);
+
         // 회원정보 수정 실패 (validation error)
         if (bindingResult.hasErrors()) {
+            return "auth/editForm";
+        }
+
+        if (!editRequestDto.getPassword().equals(editRequestDto.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword", "passwordMismatch", "비밀번호가 일치하지 않습니다.");
+            bindingResult.reject("globalError", "비밀번호가 일치하지 않습니다."); // 전역 에러 추가
             return "auth/editForm";
         }
 
