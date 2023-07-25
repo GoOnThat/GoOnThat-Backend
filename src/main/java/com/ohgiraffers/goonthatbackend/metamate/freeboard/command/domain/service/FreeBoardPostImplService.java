@@ -7,6 +7,7 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity.File;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
