@@ -48,9 +48,9 @@
         <i class="bi bi-envelope d-flex align-items-center"><a href="/messages/received"><span>받은 쪽지함</span></a></i>
         <i class="bi bi-person d-flex align-items-center ms-4"><span th:text="${user.major}"></span><span th:text="${user.nickname}"></span><span>님 환영합니다.</span></i>
       </div>
-      <div class="social-links d-none d-md-flex align-items-center">
-        <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+
+      <div class="contact-info d-flex align-items-center" th:if="${user == null}">
+        <i class="bi bi-person-add d-flex align-items-center"><a href="/auth/join"><span>회원가입 신청</span></a></i>
       </div>
     </div>
   </section><!-- End Top Bar -->
@@ -107,6 +107,10 @@
           <div class="d-flex justify-content-center justify-content-lg-start" th:if="${user != null}">
             <button onclick="location.href='/auth/logout';" type="button" class="btn-get-started">로그아웃</button>
             <a href="https://www.youtube.com/watch?v=c5YdX588Tvo&pp=ygUY66mU7YOA67KE7Iqk7JWE7Lm0642w66-4" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+          </div>
+          <br>
+          <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+              <button onclick="location.href='/admin/members';" type="button" class="btn-get-started">관리자 페이지</button>
           </div>
 
         </div>
