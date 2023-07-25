@@ -1,7 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
 import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
