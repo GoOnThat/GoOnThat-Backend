@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "freeboard")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 public class FreeBoardPost extends AuditingFields {
 
 
@@ -68,6 +67,26 @@ public class FreeBoardPost extends AuditingFields {
         this.boardCategory = newCategory;
         this.boardTitle = newTitle;
         this.boardContent = newContent;
+    }
+
+    public void setBoardCategory(String boardCategory) {
+        this.boardCategory = boardCategory;
+    }
+
+    public void setBoardTitle(String boardTitle) {
+        this.boardTitle = boardTitle;
+    }
+
+    public void setBoardContent(String boardContent) {
+        this.boardContent = boardContent;
+    }
+
+    public void setBoardHits(int boardHits) {
+        this.boardHits = boardHits;
+    }
+
+    public void setBoardIsDeleted(boolean boardIsDeleted) {
+        this.boardIsDeleted = boardIsDeleted;
     }
 
     public void delete() {

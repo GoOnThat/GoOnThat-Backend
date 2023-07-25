@@ -24,5 +24,6 @@ public interface FreeBoardPostService {
     FreeBoardDetailDTO getDetailPosts(Long boardNo);
 
     void hitsUp(Long boardNo, FreeBoardDetailDTO freeBoardDetailDTO);
-//     List<FreeBoardListDTO> getSearchPosts();
+
+    Page<FreeBoardListDTO> getSearchPosts(String key, String searchKeyword, Pageable pageable);
 }

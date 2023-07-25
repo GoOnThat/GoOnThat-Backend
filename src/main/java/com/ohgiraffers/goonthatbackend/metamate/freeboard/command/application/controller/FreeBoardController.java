@@ -41,29 +41,35 @@ import java.security.NoSuchAlgorithmException;
 public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
-    private final FreeBoardCommentService commentService;
     private final FileService fileService;
 
-    /* 게시판 전체 목록 조회 */
+    /* 게시판 전체 목록 조회, 검색목록 조회 분리 */
     @GetMapping("/list")
-    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=1, size=10, sort="boardNo",
-                        direction= Sort.Direction.DESC) Pageable pageable, Model model) {
+    public String list( @RequestParam(required = false) String searchKeyword,
+                        @RequestParam(required = false) String key,
+                        @PageableDefault(page = 0, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable
+            , Model model) {
 
-        if (user != null) {
-            model.addAttribute("user", user);
+        Page<FreeBoardListDTO> boardList;
+
+        if (searchKeyword != null && key != null) {
+            boardList = freeBoardService.getSearchPosts(key, searchKeyword, pageable);
+        } else {
+            boardList = freeBoardService.getAllPosts(pageable);
         }
-        Page<FreeBoardListDTO> boardList = freeBoardService.getAllPosts(pageable);
 
-        int nowPage = boardList.getPageable().getPageNumber(); // 현재 페이지 번호를 1부터 시작하도록 수정
+        int nowPage = boardList.getPageable().getPageNumber() + 1; // 현재 페이지 번호를 1부터 시작하도록 수정
         int totalPages = boardList.getTotalPages();
         int startPage = Math.max(nowPage - 4, 1);
         int endPage = Math.min(nowPage + 5, totalPages);
         endPage = Math.min(endPage, startPage + 9); // 최대 10개 페이지 링크를 표시하도록 수정
 
-        model.addAttribute("nowPage",nowPage);
+        model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("boardList", boardList);
+        model.addAttribute("totalPages", totalPages);
+
         return "board/list";
     }
 
@@ -91,7 +97,7 @@ public class FreeBoardController {
             String fileName = new MD5Generator(originFileName).toString();
             String savePath = System.getProperty("user.dir") + "\\files";
 
-            if(!new File(savePath).exists()) {
+            if (!new File(savePath).exists()) {
                 new File(savePath).mkdirs();
             }
 
@@ -128,7 +134,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-        freeBoardService.hitsUp(boardNo,boardDetail);
+        freeBoardService.hitsUp(boardNo, boardDetail);
 
         if (boardDetail.isBoardIsDeleted()) {
             return "redirect:board/list";
