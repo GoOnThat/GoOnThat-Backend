@@ -1,6 +1,9 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
+import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
@@ -18,11 +21,16 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.apache.tomcat.util.file.ConfigurationSource;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,7 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-
+import java.util.List;
 
 @Controller
 @RequestMapping("/board")
@@ -40,35 +48,27 @@ import java.security.NoSuchAlgorithmException;
 public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
+    private final FreeBoardCommentService commentService;
     private final FileService fileService;
 
-    /* 게시판 전체 목록 조회, 검색목록 조회 분리 */
+    /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
-    public String list( @RequestParam(required = false) String searchKeyword,
-                        @RequestParam(required = false) String key,
-                        @PageableDefault(page = 0, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable
-            , Model model) {
+    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=0, size=10, sort="boardNo",
+                        direction= Sort.Direction.DESC) Pageable pageable, Model model) {
 
-        Page<FreeBoardListDTO> boardList;
-
-        if (searchKeyword != null && key != null) {
-            boardList = freeBoardService.getSearchPosts(key, searchKeyword, pageable);
-        } else {
-            boardList = freeBoardService.getAllPosts(pageable);
+        if (user != null) {
+            model.addAttribute("user", user);
         }
+        Page<FreeBoardListDTO> boardList = freeBoardService.getAllPosts(pageable);
 
-        int nowPage = boardList.getPageable().getPageNumber() + 1; // 현재 페이지 번호를 1부터 시작하도록 수정
-        int totalPages = boardList.getTotalPages();
-        int startPage = Math.max(nowPage - 4, 1);
-        int endPage = Math.min(nowPage + 5, totalPages);
-        endPage = Math.min(endPage, startPage + 9); // 최대 10개 페이지 링크를 표시하도록 수정
+        int nowPage = boardList.getPageable().getPageNumber();
+        int startPage= Math.max(nowPage -4, 1);
+        int endPage= Math.min(nowPage+9, boardList.getTotalPages());
 
-        model.addAttribute("nowPage", nowPage);
+        model.addAttribute("nowPage",nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("boardList", boardList);
-        model.addAttribute("totalPages", totalPages);
-
         return "board/list";
     }
 
@@ -96,7 +96,7 @@ public class FreeBoardController {
             String fileName = new MD5Generator(originFileName).toString();
             String savePath = System.getProperty("user.dir") + "\\files";
 
-            if (!new File(savePath).exists()) {
+            if(!new File(savePath).exists()) {
                 new File(savePath).mkdirs();
             }
 
@@ -133,7 +133,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-        freeBoardService.hitsUp(boardNo, boardDetail);
+        freeBoardService.hitsUp(boardNo,boardDetail);
 
         if (boardDetail.isBoardIsDeleted()) {
             return "redirect:board/list";
