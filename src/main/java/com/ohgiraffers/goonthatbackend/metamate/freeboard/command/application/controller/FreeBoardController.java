@@ -1,9 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.service.FreeBoardCommentService;
-import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.repository.FreeBoardCommentRepository;
 import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
 import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
@@ -13,26 +10,25 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.apache.tomcat.util.file.ConfigurationSource;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,7 +36,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.List;
+
 
 @Controller
 @RequestMapping("/board")
@@ -48,27 +44,35 @@ import java.util.List;
 public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
-    private final FreeBoardCommentService commentService;
     private final FileService fileService;
 
-    /* 게시판 전체 목록 조회 */
+    /* 게시판 전체 목록 조회, 검색목록 조회 분리 */
     @GetMapping("/list")
-    public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=0, size=10, sort="boardNo",
-                        direction= Sort.Direction.DESC) Pageable pageable, Model model) {
+    public String list( @RequestParam(required = false) String searchKeyword,
+                        @RequestParam(required = false) String key,
+                        @PageableDefault(page = 0, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable
+            , Model model) {
 
-        if (user != null) {
-            model.addAttribute("user", user);
+        Page<FreeBoardListDTO> boardList;
+
+        if (searchKeyword != null && key != null) {
+            boardList = freeBoardService.getSearchPosts(key, searchKeyword, pageable);
+        } else {
+            boardList = freeBoardService.getAllPosts(pageable);
         }
-        Page<FreeBoardListDTO> boardList = freeBoardService.getAllPosts(pageable);
 
-        int nowPage = boardList.getPageable().getPageNumber();
-        int startPage= Math.max(nowPage -4, 1);
-        int endPage= Math.min(nowPage+9, boardList.getTotalPages());
+        int nowPage = boardList.getPageable().getPageNumber() + 1; // 현재 페이지 번호를 1부터 시작하도록 수정
+        int totalPages = boardList.getTotalPages();
+        int startPage = Math.max(nowPage - 4, 1);
+        int endPage = Math.min(nowPage + 5, totalPages);
+        endPage = Math.min(endPage, startPage + 9); // 최대 10개 페이지 링크를 표시하도록 수정
 
-        model.addAttribute("nowPage",nowPage);
+        model.addAttribute("nowPage", nowPage);
         model.addAttribute("startPage", startPage);
         model.addAttribute("endPage", endPage);
         model.addAttribute("boardList", boardList);
+        model.addAttribute("totalPages", totalPages);
+
         return "board/list";
     }
 
@@ -84,19 +88,23 @@ public class FreeBoardController {
 
     /* 글쓰기 페이지 작성 */
     @PostMapping("/write")
-    public String writeSave(@ModelAttribute("freeBoardWriteDTO") FreeBoardWriteDTO freeBoardWriteDTO,
+    public String writeSave(@Valid FreeBoardWriteDTO freeBoardWriteDTO, BindingResult bindingResult,
                             @RequestParam("file") MultipartFile files,
                             @LoginUser SessionMetaUser user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
         }
-
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationErrors", bindingResult.getAllErrors());
+            model.addAttribute("freeBoardWriteDTO", freeBoardWriteDTO);
+            return "board/write"; // 에러가 발생한 폼 페이지로 다시 이동
+        }
         try {
             String originFileName = files.getOriginalFilename();
             String fileName = new MD5Generator(originFileName).toString();
             String savePath = System.getProperty("user.dir") + "\\files";
 
-            if(!new File(savePath).exists()) {
+            if (!new File(savePath).exists()) {
                 new File(savePath).mkdirs();
             }
 
@@ -126,14 +134,13 @@ public class FreeBoardController {
 
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
-    public String detail(@PathVariable Long boardNo, @ModelAttribute("freeBoardDetailDTO") FreeBoardDetailDTO freeBoardDetailDTO,
-                         @LoginUser SessionMetaUser user, Model model) {
+    public String detail(@PathVariable Long boardNo,@LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-        freeBoardService.hitsUp(boardNo,boardDetail);
+        freeBoardService.hitsUp(boardNo, boardDetail);
 
         if (boardDetail.isBoardIsDeleted()) {
             return "redirect:board/list";
@@ -168,17 +175,27 @@ public class FreeBoardController {
 
     /* 게시글 수정 */
     @PostMapping("/edit/{boardNo}")
-    public String editSave(@PathVariable Long boardNo, @ModelAttribute("freeBoardEditDTO") FreeBoardEditDTO freeBoardEditDTO,
+    public String editSave(@PathVariable Long boardNo,
+                           @ModelAttribute("freeBoardEditDTO")
+                           @Valid FreeBoardEditDTO freeBoardEditDTO, BindingResult bindingResult,
                            @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
-
-        String message = freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
-        model.addAttribute("Message", message);
-
-        return "redirect:/board/detail/" + boardNo;
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationErrors", bindingResult.getAllErrors());
+            model.addAttribute("boardDetail", boardDetail);
+            model.addAttribute("freeBoardEditDTO", freeBoardEditDTO);
+            return "board/edit";
+        }
+        try {
+            freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
+            return "redirect:/board/detail/" + boardNo;
+        }catch(IllegalStateException e){
+            return "redirect:/board/detail/" + boardNo;
+        }
     }
 
     /* 게시글 삭제 */
@@ -188,15 +205,13 @@ public class FreeBoardController {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        String message = freeBoardService.deletePost(boardNo, user);
-        model.addAttribute("Message", message);
 
-        if (message.equals("게시글이 삭제되었습니다.")) {
+        try {
+            freeBoardService.deletePost(boardNo, user);
             return "redirect:/board/list";
-        } else {
+        }catch (IllegalStateException e) {
             return "redirect:/board/detail/" + boardNo;
         }
-
     }
 
     /* 첨부파일 다운로드 */
