@@ -60,4 +60,19 @@ public class FreeBoardCommentService {
 
         freeBoardComment.delete();
     }
+
+    @Transactional
+    public void modifyComment(Long commentNo, SessionMetaUser user, FreeBoardCommentWriteDTO freeBoardCommentWriteDTO) {
+        FreeBoardComment freeBoardComment = freeBoardCommentRepository.findById(commentNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        if (!accessService.commentValidateUserAccess(freeBoardComment, user)) {
+            throw new CustomException(ErrorCode.COMMENT_NOT_FOUND);
+        }
+
+        freeBoardComment.update(
+                freeBoardCommentWriteDTO.getCommentContent()
+        );
+        freeBoardCommentRepository.save(freeBoardComment);
+    }
 }
