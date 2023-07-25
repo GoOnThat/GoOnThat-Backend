@@ -54,7 +54,7 @@ public class FreeBoardController {
     /* 게시판 전체 목록 조회 */
     @GetMapping("/list")
     public String list(@LoginUser SessionMetaUser user, @PageableDefault(page=0, size=10, sort="boardNo",
-                        direction= Sort.Direction.DESC) Pageable pageable, Model model) {
+            direction= Sort.Direction.DESC) Pageable pageable, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);

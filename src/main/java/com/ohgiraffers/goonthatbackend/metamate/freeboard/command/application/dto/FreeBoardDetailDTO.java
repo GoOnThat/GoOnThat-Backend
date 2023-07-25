@@ -47,7 +47,7 @@ public class FreeBoardDetailDTO {
                 , boardPost.getMetaUser()
                 , boardPost.getFileNo()
                 , boardPost.getFileName()
-                );
+        );
     }
 
 }
