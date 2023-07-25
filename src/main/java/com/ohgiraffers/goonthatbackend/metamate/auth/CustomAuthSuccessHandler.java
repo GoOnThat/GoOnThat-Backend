@@ -27,14 +27,8 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
                                         Authentication authentication) throws IOException {
 
         clearSession(request);
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-        String defaultUri = "/index"; // 기본 URI를 메인 페이지로 설정
 
-        if (request.getRequestURI().equals(request.getContextPath() + "/auth/login")) {
-            defaultUri = "/index"; // 메인 페이지 URI를 설정합니다.
-        } else if (savedRequest != null) {
-            defaultUri = savedRequest.getRedirectUrl();
-        }
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
 
         /**
          * prevPage가 존재하는 경우 = 사용자가 직접 /auth/login 경로로 로그인 요청
@@ -46,7 +40,7 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
         }
 
         // 기본 URI
-        String uri = "/index";
+        String uri = "/";
 
         /**
          * savedRequest 존재하는 경우 = 인증 권한이 없는 페이지 접근
@@ -65,6 +59,8 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
 
         redirectStrategy.sendRedirect(request, response, uri);
     }
+
+    // 로그인 실패 후 성공 시 남아있는 에러 세션 제거
     protected void clearSession(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
