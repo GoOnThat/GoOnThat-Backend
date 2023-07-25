@@ -63,7 +63,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
             postList.add(freeBoardListDTO);
         }
 
-        return new PageImpl<>(postList, pageable,allPosts.getTotalElements());
+        return new PageImpl<>(postList, pageable, allPosts.getTotalElements());
     }
 
     //키워드별 검색
@@ -74,17 +74,17 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         Page<FreeBoardPost> allPosts;
         List<FreeBoardListDTO> postList = new ArrayList<>();
 
-        switch(key){
+        switch (key) {
             case "title":
                 allPosts = freeBoardPostRepository.findByBoardTitleContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            case "content" :
+            case "content":
                 allPosts = freeBoardPostRepository.findByBoardContentContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            case "writer" :
+            case "writer":
                 allPosts = freeBoardPostRepository.findByMetaUserNicknameContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            default :
+            default:
                 allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse(pageable);
                 break;
         }
@@ -137,7 +137,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        if(!accessService.postValidateUserAccess(boardPost,user)) {
+        if (!accessService.postValidateUserAccess(boardPost, user)) {
             throw new IllegalStateException("권한이 없습니다.");
         }
         boardPost.update(
@@ -155,9 +155,9 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo).orElseThrow(() ->
                 new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        if(!accessService.postValidateUserAccess(boardPost,user)){
+        if (!accessService.postValidateUserAccess(boardPost, user)) {
             throw new IllegalStateException("권한이 없습니다.");
         }
-            boardPost.delete();
+        boardPost.delete();
     }
 }

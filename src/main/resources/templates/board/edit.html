@@ -65,7 +65,8 @@
                         <td>제목</td>
                         <td>
                             <input type="text" class="inputTitle" th:field="*{boardTitle}" placeholder="제목을 입력하세요"/>
-                            <span class="err" th:if="${#fields.hasErrors('boardTitle')}" th:errors="*{boardTitle}"></span>
+                            <span class="err" th:if="${#fields.hasErrors('boardTitle')}"
+                                  th:errors="*{boardTitle}"></span>
                         </td>
                     </tr>
                     <tr>
@@ -73,7 +74,8 @@
                         <td>
                             <textarea class="inputContent" th:field="*{boardContent}" placeholder="내용을 입력하세요" cols="85"
                                       rows="15"></textarea>
-                            <span class="err" th:if="${#fields.hasErrors('boardContent')}" th:errors="*{boardContent}"></span>
+                            <span class="err" th:if="${#fields.hasErrors('boardContent')}"
+                                  th:errors="*{boardContent}"></span>
                         </td>
                     </tr>
                     <tr>
