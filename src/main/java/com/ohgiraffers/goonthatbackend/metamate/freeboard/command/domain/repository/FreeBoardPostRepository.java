@@ -7,13 +7,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
-
 @Repository
-public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost,Long> {
+public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost, Long> {
 
     Page<FreeBoardPost> findByBoardIsDeletedFalse(Pageable pageable); //삭제여부 false만 조회
 
+    Page<FreeBoardPost> findByBoardTitleContainingAndBoardIsDeletedFalse(String searchKeyword, Pageable pageable); // 제목검색
 
-//   Page<FreeBoardPost> findByBoardContaining(String searchKeyword, Pageable pageable);
+    Page<FreeBoardPost> findByBoardContentContainingAndBoardIsDeletedFalse(String searchKeyword, Pageable pageable); //내용검색
+
+    Page<FreeBoardPost> findByMetaUserNicknameContainingAndBoardIsDeletedFalse(String searchKeyword, Pageable pageable); //닉네임검색
 
 }
