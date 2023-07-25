@@ -168,6 +168,22 @@ iframe {
   color: red;
 }
 
+.txt6 {
+  font-family: Ubuntu-Bold;
+  font-size: 15px;
+  color: #57b846;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.txt7 {
+  font-family: Ubuntu-Bold;
+  font-size: 18px;
+  color: red;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
 
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/

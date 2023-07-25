@@ -45,4 +45,8 @@ public class FreeBoardComment extends AuditingFields {
     public void delete() {
         this.commentIsDeleted = true;
     }
+
+    public void update(String commentContent) {
+        this.commentContent = commentContent;
+    }
 }

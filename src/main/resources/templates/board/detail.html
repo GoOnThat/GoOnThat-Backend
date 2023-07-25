@@ -155,6 +155,7 @@
     </tr>
 </table>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <input type="hidden" name="refBoardNo" th:value="${boardDetail.boardNo}">
 <table align="center" width="500" border="0">
     <tr>
@@ -183,9 +184,14 @@
     <!-- 타임리프 반복문으로 댓글 목록을 표시 -->
     <tr th:each="comment : ${boardDetail.commentList}">
         <td th:if="${!comment.isCommentIsDeleted()}" th:text="${comment.getCommentWriter()}"></td>
-        <td th:if="${!comment.isCommentIsDeleted}" th:text="${comment.commentContent}"></td>
+        <td th:if="${!comment.isCommentIsDeleted()}">
+            <span th:id="'comment-content-' + ${comment.commentNo}" th:text="${comment.commentContent}"></span>
+            <input type="text" class="edit-comment-input" th:id="'edit-comment-input-' + ${comment.commentNo}" th:value="${comment.commentContent}" style="display: none;">
+        </td>
         <td th:if="${!comment.isCommentIsDeleted}" th:text="${comment.getCreatedDate()}"></td>
-        <td th:if="${!comment.isCommentIsDeleted}">
+        <td th:if="${!comment.isCommentIsDeleted()}">
+            <button class="edit-button" th:id="'edit-button-' + ${comment.commentNo}" th:onclick="'editComment(\'' + ${comment.commentNo} + '\')'">수정</button>
+            <button class="update-button" th:id="'update-button-' + ${comment.commentNo}" th:onclick="'updateComment(\'' + ${comment.commentNo} + '\')'" style="display: none;">확인</button>
             <button class="delete-button" th:onclick="'deleteComment(\'' + ${comment.commentNo} + '\')'">삭제</button>
         </td>
     </tr>
@@ -213,14 +219,14 @@
             success: function (data, status, xhr) {
                 // 등록 성공시 처리
                 console.log(data);
-                alert("댓글 등록 성공");
+                alert("댓글 등록이 완료되었습니다.");
                 location.reload();
                 // 댓글 목록을 다시 로딩하는 등의 작업 수행
             },
             error: function (data) {
                 // 등록 실패시 처리
                 console.log(data);
-                alert("댓글 등록 실패");
+                alert("권한이 없습니다.");
             }
         });
     }
@@ -238,19 +244,56 @@
                 xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             },
             success: function(data, status, xhr) {
-                // 삭제 성공 시 처리
+                // 수정 성공 시 처리
                 console.log(data);
-                alert("댓글 삭제 성공");
+                alert("댓글 삭제가 완료되었습니다.");
                 location.reload();
                 // 댓글 목록을 다시 로딩하는 등의 작업 수행
             },
             error: function(data) {
                 // 삭제 실패 시 처리
                 console.log(data);
-                alert("댓글 삭제 실패");
+                alert("권한이 없습니다.");
             }
         });
     }
+
+    function updateComment(commentNo) {
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var url = "/edit/" + commentNo;
+        var updatedCommentContent = $("#edit-comment-input-" + commentNo).val();
+
+        $.ajax({
+            url: url,
+            type: "PUT",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            },
+            data: { commentContent: updatedCommentContent },
+            success: function (data, status, xhr) {
+                console.log(data);
+                alert("댓글 수정이 완료되었습니다.");
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+                alert("권한이 없습니다.");
+            }
+        });
+    }
+
+    function editComment(commentNo) {
+        var commentContentSpan = $("#comment-content-" + commentNo);
+        var commentContentInput = $("#edit-comment-input-" + commentNo);
+        var updateButton = $("#update-button-" + commentNo);
+        var editButton = $("#edit-button-" + commentNo);
+
+        commentContentSpan.hide();
+        commentContentInput.show();
+        updateButton.show();
+        editButton.hide();
+    }
+
 </script>
 </body>
 
