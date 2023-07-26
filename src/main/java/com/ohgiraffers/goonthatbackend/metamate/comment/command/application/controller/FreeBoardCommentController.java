@@ -42,6 +42,20 @@ public class FreeBoardCommentController {
         return commentList;
     }
 
+    /* 댓글 수정 */
+    @PutMapping("/edit/{commentNo}")
+    public ResponseEntity<String> modifyComment(@PathVariable Long commentNo, @LoginUser SessionMetaUser user, FreeBoardCommentWriteDTO freeBoardCommentWriteDTO) {
+
+        try {
+             freeBoardCommentService.modifyComment(commentNo, user, freeBoardCommentWriteDTO);
+            return ResponseEntity.ok("댓글이 수정되었습니다.");
+        } catch (CustomException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 수정에 실패하였습니다.");
+        }
+    }
+
     /* 댓글 삭제 */
     @DeleteMapping(value = "/comment/{commentNo}")
     public ResponseEntity<String> removeComment(@PathVariable Long commentNo, @LoginUser SessionMetaUser user) {

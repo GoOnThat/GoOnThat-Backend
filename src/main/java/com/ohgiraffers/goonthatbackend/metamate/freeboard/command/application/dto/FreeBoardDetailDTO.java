@@ -29,12 +29,11 @@ public class FreeBoardDetailDTO {
     private MetaUser metaUser;
     private Long fileNo;
     private String fileName;
-    private Long likeNo;
 
 
-    public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost,List<FreeBoardCommentReadDTO> commentList) {
-        CalcCreateDate cal= new CalcCreateDate();
-        String boardWriter=boardPost.getMetaUser().getNickname();
+    public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost, List<FreeBoardCommentReadDTO> commentList) {
+        CalcCreateDate cal = new CalcCreateDate();
+        String boardWriter = boardPost.getMetaUser().getNickname();
         return new FreeBoardDetailDTO(
                 boardPost.getBoardNo()
                 , cal.calcCreateDate(boardPost.getCreatedAt())
@@ -48,8 +47,8 @@ public class FreeBoardDetailDTO {
                 , boardPost.getMetaUser()
                 , boardPost.getFileNo()
                 , boardPost.getFileName()
-                , boardPost.getLikeNo()
-                );
+        );
     }
+
 
 }

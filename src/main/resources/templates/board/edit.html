@@ -1,79 +1,98 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta class="test" name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
 </head>
 <style>
-  table.table2 {
-    border-collapse: separate;
-    border-spacing: 1px;
-    text-align: left;
-    line-height: 1.5;
-    border-top: 1px solid #ccc;
-    margin: 20px 10px;
-  }
+    table.table2 {
+        border-collapse: separate;
+        border-spacing: 1px;
+        text-align: left;
+        line-height: 1.5;
+        border-top: 1px solid #ccc;
+        margin: 20px 10px;
+    }
 
-  table.table2 tr {
-    width: 50px;
-    padding: 10px;
-    font-weight: bold;
-    vertical-align: top;
-    border-bottom: 1px solid #ccc;
-  }
+    table.table2 tr {
+        width: 50px;
+        padding: 10px;
+        font-weight: bold;
+        vertical-align: top;
+        border-bottom: 1px solid #ccc;
+    }
 
-  table.table2 td {
-    width: 100px;
-    padding: 10px;
-    vertical-align: top;
-    border-bottom: 1px solid #ccc;
-  }
+    table.table2 td {
+        width: 100px;
+        padding: 10px;
+        vertical-align: top;
+        border-bottom: 1px solid #ccc;
+    }
 
-  .center {
-    text-align: center;
-  }
+    .center {
+        text-align: center;
+    }
 </style>
 <body>
-<form th:action="@{/board/edit/{boardNo}(boardNo=${boardDetail.boardNo})}" method="post" th:object="${freeBoardEditDTO}">
-  <table style="padding-top:50px" align="center" width="800" border="0" cellpadding="2">
-    <tr>
-      <td height="20" align="center" bgcolor="#ccc"><font color="white">글 수정</font></td>
-    </tr>
-    <tr>
-      <td bgcolor="white">
-        <table class="table2">
-          <tr>
-            <td>작성자</td>
-            <td>
-              <span th:if="${user != null}" th:text="${user.nickname}"></span>
-              <span th:unless="${user != null}">로그인하세요</span>
+<form th:action="@{/board/edit/{boardNo}(boardNo=${boardNo})}" method="post" th:object="${freeBoardEditDTO}">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    <table style="padding-top:50px" align="center" width="800" border="0" cellpadding="2">
+        <tr>
+            <td height="20" align="center" bgcolor="#ccc"><font color="white">글 수정</font></td>
+        </tr>
+        <tr>
+            <td bgcolor="white">
+                <table class="table2">
+                    <tr>
+                        <td>작성자</td>
+                        <td>
+                            <span th:if="${user != null}" th:text="${user.nickname}"></span>
+                            <span th:unless="${user != null}">로그인하세요</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>카테고리</td>
+                        <td>
+                            <select th:field="*{boardCategory}">
+                                <option value="잡담" th:selected="${boardDetail.boardCategory == '잡담'}">잡담</option>
+                                <option value="정보" th:selected="${boardDetail.boardCategory == '정보'}">정보</option>
+                                <option value="공지" th:selected="${boardDetail.boardCategory == '공지'}">공지</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>제목</td>
+                        <td>
+                            <input type="text" class="inputTitle" th:field="*{boardTitle}" placeholder="제목을 입력하세요"/>
+                            <span class="err" th:if="${#fields.hasErrors('boardTitle')}"
+                                  th:errors="*{boardTitle}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>내용</td>
+                        <td>
+                            <textarea class="inputContent" th:field="*{boardContent}" placeholder="내용을 입력하세요" cols="85"
+                                      rows="15"></textarea>
+                            <span class="err" th:if="${#fields.hasErrors('boardContent')}"
+                                  th:errors="*{boardContent}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>파일</td>
+                        <td>
+                            <input name="file" type="file" class="custom-file-input" id="customFile"/>
+                        </td>
+                    </tr>
+                </table>
+                <div class="center">
+                    <button type="submit">수정</button>
+                    <button type="button" onclick="location.href='/board/list'">취소</button>
+                    </button>
+                </div>
             </td>
-          </tr>
-          <tr>
-            <td>제목</td>
-            <td><input type="text" th:field="*{boardTitle}" size="60" th:value="${boardDetail.boardTitle}"></td>
-          </tr>
-          <tr>
-            <td>내용</td>
-            <td><textarea th:field="*{boardContent}" cols="85" rows="15" th:text="${boardDetail.boardContent}"></textarea></td>
-          </tr>
-          <tr>
-            <td>카테고리</td>
-            <td>
-              <select th:field="*{boardCategory}">
-                <option value="잡담" th:selected="${boardDetail.boardCategory == '잡담'}">잡담</option>
-                <option value="정보" th:selected="${boardDetail.boardCategory == '정보'}">정보</option>
-                <option value="공지" th:selected="${boardDetail.boardCategory == '공지'}">공지</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-        <div class="center">
-          <button type="submit">수정</button>
-          <button onclick="location.href='/board/detail/{boardNo}(boardNo=${boardDetail.boardNo})'">취소</button>
-        </div>
-      </td>
-    </tr>
-  </table>
+        </tr>
+    </table>
 </form>
 </body>
 </html>

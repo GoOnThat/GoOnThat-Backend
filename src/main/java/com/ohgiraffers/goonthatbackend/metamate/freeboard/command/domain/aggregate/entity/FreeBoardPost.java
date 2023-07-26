@@ -14,7 +14,6 @@ import java.util.List;
 @Table(name = "freeboard")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Setter
 public class FreeBoardPost extends AuditingFields {
 
 
@@ -64,7 +63,6 @@ public class FreeBoardPost extends AuditingFields {
         this.fileNo = fileNo;
         this.fileName = fileName;
     }
-
 
     public void update(String newCategory, String newTitle, String newContent) {
         this.boardCategory = newCategory;

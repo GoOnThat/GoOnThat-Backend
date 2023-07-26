@@ -13,16 +13,17 @@ import org.springframework.data.domain.Pageable;
 public interface FreeBoardPostService {
 
 
-    String savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user);
+    void savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user);
 
-    String updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user);
+    void updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user);
 
-    String deletePost(Long boardNo, SessionMetaUser user);
+    void deletePost(Long boardNo, SessionMetaUser user);
 
     Page<FreeBoardListDTO> getAllPosts(Pageable pageable);
 
     FreeBoardDetailDTO getDetailPosts(Long boardNo);
 
     void hitsUp(Long boardNo, FreeBoardDetailDTO freeBoardDetailDTO);
-//     List<FreeBoardListDTO> getSearchPosts();
+
+    Page<FreeBoardListDTO> getSearchPosts(String key, String searchKeyword, Pageable pageable);
 }
