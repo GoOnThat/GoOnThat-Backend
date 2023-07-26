@@ -16,7 +16,9 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.se
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.repository.FreeBoardPostRepository;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -40,14 +42,13 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     //게시글 쓰기
     @Transactional
     @Override
-    public String savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
+    public void savePost(FreeBoardWriteDTO boardDTO, SessionMetaUser user) {
 
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         FreeBoardPost freeBoardPost = boardDTO.toEntity(metaUser);
         freeBoardPostRepository.save(freeBoardPost);
-        return "게시글이 등록되었습니다.";
     }
 
     //전체 조회
@@ -62,7 +63,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
             postList.add(freeBoardListDTO);
         }
 
-        return new PageImpl<>(postList, pageable,allPosts.getTotalElements());
+        return new PageImpl<>(postList, pageable, allPosts.getTotalElements());
     }
 
     //키워드별 검색
@@ -73,17 +74,17 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         Page<FreeBoardPost> allPosts;
         List<FreeBoardListDTO> postList = new ArrayList<>();
 
-        switch(key){
+        switch (key) {
             case "title":
                 allPosts = freeBoardPostRepository.findByBoardTitleContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            case "content" :
+            case "content":
                 allPosts = freeBoardPostRepository.findByBoardContentContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            case "writer" :
+            case "writer":
                 allPosts = freeBoardPostRepository.findByMetaUserNicknameContainingAndBoardIsDeletedFalse(searchKeyword, pageable);
                 break;
-            default :
+            default:
                 allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse(pageable);
                 break;
         }
@@ -94,6 +95,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 
         return new PageImpl<>(postList, pageable, allPosts.getTotalElements());
     }
+
 
     //세부내용
     @Transactional(readOnly = true)
@@ -127,40 +129,35 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         boardPost.hitsUp(freeBoardDetailDTO.getBoardHits());
     }
 
-    //게시글 수정
+    //게시글 수정 적용
     @Transactional
     @Override
-    public String updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user) {
+    public void updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user) {
 
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         if (!accessService.postValidateUserAccess(boardPost, user)) {
-            return "권한이 없습니다.";
+            throw new IllegalStateException("권한이 없습니다.");
         }
-
         boardPost.update(
-                freeBoardEditDTO.getBoardCategory()
-                , freeBoardEditDTO.getBoardTitle()
-                , freeBoardEditDTO.getBoardContent()
+                freeBoardEditDTO.getBoardCategory(),
+                freeBoardEditDTO.getBoardTitle(),
+                freeBoardEditDTO.getBoardContent()
         );
-        freeBoardPostRepository.save(boardPost);
-
-        return "게시글이 수정되었습니다.";
     }
 
     //게시글 삭제 (SOFT DELETE)
     @Transactional
     @Override
-    public String deletePost(Long boardNo, SessionMetaUser user) {
+    public void deletePost(Long boardNo, SessionMetaUser user) {
 
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo).orElseThrow(() ->
                 new CustomException(ErrorCode.POST_NOT_FOUND));
+
         if (!accessService.postValidateUserAccess(boardPost, user)) {
-            return "권한이 없습니다.";
+            throw new IllegalStateException("권한이 없습니다.");
         }
         boardPost.delete();
-
-        return "게시글이 삭제되었습니다.";
     }
 }

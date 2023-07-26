@@ -1,7 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.service;
 
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
-import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.AccessService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;

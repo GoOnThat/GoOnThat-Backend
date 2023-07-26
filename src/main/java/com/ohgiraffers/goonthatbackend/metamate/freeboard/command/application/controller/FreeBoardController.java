@@ -10,13 +10,16 @@ import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.service.FreeBoardPostService;
 import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -25,6 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -84,13 +88,17 @@ public class FreeBoardController {
 
     /* 글쓰기 페이지 작성 */
     @PostMapping("/write")
-    public String writeSave(@ModelAttribute("freeBoardWriteDTO") FreeBoardWriteDTO freeBoardWriteDTO,
+    public String writeSave(@Valid FreeBoardWriteDTO freeBoardWriteDTO, BindingResult bindingResult,
                             @RequestParam("file") MultipartFile files,
                             @LoginUser SessionMetaUser user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
         }
-
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationErrors", bindingResult.getAllErrors());
+            model.addAttribute("freeBoardWriteDTO", freeBoardWriteDTO);
+            return "board/write"; // 에러가 발생한 폼 페이지로 다시 이동
+        }
         try {
             String originFileName = files.getOriginalFilename();
             String fileName = new MD5Generator(originFileName).toString();
@@ -126,8 +134,7 @@ public class FreeBoardController {
 
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
-    public String detail(@PathVariable Long boardNo, @ModelAttribute("freeBoardDetailDTO") FreeBoardDetailDTO freeBoardDetailDTO,
-                         @LoginUser SessionMetaUser user, Model model) {
+    public String detail(@PathVariable Long boardNo,@LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
@@ -168,17 +175,27 @@ public class FreeBoardController {
 
     /* 게시글 수정 */
     @PostMapping("/edit/{boardNo}")
-    public String editSave(@PathVariable Long boardNo, @ModelAttribute("freeBoardEditDTO") FreeBoardEditDTO freeBoardEditDTO,
+    public String editSave(@PathVariable Long boardNo,
+                           @ModelAttribute("freeBoardEditDTO")
+                           @Valid FreeBoardEditDTO freeBoardEditDTO, BindingResult bindingResult,
                            @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
-
-        String message = freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
-        model.addAttribute("Message", message);
-
-        return "redirect:/board/detail/" + boardNo;
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("validationErrors", bindingResult.getAllErrors());
+            model.addAttribute("boardDetail", boardDetail);
+            model.addAttribute("freeBoardEditDTO", freeBoardEditDTO);
+            return "board/edit";
+        }
+        try {
+            freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
+            return "redirect:/board/detail/" + boardNo;
+        }catch(IllegalStateException e){
+            return "redirect:/board/detail/" + boardNo;
+        }
     }
 
     /* 게시글 삭제 */
@@ -188,15 +205,13 @@ public class FreeBoardController {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        String message = freeBoardService.deletePost(boardNo, user);
-        model.addAttribute("Message", message);
 
-        if (message.equals("게시글이 삭제되었습니다.")) {
+        try {
+            freeBoardService.deletePost(boardNo, user);
             return "redirect:/board/list";
-        } else {
+        }catch (IllegalStateException e) {
             return "redirect:/board/detail/" + boardNo;
         }
-
     }
 
     /* 첨부파일 다운로드 */

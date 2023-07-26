@@ -18,4 +18,6 @@ public interface FreeBoardPostRepository extends JpaRepository<FreeBoardPost, Lo
 
     Page<FreeBoardPost> findByMetaUserNicknameContainingAndBoardIsDeletedFalse(String searchKeyword, Pageable pageable); //닉네임검색
 
+    Page<FreeBoardPost> findByBoardCategoryContainingAndBoardIsDeletedFalse(String searchKeyword, Pageable pageable); // 카테고리
+
 }
