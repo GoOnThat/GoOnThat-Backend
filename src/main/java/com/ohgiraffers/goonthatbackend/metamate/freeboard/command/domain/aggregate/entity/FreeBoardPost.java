@@ -48,6 +48,8 @@ public class FreeBoardPost extends AuditingFields {
 
     private boolean boardIsDeleted;
 
+    private Long likeNo;
+
     @Builder
     public FreeBoardPost(String boardCategory, String boardTitle, String boardContent,
                          MetaUser metaUser, int boardHits, List<FreeBoardComment> commentList,

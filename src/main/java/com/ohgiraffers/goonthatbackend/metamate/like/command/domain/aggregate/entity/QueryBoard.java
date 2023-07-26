@@ -4,8 +4,6 @@
 //
 //import javax.persistence.*;
 //
-//@Entity
-//@Table(name = "BOARD_ID")
 //@Getter
 //public class QueryBoard {
 //
