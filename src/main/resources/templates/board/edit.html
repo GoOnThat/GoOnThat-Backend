@@ -78,6 +78,17 @@
                                   th:errors="*{boardContent}"></span>
                         </td>
                     </tr>
+                    <tr th:if="${boardDetail.multiFilesList!=null}">
+                        <td>첨부파일</td>
+                        <td>
+                            <ul>
+                                <li th:each="file : ${boardDetail.multiFilesList}">
+                                    <a class="card-text" th:href="@{'/download/' + ${file.fileNo}}"
+                                       th:text="${file.getOriginFileName()}"></a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
                     <tr>
                         <td>파일</td>
                         <td>

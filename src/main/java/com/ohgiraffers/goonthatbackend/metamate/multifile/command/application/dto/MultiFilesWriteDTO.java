@@ -11,7 +11,6 @@ import lombok.*;
 @NoArgsConstructor
 public class MultiFilesWriteDTO {
 
-
     private String originFileName;
 
     private String fileName;
