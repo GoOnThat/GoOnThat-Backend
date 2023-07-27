@@ -81,7 +81,11 @@
                     <tr>
                         <td>파일</td>
                         <td>
-                            <input name="file" type="file" class="custom-file-input" id="customFile"/>
+                            <input name="file" type="file" multiple class="custom-file-input" id="customFile"/>
+                        </td>
+                        <td>
+                            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                                <span th:text="${errorMessage}"></span>
                         </td>
                     </tr>
                 </table>
@@ -95,7 +99,7 @@
 </form>
 <script>
     $('.custom-file-input').on('change', function () {
-        var fileName = $(this).val().split('\\').pop();
+        const fileName = $(this).val().split('\\').pop();
         $(this).siblings('.custom-file-label').addClass('selected').html(fileName);
     });
 </script>

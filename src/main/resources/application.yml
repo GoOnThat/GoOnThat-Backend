@@ -15,6 +15,10 @@ spring:
     url: jdbc:mysql://localhost:3306/metamate
     username: admin
     password: admin
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
 
   thymeleaf:
     cache: false # Set to true for production; false for development (disabled caching for faster development)

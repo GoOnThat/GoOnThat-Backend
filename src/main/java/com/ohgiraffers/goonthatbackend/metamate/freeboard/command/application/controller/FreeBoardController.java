@@ -1,9 +1,9 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.common.MD5Generator;
-import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.FileDTO;
-import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.FileService;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesReadDTO;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesWriteDTO;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.MultiFilesService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -29,13 +29,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 
 @Controller
@@ -44,13 +43,13 @@ import java.security.NoSuchAlgorithmException;
 public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
-    private final FileService fileService;
+    private final MultiFilesService multiFilesService;
 
     /* 게시판 전체 목록 조회, 검색목록 조회 분리 */
     @GetMapping("/list")
-    public String list( @RequestParam(required = false) String searchKeyword,
-                        @RequestParam(required = false) String key,
-                        @PageableDefault(page = 0, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable
+    public String list(@RequestParam(required = false) String searchKeyword,
+                       @RequestParam(required = false) String key,
+                       @PageableDefault(page = 0, sort = "boardNo", direction = Sort.Direction.DESC) Pageable pageable
             , Model model) {
 
         Page<FreeBoardListDTO> boardList;
@@ -89,7 +88,7 @@ public class FreeBoardController {
     /* 글쓰기 페이지 작성 */
     @PostMapping("/write")
     public String writeSave(@Valid FreeBoardWriteDTO freeBoardWriteDTO, BindingResult bindingResult,
-                            @RequestParam("file") MultipartFile files,
+                            @RequestParam("file") List<MultipartFile> files,
                             @LoginUser SessionMetaUser user, Model model) {
         if (user != null) {
             model.addAttribute("user", user);
@@ -99,42 +98,30 @@ public class FreeBoardController {
             model.addAttribute("freeBoardWriteDTO", freeBoardWriteDTO);
             return "board/write"; // 에러가 발생한 폼 페이지로 다시 이동
         }
-        try {
-            String originFileName = files.getOriginalFilename();
-            String fileName = new MD5Generator(originFileName).toString();
-            String savePath = System.getProperty("user.dir") + "\\files";
 
-            if (!new File(savePath).exists()) {
-                new File(savePath).mkdirs();
+        try {
+            for (MultipartFile file : files) {
+                multiFilesService.saveFile(file,freeBoardWriteDTO,user);
             }
 
-            String filePath = savePath + "\\" + fileName;
-            files.transferTo(new File(filePath));
-
-            FileDTO fileDTO = new FileDTO();
-            fileDTO.setOriginFileName(originFileName);
-            fileDTO.setFilename(fileName);
-            fileDTO.setFilePath(filePath);
-
-            Long fileNo = fileService.saveFile(fileDTO);
-            freeBoardWriteDTO.setFileNo(fileNo);
             freeBoardService.savePost(freeBoardWriteDTO, user);
 
-
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            model.addAttribute("errorMessage", "파일 전송 중 오류가 발생했습니다.");
+            return "board/write";
+        } catch (NoSuchAlgorithmException e) {
+            model.addAttribute("errorMessage", "파일 처리 중 오류가 발생했습니다.");
+            return "board/write";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "board/write";
         }
-
         return "redirect:/board/list";
     }
 
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
-    public String detail(@PathVariable Long boardNo,@LoginUser SessionMetaUser user, Model model) {
+    public String detail(@PathVariable Long boardNo, @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
@@ -193,7 +180,7 @@ public class FreeBoardController {
         try {
             freeBoardService.updatePost(boardNo, freeBoardEditDTO, user);
             return "redirect:/board/detail/" + boardNo;
-        }catch(IllegalStateException e){
+        } catch (IllegalStateException e) {
             return "redirect:/board/detail/" + boardNo;
         }
     }
@@ -209,20 +196,25 @@ public class FreeBoardController {
         try {
             freeBoardService.deletePost(boardNo, user);
             return "redirect:/board/list";
-        }catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             return "redirect:/board/detail/" + boardNo;
         }
     }
 
     /* 첨부파일 다운로드 */
-    @GetMapping("/dowmload/{fileNo}")
+    @GetMapping("/download/{fileNo}")
     public ResponseEntity<Resource> fileDownload(@PathVariable("fileNo") Long fileNo) throws IOException {
 
-        FileDTO fileDTO = fileService.getFile(fileNo);
+        MultiFilesReadDTO fileDTO = multiFilesService.getFile(fileNo);
         Path path = Paths.get(fileDTO.getFilePath());
+
+        // 파일을 InputStreamResource로 감싸서 리소스로 만듭니다.
         Resource resource = new InputStreamResource(Files.newInputStream(path));
 
-        return ResponseEntity.ok().contentType(MediaType.parseMediaType("application/octet-stream"))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDTO.getOriginFileName() + "\"").body(resource);
+        // ResponseEntity를 이용하여 다운로드 응답을 생성합니다.
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDTO.getOriginFileName() + "\"")
+                .body(resource);
     }
 }

@@ -1,11 +1,13 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity.MultiFiles;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,10 +24,9 @@ public class FreeBoardWriteDTO {
     @NotBlank(message = "내용을 입력하세요.")
     private String boardContent; //내용
 
-    private Long fileNo;
+    private List<MultiFiles> multiFiles;
 
-
-    public FreeBoardPost toEntity(MetaUser metaUser) {
+    public FreeBoardPost toEntity(MetaUser metaUser, List<MultiFiles> multiFiles) {
         return FreeBoardPost.builder()
                 .boardCategory(this.boardCategory)
                 .boardTitle(this.boardTitle)
@@ -33,7 +34,7 @@ public class FreeBoardWriteDTO {
                 .metaUser(metaUser)
                 .boardHits(0)
                 .boardIsDeleted(false)
-                .fileNo(this.fileNo)
+                .multiFiles(multiFiles)
                 .build();
 
     }

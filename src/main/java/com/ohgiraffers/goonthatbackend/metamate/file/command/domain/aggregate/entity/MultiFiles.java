@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table(name = "file")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class File extends AuditingFields {
+public class MultiFiles extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class File extends AuditingFields {
     private String originFileName;
 
     @Column(nullable = false)
-    private String filename;
+    private String fileName;
 
     @Column(nullable = false)
     private String filePath;
@@ -39,11 +39,10 @@ public class File extends AuditingFields {
     private FreeBoardPost freeBoardPost;
 
     @Builder
-    public File(Long fileNo, String originFileName, String filename,
-                String filePath, MetaUser metaUser, FreeBoardPost freeBoardPost) {
-        this.fileNo = fileNo;
+    public MultiFiles(String originFileName, String fileName,
+                      String filePath, MetaUser metaUser, FreeBoardPost freeBoardPost) {
         this.originFileName = originFileName;
-        this.filename = filename;
+        this.fileName = fileName;
         this.filePath = filePath;
         this.metaUser = metaUser;
         this.freeBoardPost = freeBoardPost;

@@ -7,6 +7,10 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesReadDTO;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesWriteDTO;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity.MultiFiles;
+import com.ohgiraffers.goonthatbackend.metamate.file.command.infra.repository.MultiFilesRepository;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardEditDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardListDTO;
@@ -37,6 +41,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     private final FreeBoardPostRepository freeBoardPostRepository;
     private final FreeBoardCommentRepository freeBoardCommentRepository;
     private final MetaUserRepository metaUserRepository;
+    private final MultiFilesRepository multiFilesRepository;
     private final AccessService accessService;
 
     //게시글 쓰기
@@ -105,10 +110,16 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-//        boardPost.setFileNo(boardNo);
+        //파일 조회 로직
+        List<MultiFiles> fileList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
+        List<MultiFilesReadDTO> fileDTOList = new ArrayList<>();
+        for (MultiFiles file : fileList) {
+            MultiFilesReadDTO fileDTO = MultiFilesReadDTO.fromEntity(file);
+            fileDTOList.add(fileDTO);
+        }
 
         //댓글 조회 로직
-        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNo(boardNo);
+        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNoAndCommentIsDeletedFalse(boardNo);
         List<FreeBoardCommentReadDTO> commentRead = new ArrayList<>();
         for (FreeBoardComment comment : commentList) {
             FreeBoardCommentReadDTO freeBoardComment = FreeBoardCommentReadDTO.fromEntity(comment);
@@ -116,7 +127,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
             commentRead.add(freeBoardComment);
         }
 
-        return new FreeBoardDetailDTO().fromEntity(boardPost, commentRead);
+        return new FreeBoardDetailDTO().fromEntity(boardPost, commentRead, fileDTOList);
     }
 
     //조회수
