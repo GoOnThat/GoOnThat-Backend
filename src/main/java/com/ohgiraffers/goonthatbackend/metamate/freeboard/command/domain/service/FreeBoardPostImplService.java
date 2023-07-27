@@ -106,7 +106,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
 //        boardPost.setFileNo(boardNo);
 
         //댓글 조회 로직
-        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNo(boardNo);
+        List<FreeBoardComment> commentList = freeBoardCommentRepository.findByFreeBoardPost_BoardNoAndCommentIsDeletedFalse(boardNo);
         List<FreeBoardCommentReadDTO> commentRead = new ArrayList<>();
         for (FreeBoardComment comment : commentList) {
             FreeBoardCommentReadDTO freeBoardComment = FreeBoardCommentReadDTO.fromEntity(comment);
