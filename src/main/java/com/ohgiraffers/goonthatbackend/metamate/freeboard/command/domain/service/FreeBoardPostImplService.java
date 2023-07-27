@@ -52,6 +52,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+
         FreeBoardPost freeBoardPost = boardDTO.toEntity(metaUser);
         freeBoardPostRepository.save(freeBoardPost);
     }
