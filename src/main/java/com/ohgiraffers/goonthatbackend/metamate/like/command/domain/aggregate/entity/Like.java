@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -43,8 +45,7 @@ public class Like {
 //    private String likeMan;
 
     @Builder
-    public Like(Long likeNo, FreeBoardPost freeBoardPost, MetaUser metaUser,
-                boolean likeStatus, int liked, String likeMan) {
+    public Like(Long likeNo, FreeBoardPost freeBoardPost, MetaUser metaUser) {
         this.likeNo = likeNo;
         this.freeBoardPost = freeBoardPost;
         this.metaUser = metaUser;
@@ -53,6 +54,9 @@ public class Like {
 //        this.likeMan = likeMan;
     }
 
+
+    @OneToMany(mappedBy = "freeBoardPost", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
 //    public void unLikeBoard(FreeBoardPost freeBoardPost) {
 //        this.likeStatus = false;
 //        freeBoardPost.setLiked(freeBoardPost.getLiked() - 1);
@@ -68,4 +72,9 @@ public class Like {
 //
 //    public void setLiked() {
 //    }
+
+    // 좋아요 수를 반환하는 메서드
+    public int getLikeCount() {
+        return likes.size();
+    }
 }

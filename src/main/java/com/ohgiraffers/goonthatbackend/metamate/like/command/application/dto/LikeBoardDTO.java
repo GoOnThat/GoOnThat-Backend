@@ -16,6 +16,7 @@ public class LikeBoardDTO {
     private Long likeNo;
     private FreeBoardPost freeBoardPost;
     private String likeMan;
+    private int likeCount;
 //    private boolean likeStatus;
 
     public Like toEntity(MetaUser user, FreeBoardPost freeBoardPost) {
@@ -32,7 +33,8 @@ public class LikeBoardDTO {
         return new LikeBoardDTO(
                 like.getLikeNo(),
                 like.getFreeBoardPost(),
-                like.getMetaUser().getNickname()
+                like.getMetaUser().getNickname(),
+                1
         );
     }
 }

@@ -3,10 +3,12 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggreg
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
+import com.ohgiraffers.goonthatbackend.metamate.like.command.domain.aggregate.entity.Like;
 import lombok.*;
 
 
 import javax.persistence.*;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -47,12 +49,13 @@ public class FreeBoardPost extends AuditingFields {
 
     private boolean boardIsDeleted;
 
-    private Long likeNo;
+    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.LAZY)
+    private List<Like> likeList;
 
     @Builder
     public FreeBoardPost(String boardCategory, String boardTitle, String boardContent,
                          MetaUser metaUser, int boardHits, List<FreeBoardComment> commentList,
-                         boolean boardIsDeleted, Long fileNo, String fileName) {
+                         boolean boardIsDeleted, Long fileNo, String fileName, List<Like> likeList) {
         this.boardCategory = boardCategory;
         this.boardTitle = boardTitle;
         this.boardContent = boardContent;
@@ -62,6 +65,7 @@ public class FreeBoardPost extends AuditingFields {
         this.boardIsDeleted = boardIsDeleted;
         this.fileNo = fileNo;
         this.fileName = fileName;
+        this.likeList = likeList;
     }
 
     public void update(String newCategory, String newTitle, String newContent) {
@@ -76,6 +80,10 @@ public class FreeBoardPost extends AuditingFields {
 
     public void hitsUp(int boardHits){
         this.boardHits=boardHits;
+    }
+
+    public Collection<Like> getLikes() {
+        return likeList;
     }
 }
 

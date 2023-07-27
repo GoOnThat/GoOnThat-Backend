@@ -1,0 +1,32 @@
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<!DOCTYPE mapper-->
+<!--        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"-->
+<!--        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+
+<!--<mapper namespace="com.ohgiraffers.goonthatbackend.metamate.like.command.infra.mapper.IfreeBoardMapper">-->
+<!--    <insert id="insertFreeboard">-->
+<!--        insert into Like_freeBaord(-->
+<!--            freeboard_hit,-->
+<!--            freeboard_like-->
+<!--        ) values ((select * from (select max(freeboard_no)+1 from like_freeboard) next),0,0))-->
+<!--    </insert>-->
+
+<!--    <select id="findLike" resultType="int">-->
+<!--        select count(*) from like_board where board_no = #{board_no} and user_no = #{metaUser}-->
+<!--    </select>-->
+
+<!--    <insert id="likeUp">-->
+<!--        insert into like_board (like_no ,board_no , user_no, freeboard_like,like_type)-->
+<!--        values((select * from (select max(like_no)+1 from like_board) next), #{board_no},#{metaUser},1,#{like_type})-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash; 좋아요 불러오기 &ndash;&gt;-->
+<!--    <select id="getLike" resultType="int">-->
+<!--        select count(*) from like_board where board_no = #{board_no} and like_type =#{like_type}-->
+<!--    </select>-->
+
+<!--    <delete id="likeDown">-->
+<!--        delete from like_board where board_no = #{board_no} and user_no = #{metaUser}  and like_type =#{like_type}-->
+<!--    </delete>-->
+
+<!--</mapper>-->

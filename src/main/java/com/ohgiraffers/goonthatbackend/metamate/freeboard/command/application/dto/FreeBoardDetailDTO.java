@@ -29,6 +29,8 @@ public class FreeBoardDetailDTO {
     private MetaUser metaUser;
     private Long fileNo;
     private String fileName;
+    private int likeNo;
+    private int likeCount;
 
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost, List<FreeBoardCommentReadDTO> commentList) {
@@ -47,6 +49,8 @@ public class FreeBoardDetailDTO {
                 , boardPost.getMetaUser()
                 , boardPost.getFileNo()
                 , boardPost.getFileName()
+                , likeNo
+                , likeCount
         );
     }
 
