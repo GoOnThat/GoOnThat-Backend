@@ -1,7 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
 
-import com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity.MultiFiles;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity.MultiFiles;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;
 
@@ -26,6 +26,7 @@ public class FreeBoardEditDTO {
     private String boardContent; //내용
 
     private List<MultiFiles> multiFilesList;
+
 
     public FreeBoardPost toEntity() {
         return FreeBoardPost.builder()

@@ -3,7 +3,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggreg
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.domain.aggregate.entity.FreeBoardComment;
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
-import com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity.MultiFiles;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity.MultiFiles;
 import lombok.*;
 
 

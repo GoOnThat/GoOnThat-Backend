@@ -3,8 +3,7 @@ package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.d
 import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.FreeBoardCommentReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
-import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesReadDTO;
-import com.ohgiraffers.goonthatbackend.metamate.file.command.application.dto.MultiFilesWriteDTO;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

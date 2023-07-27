@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "file")
+@Table(name = "multifile")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class MultiFiles extends AuditingFields {
@@ -21,13 +21,13 @@ public class MultiFiles extends AuditingFields {
     @Column
     private Long fileNo;
 
-    @Column(nullable = false)
+    @Column
     private String originFileName;
 
-    @Column(nullable = false)
+    @Column
     private String fileName;
 
-    @Column(nullable = false)
+    @Column
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -37,6 +37,10 @@ public class MultiFiles extends AuditingFields {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_no")
     private FreeBoardPost freeBoardPost;
+
+    public void setFreeBoardPost(FreeBoardPost freeBoardPost) {
+        this.freeBoardPost = freeBoardPost;
+    }
 
     @Builder
     public MultiFiles(String originFileName, String fileName,

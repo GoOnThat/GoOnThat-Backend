@@ -1,6 +1,6 @@
-package com.ohgiraffers.goonthatbackend.metamate.file.command.application.controller;
+package com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.controller;
 
-import com.ohgiraffers.goonthatbackend.metamate.file.command.application.service.MultiFilesService;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.service.MultiFilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

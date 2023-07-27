@@ -122,7 +122,8 @@
                         <ul>
                             <li th:each="file : ${boardDetail.multiFilesList}">
                                 <a class="card-text" th:href="@{'/download/' + ${file.fileNo}}"
-                                   th:text="${file.fileName}"></a>
+                                   th:text="${file.getOriginFileName()}"></a>
+                            </li>
                         </ul>
                     </td>
                 </tr>
