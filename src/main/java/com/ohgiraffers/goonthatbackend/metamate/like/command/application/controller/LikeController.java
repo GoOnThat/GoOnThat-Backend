@@ -70,7 +70,31 @@ public class LikeController {
 
     @ResponseBody
     @PostMapping("/like/{boardNo}")
-    public List<LikeBoardDTO> addLike(@PathVariable("boardNo") Long likeNo,
+    public List<LikeBoardDTO> addLike(@PathVariable("boardNo") Long boardNo,
+                                      @LoginUser SessionMetaUser user, Model model,
+                                      LikeBoardDTO likeBoardDTO) {
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
+        FreeBoardPost freeBoardPost = freeBoardPostRepository.findById(boardNo)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+
+        // 업데이트된 좋아요 수를 포함한 좋아요 목록을 반환
+        List<LikeBoardDTO> likeList = likeService.addLike(freeBoardPost, likeBoardDTO, user);
+        List<LikeBoardDTO> deleteLike = likeService.deleteLike(freeBoardPost, likeBoardDTO, user);
+        /*
+        문제는 이새끼임...
+        그동안 insert 안됐던건 transactional annotation 때문에 에러가 발생한 경우 디비에 저장을 안해서 발생한 것임
+        고로 위에있는 새기처리해야됨...
+         */
+
+        return likeList;
+    }
+
+    @ResponseBody
+    @PostMapping("/delete/{boardNo}")
+    public List<LikeBoardDTO> deleteLike(@PathVariable("boardNo") Long likeNo,
                                       @LoginUser SessionMetaUser user, Model model,
                                       LikeBoardDTO likeBoardDTO) {
 
@@ -80,32 +104,11 @@ public class LikeController {
         FreeBoardPost freeBoardPost = freeBoardPostRepository.findById(likeNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        // 좋아요 추가 처리
-        int updatedLikeCount = likeService.addLike(freeBoardPost, user);
 
-        // 업데이트된 좋아요 수를 포함한 좋아요 목록을 반환
-        List<LikeBoardDTO> likeList = likeService.getLikeCount(freeBoardPost);
+        List<LikeBoardDTO> likeList = likeService.deleteLike(freeBoardPost, likeBoardDTO, user);
+
+        System.out.println("likeList = " + likeList);
 
         return likeList;
     }
-
-//    @ResponseBody
-//    @PostMapping("/delete/{likeNo}")
-//    public List<LikeBoardDTO> deleteLike(@PathVariable("likeNo") Long likeNo,
-//                                      @LoginUser SessionMetaUser user, Model model,
-//                                      LikeBoardDTO likeBoardDTO) {
-//
-//        if (user != null) {
-//            model.addAttribute("user", user);
-//        }
-//        FreeBoardPost freeBoardPost = freeBoardPostRepository.findById(likeNo)
-//                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
-//
-//
-//        List<LikeBoardDTO> likeList = likeService.deleteLike(freeBoardPost, likeBoardDTO, user);
-//
-//        System.out.println("likeList = " + likeList);
-//
-//        return likeList;
-//    }
 }

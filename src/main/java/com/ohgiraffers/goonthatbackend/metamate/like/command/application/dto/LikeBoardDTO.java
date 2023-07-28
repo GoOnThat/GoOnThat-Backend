@@ -17,6 +17,9 @@ public class LikeBoardDTO {
     private FreeBoardPost freeBoardPost;
     private String likeMan;
     private int likeCount;
+
+    public LikeBoardDTO(Long likeNo, FreeBoardPost freeBoardPost, String nickname) {
+    }
 //    private boolean likeStatus;
 
     public Like toEntity(MetaUser user, FreeBoardPost freeBoardPost) {

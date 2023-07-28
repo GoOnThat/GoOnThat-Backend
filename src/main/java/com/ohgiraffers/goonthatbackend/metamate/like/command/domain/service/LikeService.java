@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +29,8 @@ public class LikeService {
     private final LikeRepository likeRepository;
 
     @Transactional
-    public int addLike(FreeBoardPost freeBoardPost, SessionMetaUser user) {
+    public List<LikeBoardDTO> addLike(FreeBoardPost freeBoardPost, LikeBoardDTO likeBoardDTO, SessionMetaUser user) {
+
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -39,37 +39,42 @@ public class LikeService {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
-        Like like = Like.builder()
-                .freeBoardPost(freeBoardPost)
-                .metaUser(metaUser)
-                .build();
+        Like like = likeBoardDTO.toEntity(metaUser, freeBoardPost);
+
         likeRepository.save(like);
 
+        List<LikeBoardDTO> likeList = new ArrayList<>();
+
+        System.out.println("ㅁㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄻㄴㅇㄹ");
+
         // 좋아요 수를 반환
-        return freeBoardPost.getLikes().size();
+        return likeList;
     }
 
-//    @Transactional
-//    public int deleteLike(FreeBoardPost freeBoardPost, SessionMetaUser user) {
-//        MetaUser metaUser = metaUserRepository.findById(user.getId())
-//                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-//
-//        // 해당 사용자의 좋아요를 찾아서 삭제
-//        Optional<Like> likeOptional = likeRepository.findByFreeBoardPostAndMetaUser(freeBoardPost, metaUser);
-//        if (likeOptional.isPresent()) {
-//            Like like = likeOptional.get();
-//            likeRepository.delete(like);
-//        }
-//
-//        // 좋아요 수를 반환
-//        return freeBoardPost.getLikes().size();
-//    }
-//
+    @Transactional
+    public List<LikeBoardDTO> deleteLike(FreeBoardPost freeBoardPost, LikeBoardDTO likeBoardDTO, SessionMetaUser user) {
+        MetaUser metaUser = metaUserRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+
+        if (!likeRepository.findByFreeBoardPostAndMetaUser(freeBoardPost, metaUser).isPresent()) {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        Like like = likeBoardDTO.toEntity(metaUser, freeBoardPost);
+
+        likeRepository.delete(like);
+
+        List<LikeBoardDTO> likeList = new ArrayList<>();
+
+        // 좋아요 수를 반환
+        return likeList;
+    }
+
     public List<LikeBoardDTO> getLikeCount(FreeBoardPost freeBoardPost) {
     List<Like> likes = likeRepository.findByFreeBoardPost(freeBoardPost);
-    return likes.stream()
-            .map(like -> LikeBoardDTO.fromEntity(like))
-            .collect(Collectors.toList());
+
+        return getLikeCount(freeBoardPost);
 }
 
 }

@@ -82,7 +82,7 @@ public class FreeBoardPost extends AuditingFields {
         this.boardHits=boardHits;
     }
 
-    public Collection<Like> getLikes() {
+    public Collection<Like> addLike() {
         return likeList;
     }
 }

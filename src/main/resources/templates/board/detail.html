@@ -133,10 +133,19 @@
                 </tr>
                 <tr>
                     <td>
-                        <button type="button" id="likeBtn" th:onclick="'pushLike(' + ${boardDetail.boardNo} + ', ' + ${boardDetail.likeNo} + ')'">좋아요</button>
+                        <button type="button" id="like" th:onclick="'pushLike'+'(' + ${boardDetail.boardNo}
+                        + ', ' + ${boardDetail.getLikeList()} + ')'">좋아요</button>
                         <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
-                        <span th:id="'likeStatus-' + ${boardDetail.likeNo}" th:text="${boardDetail.likeCount}"></span>
-                        <input type="submit" class="like-status-up" th:id="'likeStatusUp-' + ${boardDetail.likeNo}" th:value="${boardDetail.likeCount}" style="display: none;">
+                        <span th:id="'likeStatus-' + ${boardDetail.getLikeList()}" th:text="${boardDetail.getLikeList()}"></span>
+                        <input type="submit" class="like-status-up" th:id="'likeStatusUp-' + ${boardDetail.getLikeList()}" th:value="${boardDetail.getLikeList()}" style="display: none;">
+                    </td>
+
+                    <td>
+                        <button type="button" id="delete" th:onclick="'deleteLike'+'(' + ${boardDetail.boardNo}
+                        + ', ' + ${boardDetail.getLikeList()} + ')'">좋아요 취소</button>
+                        <input type="hidden" th:name="_csrf" th:value="${_csrf.token}" />
+                        <span th:id="'likeStatus-' + ${boardDetail.getLikeList()}" th:text="${boardDetail.getLikeList()}"></span>
+                        <input type="submit" class="like-status-up" th:id="'likeStatusUp-' + ${boardDetail.getLikeList()}" th:value="${boardDetail.getLikeList()}" style="display: none;">
                     </td>
                 </tr>
 <!--                $(function (){-->
@@ -352,7 +361,9 @@
         var csrfToken = $("meta[name='_csrf']").attr("content");
         var url = "/like/" + boardNo;
 
-        $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+        console.log(boardNo + " " + likeNo);
+
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
             if (options['type'].toLowerCase() === "post") {
                 jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
             }
@@ -365,27 +376,66 @@
                 likeNo: likeNo
             },
             type: "POST",
-            success: function (data, status, xhr) {
-                // 등록 성공시 처리-->
+            success: function(data, status, xhr) {
+                // 등록 성공시 처리
                 console.log(data);
                 alert("좋아요 등록이 완료되었습니다.");
 
-                // 좋아요 버튼을 숨기고, 좋아요 취소 버튼을 보이도록 설정-->
-                $("#likeBtn").hide();
+                // 좋아요 버튼을 숨기고, 좋아요 취소 버튼을 보이도록 설정
+                $("#like").hide();
                 $("#likeStatusUp-" + likeNo).show();
-                $("#likeStatusUp-" + likeNo).val(newLikeNo);
+                $("#likeStatusUp-" + likeNo).val(likeNo);
 
-                // 좋아요 버튼을 비활성화 (이미 좋아요를 누른 상태이므로 중복으로 좋아요를 누르지 못하도록 함)-->
-                $("#likeBtn").prop("disabled", true);
+                // 좋아요 버튼을 비활성화 (이미 좋아요를 누른 상태이므로 중복으로 좋아요를 누르지 못하도록 함)
+                $("#like").prop("disabled", true);
             },
-            error: function (data) {
-                // 등록 실패시 처리-->
+            error: function(data) {
+                // 등록 실패시 처리
                 console.log(data);
                 alert("좋아요 등록 실패");
             }
         });
     }
 
+    function deleteLike(boardNo, likeNo) {
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+        var url = "/delete/" + boardNo;
+
+        console.log(boardNo + " " + likeNo);
+
+        $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+            if (options['type'].toLowerCase() === "post") {
+                jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+            }
+        });
+
+        $.ajax({
+            url: url,
+            data: {
+                boardNo: boardNo,
+                likeNo: likeNo
+            },
+            type: "POST",
+            success: function(data, status, xhr) {
+                // 등록 성공시 처리
+                console.log(data);
+                alert("좋아요 취소가 완료되었습니다.");
+
+                // 좋아요 버튼을 숨기고, 좋아요 취소 버튼을 보이도록 설정
+                $("#delete").hide();
+                $("#likeStatusUp-" + likeNo).show();
+                $("#likeStatusUp-" + likeNo).val(likeNo);
+
+                // 좋아요 버튼을 비활성화 (이미 좋아요를 누른 상태이므로 중복으로 좋아요를 누르지 못하도록 함)
+                $("#delete").prop("disabled", true);
+            },
+            error: function(data) {
+                // 등록 실패시 처리
+                console.log(data);
+                alert("좋아요 취소 실패");
+            }
+        });
+    }
 </script>
 </body>
 

@@ -16,13 +16,21 @@
 //    private Long likeNo;
 //    private FreeBoardComment freeBoardComment;
 //    private MetaUser metaUser;
-//    private boolean likeStatus;
+//
 //
 //    public Like toEntity(MetaUser user, FreeBoardComment freeBoardComment) {
 //        return Like.builder()
-////                .freeBoardComment(this.freeBoardComment)
+//                .freeBoardComment(freeBoardComment)
 //                .metaUser(user)
-////                .likeStatus(true)
 //                .build();
+//    }
+//
+//    public static LikeBoardDTO fromEntity(Like like) {
+//
+//        return new LikeBoardDTO(
+//                like.getLikeNo(),
+//                like.getFreeBoardPost(),
+//                like.getMetaUser().getNickname()
+//        );
 //    }
 //}

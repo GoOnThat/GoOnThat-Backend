@@ -24,3 +24,4 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 
     Optional<Like> findByFreeBoardPostAndMetaUser(FreeBoardPost freeBoardPost, MetaUser metaUser);
 }
+

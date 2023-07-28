@@ -4,6 +4,7 @@ import com.ohgiraffers.goonthatbackend.metamate.comment.command.application.dto.
 import com.ohgiraffers.goonthatbackend.metamate.common.CalcCreateDate;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
+import com.ohgiraffers.goonthatbackend.metamate.like.command.domain.aggregate.entity.Like;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,12 +30,12 @@ public class FreeBoardDetailDTO {
     private MetaUser metaUser;
     private Long fileNo;
     private String fileName;
-    private int likeNo;
-    private int likeCount;
+    private List<Like> likeList;
 
 
     public FreeBoardDetailDTO fromEntity(FreeBoardPost boardPost, List<FreeBoardCommentReadDTO> commentList) {
         CalcCreateDate cal = new CalcCreateDate();
+
         String boardWriter = boardPost.getMetaUser().getNickname();
         return new FreeBoardDetailDTO(
                 boardPost.getBoardNo()
@@ -49,8 +50,7 @@ public class FreeBoardDetailDTO {
                 , boardPost.getMetaUser()
                 , boardPost.getFileNo()
                 , boardPost.getFileName()
-                , likeNo
-                , likeCount
+                , likeList
         );
     }
 
