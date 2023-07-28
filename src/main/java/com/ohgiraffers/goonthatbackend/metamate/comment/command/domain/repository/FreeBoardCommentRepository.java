@@ -13,6 +13,6 @@ public interface FreeBoardCommentRepository extends JpaRepository<FreeBoardComme
 
     List<FreeBoardComment> findByFreeBoardPost(FreeBoardPost freeBoardPost);
 
-    List<FreeBoardComment> findByFreeBoardPost_BoardNo(Long boardNo); //글번호로 댓글조회
+    List<FreeBoardComment> findByFreeBoardPost_BoardNoAndCommentIsDeletedFalse(Long boardNo); //글번호로 댓글조회
 
 }

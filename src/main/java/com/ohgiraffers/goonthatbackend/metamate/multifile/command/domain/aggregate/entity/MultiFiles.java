@@ -1,4 +1,4 @@
-package com.ohgiraffers.goonthatbackend.metamate.file.command.domain.aggregate.entity;
+package com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.AuditingFields;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
@@ -11,25 +11,26 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "file")
+@Table(name = "multifile")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class File extends AuditingFields {
+public class MultiFiles extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long fileNo;
 
-    @Column(nullable = false)
+    @Column
     private String originFileName;
 
-    @Column(nullable = false)
-    private String filename;
+    @Column
+    private String fileName;
 
-    @Column(nullable = false)
+    @Column
     private String filePath;
 
+    //프로필 사진용
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private MetaUser metaUser;
@@ -38,14 +39,25 @@ public class File extends AuditingFields {
     @JoinColumn(name = "board_no")
     private FreeBoardPost freeBoardPost;
 
+    public void setFreeBoardPost(FreeBoardPost freeBoardPost) {
+        this.freeBoardPost = freeBoardPost;
+    }
+
     @Builder
-    public File(Long fileNo, String originFileName, String filename,
-                String filePath, MetaUser metaUser, FreeBoardPost freeBoardPost) {
-        this.fileNo = fileNo;
+    public MultiFiles(String originFileName, String fileName,
+                      String filePath, MetaUser metaUser, FreeBoardPost freeBoardPost) {
         this.originFileName = originFileName;
-        this.filename = filename;
+        this.fileName = fileName;
         this.filePath = filePath;
         this.metaUser = metaUser;
         this.freeBoardPost = freeBoardPost;
     }
+
+    public void fileUpdate(String originFileName, String fileName, String filePath){
+        this.originFileName=originFileName;
+        this.fileName=fileName;
+        this.filePath=filePath;
+    }
+
+
 }
