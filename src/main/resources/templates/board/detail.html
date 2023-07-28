@@ -121,7 +121,7 @@
                     <td>
                         <ul>
                             <li th:each="file : ${boardDetail.multiFilesList}">
-                                <a class="card-text" th:href="@{'/download/' + ${file.fileNo}}"
+                                <a class="card-text" th:href="@{/download/{boardNo}(boardNo=${file.fileNo})}"
                                    th:text="${file.getOriginFileName()}"></a>
                             </li>
                         </ul>

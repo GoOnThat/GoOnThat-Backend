@@ -1,7 +1,6 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
-import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.service.MultiFilesService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
@@ -21,20 +20,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -45,6 +35,7 @@ public class FreeBoardController {
 
     private final FreeBoardPostService freeBoardService;
     private final MultiFilesService multiFilesService;
+
 
     /* 게시판 전체 목록 조회, 검색목록 조회 분리 */
     @GetMapping("/list")
@@ -130,7 +121,6 @@ public class FreeBoardController {
         }
         //글 조회
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
-
         //조회수 up
         freeBoardService.hitsUp(boardNo, boardDetail);
 
@@ -139,9 +129,9 @@ public class FreeBoardController {
             return "redirect:board/list";
         }
 
-        //게시글 model 적재
+        //게시글, 파일 model 적재
         model.addAttribute("boardDetail", boardDetail);
-
+        model.addAttribute("boardFile",multiFilesService.getFiles(boardNo));
         return "board/detail";
     }
 
@@ -210,39 +200,32 @@ public class FreeBoardController {
     }
 
     /* 첨부파일 다운로드 */
-    @GetMapping("/download/{boardNo}")
-    public ResponseEntity<List<Resource>> fileDownload(@PathVariable("boardNo") Long boardNo) throws IOException {
-        List<MultiFilesReadDTO> multiFilesReadDTOList = multiFilesService.getFiles(boardNo);
-
-        if (multiFilesReadDTOList.isEmpty()) {
-            // 해당 게시물에 첨부된 파일이 없는 경우 404 Not Found 응답을 반환합니다.
-            return ResponseEntity.notFound().build();
-        }
-
-        // 다운로드할 모든 파일 정보를 담을 리스트 생성
-        List<Resource> resources = new ArrayList<>();
-
-        // 모든 파일 정보를 리스트에 추가
-        for (MultiFilesReadDTO fileDTO : multiFilesReadDTOList) {
-            Path path = Paths.get(fileDTO.getFilePath());
-
-            // 파일이 존재하는지 확인합니다.
-            if (Files.exists(path)) {
-                // 파일 경로를 사용하여 InputStreamResource를 생성합니다.
-                Resource resource = new InputStreamResource(Files.newInputStream(path));
-                resources.add(resource);
-            }
-        }
-
-        // 다운로드 응답을 위한 ResponseEntity를 생성하여 반환합니다.
-        // 다운로드 링크의 파일 이름은 첫 번째 파일의 이름으로 설정합니다.
-        String contentDispositionHeader = "attachment; filename=\"" + multiFilesReadDTOList.get(0).getOriginFileName() + "\"";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, contentDispositionHeader);
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(resources);
-    }
+//    @GetMapping("/download/{boardNo}")
+//    public ResponseEntity<Resource> fileDownload(@PathVariable("fileNo") Long fileNo) throws IOException {
+//        // 파일 정보 가져오기
+//        MultiFiles multiFiles = multiFilesRepository.findById(fileNo)
+//                .orElseThrow(() -> new IllegalArgumentException("파일을 찾을 수 없습니다."));
+//
+//        // 파일이 저장된 실제 경로 가져오기
+//        String filePath = multiFiles.getFilePath();
+//
+//        // 파일이 존재하는지 확인
+//        Path path = Paths.get(filePath);
+//        if (!Files.exists(path)) {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+//        // 파일을 읽어서 InputStreamResource 생성
+//        Resource resource = new InputStreamResource(Files.newInputStream(path));
+//
+//        // 다운로드 응답을 위한 ResponseEntity 생성
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+//        headers.setContentLength(Files.size(path));
+//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + multiFiles.getOriginFileName() + "\"");
+//
+//        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+//    }
 }
+
+

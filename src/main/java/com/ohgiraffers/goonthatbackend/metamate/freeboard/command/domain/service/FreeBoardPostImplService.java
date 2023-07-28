@@ -157,7 +157,8 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     //게시글 수정 적용
     @Transactional
     @Override
-    public void updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user) {
+    public void updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO,
+                           SessionMetaUser user) {
 
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));

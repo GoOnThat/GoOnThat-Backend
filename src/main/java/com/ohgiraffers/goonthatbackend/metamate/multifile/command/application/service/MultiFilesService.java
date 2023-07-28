@@ -5,7 +5,9 @@ import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dt
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity.MultiFiles;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.infra.repository.MultiFilesRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,18 +18,18 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Service
 @RequiredArgsConstructor
 public class MultiFilesService {
 
-    private MultiFilesRepository multiFilesRepository;
-
+    private final MultiFilesRepository multiFilesRepository;
 
     @Transactional
     public List<MultiFilesWriteDTO> saveFile(List<MultipartFile> files) throws IOException, NoSuchAlgorithmException {
 
         //DTO 반환객체
-        List<MultiFilesWriteDTO> multiFilesWriteDTOList=new ArrayList<>();
+        List<MultiFilesWriteDTO> multiFilesWriteDTOList = new ArrayList<>();
         //저장위치변수
         String savePath = System.getProperty("user.home") + File.separator + "files";
         //디렉토리생성
@@ -42,7 +44,7 @@ public class MultiFilesService {
                 throw new IllegalArgumentException("파일 디렉토리 생성에 실패했습니다.");
             }
         }
-        for(MultipartFile file:files) { // 반복문
+        for (MultipartFile file : files) { // 반복문
 
             MultiFilesWriteDTO multiFilesWriteDTO = new MultiFilesWriteDTO(); // 파일마다 새로운 DTO 객체 생성
 
@@ -70,7 +72,8 @@ public class MultiFilesService {
         return multiFilesWriteDTOList;
     }
 
-    @Transactional(readOnly = true)
+
+    @Transactional
     public List<MultiFilesReadDTO> getFiles(Long boardNo) {
         List<MultiFiles> multiFilesList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
         List<MultiFilesReadDTO> multiFilesReadDTOList = new ArrayList<>();
@@ -87,5 +90,8 @@ public class MultiFilesService {
 
         return multiFilesReadDTOList;
     }
-
 }
+
+
+
+
