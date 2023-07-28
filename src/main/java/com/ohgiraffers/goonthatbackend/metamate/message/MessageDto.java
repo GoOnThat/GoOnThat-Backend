@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageDto {
 
+    private Long id;
     private String title;
     private String content;
     private String senderNickname;
@@ -19,6 +20,7 @@ public class MessageDto {
     public static MessageDto toDto(Message message) {
         CalcCreateDate calcCreateDate = new CalcCreateDate();
         return new MessageDto(
+                message.getId(),
                 message.getTitle(),
                 message.getContent(),
                 message.getSender().getNickname(),
