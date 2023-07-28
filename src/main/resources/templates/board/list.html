@@ -99,8 +99,8 @@
             <div class="container position-relative">
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-6 text-center">
-                        <h2>Blog</h2>
-                        <p>Odio et unde deleniti. Deserunt numquam exercitationem. Officiis quo odio sint voluptas consequatur ut a odio voluptatem. Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.</p>
+                        <h2>자유게시판</h2>
+                        <p>여러분의 의견을 마음껏 펼치세요</p>
                     </div>
                 </div>
             </div>
@@ -143,19 +143,18 @@
                             <img src="assets/img/blog/blog-1.jpg" alt="" class="img-fluid">
                         </div>
 
-                        <p class="post-category" th:text="${board.boardNo}"></p>
+                        <p class="post-category" th:text="${board.boardNo}" style="color: #4c0ab8"></p>
 
                         <h2 class="title">
-                            <a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}" th:text="${board.boardTitle}"></a>
+                            <a th:href="@{/board/detail/{boardNo}(boardNo=${board.boardNo})}" th:text="|제목 : ${board.boardTitle}|" style="color: #4cb888"></a>
                         </h2>
 
                         <div class="d-flex align-items-center">
-                            <img src="assets/img/blog/blog-author.jpg" alt="" class="img-fluid post-author-img flex-shrink-0">
                             <div class="post-meta">
-                                <p class="post-author-list" th:text="${board.getBoardWriter()}"></p>
-                                <p class="post-author-list" th:text="${board.boardHits}"></p>
-                                <p class="post-date" th:text="${board.getCreatedAt()}">
-                                    <time datetime="2022-01-01"></time>
+                                <p class="post-author-list" th:text="|작성자 : ${board.getBoardWriter()}|" style="color: #0b5ed7">작성자 : </p>
+                                <p class="post-author-list" th:text="|조회수 : ${board.boardHits}|">조회수 : </p>
+                                <p class="post-date" th:text="|작성일 : ${board.getCreatedAt()}|" style="color: #dc4c3d">
+                                    작성일시 :
                                 </p>
                             </div>
                         </div>

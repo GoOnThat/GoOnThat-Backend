@@ -151,10 +151,10 @@
                     <div class="post-author d-flex align-items-center" th:each="comment : ${boardDetail.commentList}">
                         <!-- <img src="assets/img/blog/blog-author.jpg" class="rounded-circle flex-shrink-0" alt=""> -->
                         <div>
-                            <p>▾ 작성자</p><h5 th:if="${!comment.isCommentIsDeleted()}" th:text="${comment.getCommentWriter()}" style=""></h5>
-                                <p>▾ 내용</p><span th:id="'comment-content-' + ${comment.commentNo}" th:text="${comment.commentContent}"></span>
-                                <input type="text" class="edit-comment-input" th:id="'edit-comment-input-' + ${comment.commentNo}" th:value="${comment.commentContent}" style="display: none;">
-                            <p>▾ 작성 시간</p><time th:if="${!comment.isCommentIsDeleted}" th:text="${comment.getCreatedDate()}"></time>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            <h5 th:if="${!comment.isCommentIsDeleted()}" th:text="|작성자 : ${comment.getCommentWriter()}|" style="font-family: 'Bookman Old Style'"></h5>
+                                <span th:id="'comment-content-' + ${comment.commentNo}" th:text="|내용 :    ${comment.commentContent}|"></span>
+                                <input type="text" class="edit-comment-input" th:id="'edit-comment-input-' + ${comment.commentNo}" th:value="${comment.commentContent}" style="display: none;"><br>
+                            <time th:if="${!comment.isCommentIsDeleted}" th:text="|작성일 :  ${comment.getCreatedDate()}|"></time><br>
                             <button class="btn btn-outline-primary btn-sm" th:id="'edit-button-' + ${comment.commentNo}" th:onclick="'editComment(\'' + ${comment.commentNo} + '\')'">수정</button>
                             <button class="btn btn-outline-danger btn-sm" th:id="'update-button-' + ${comment.commentNo}" th:onclick="'updateComment(\'' + ${comment.commentNo} + '\')'" style="display: none;">확인</button>
                             <button class="btn btn-outline-danger btn-sm" th:onclick="'deleteComment(\'' + ${comment.commentNo} + '\')'">삭제</button>
