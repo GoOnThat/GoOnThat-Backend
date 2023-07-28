@@ -27,11 +27,15 @@ public class FreeBoardCommentController {
     /* 댓글 조회 및 추가 */
     @ResponseBody
     @PostMapping("/comment/{refBoardNo}")
-    public List<FreeBoardCommentReadDTO> addComment(@PathVariable("refBoardNo") Long refBoardNo,
+    public ResponseEntity<List<FreeBoardCommentReadDTO>> addComment(@PathVariable("refBoardNo") Long refBoardNo,
                                                     @LoginUser SessionMetaUser user, Model model,
                                                     FreeBoardCommentWriteDTO freeBoardCommentWriteDTO) {
         if (user != null) {
             model.addAttribute("user", user);
+        }
+
+        if (freeBoardCommentWriteDTO.getCommentContent().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
         FreeBoardPost freeBoardPost = freeBoardPostRepository.findById(refBoardNo)
@@ -39,7 +43,7 @@ public class FreeBoardCommentController {
 
         List<FreeBoardCommentReadDTO> commentList = freeBoardCommentService.addComment(freeBoardPost, freeBoardCommentWriteDTO, user);
 
-        return commentList;
+        return ResponseEntity.ok(commentList);
     }
 
     /* 댓글 수정 */
