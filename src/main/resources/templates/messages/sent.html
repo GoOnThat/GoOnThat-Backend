@@ -2,23 +2,59 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>보낸 편지함</title>
+  <title>보낸 쪽지함</title>
 </head>
 <body>
-<h1>보낸 편지함</h1>
+<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+<h1>보낸 쪽지함</h1>
 <table>
   <tr>
     <th>받은 사람</th>
     <th>제목</th>
     <th>내용</th>
     <th>보낸 날짜</th>
+    <th>삭제</th>
   </tr>
   <tr th:each="message : ${sentMessage}">
     <td th:text="${message.receiverNickname}"></td>
     <td th:text="${message.title}"></td>
     <td th:text="${message.content}"></td>
     <td th:text="${message.createdAt}"></td>
+    <td>
+      <button class="delete-button" th:onclick="'deleteSentMessage(\'' + ${message.id} + '\')'">삭제</button>
+    </td>
   </tr>
 </table>
+
+<a href="/messages/sendForm">쪽지보내기</a>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  function deleteSentMessage(id) {
+    var csrfToken = $("meta[name='_csrf']").attr("content");
+    var url = "/api/messages/sent/" + id;
+
+    console.log(id);
+    $.ajax({
+      url: url,
+      type: "DELETE",
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+      },
+      success: function(data, status, xhr) {
+        // 수정 성공 시 처리
+        console.log(data);
+        alert("메세지 삭제가 완료되었습니다.");
+        location.reload();
+        // 댓글 목록을 다시 로딩하는 등의 작업 수행
+      },
+      error: function(data) {
+        // 삭제 실패 시 처리
+        console.log(data);
+        alert("권한이 없습니다.");
+      }
+    });
+  }
+</script>
 </body>
 </html>

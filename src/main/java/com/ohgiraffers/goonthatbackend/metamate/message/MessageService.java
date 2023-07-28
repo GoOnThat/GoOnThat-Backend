@@ -2,6 +2,9 @@ package com.ohgiraffers.goonthatbackend.metamate.message;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
+import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
+import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
+import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,27 +51,6 @@ public class MessageService {
         return messageDtos;
     }
 
-    // 받은 편지 삭제
-    @Transactional
-    public Object deleteMessageByReceiver(Long id, MetaUser user) {
-        Message message = messageRepository.findById(id).orElseThrow(() -> {
-            return new IllegalArgumentException("메시지를 찾을 수 없습니다.");
-        });
-
-        if(user == message.getSender()) {
-            message.deleteByReceiver(); // 받은 사람에게 메시지 삭제
-            if (message.isDeleted()) {
-                // 받은사람과 보낸 사람 모두 삭제했으면, 데이터베이스에서 삭제요청
-                messageRepository.delete(message);
-                return "양쪽 모두 삭제";
-            }
-            return "한쪽만 삭제";
-        } else {
-            return new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
-        }
-    }
-
-
 
     @Transactional(readOnly = true)
     public List<MessageDto> sentMessage(MetaUser user) {
@@ -84,26 +66,49 @@ public class MessageService {
         return messageDtos;
     }
 
-
-    // 보낸 편지 삭제
+    // 받은 편지 삭제
     @Transactional
-    public Object deleteMessageBySender(Long id, MetaUser user) {
+    public Long deleteMessageByReceiver(Long id, SessionMetaUser loginUser) {
         Message message = messageRepository.findById(id).orElseThrow(() -> {
-            return new IllegalArgumentException("메시지를 찾을 수 없습니다.");
+            throw new CustomException(ErrorCode.MESSAGE_NOT_FOUND);
         });
 
-        if(user == message.getSender()) {
-            message.deleteBySender(); // 받은 사람에게 메시지 삭제
+        MetaUser metaUser = metaUserRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(metaUser.getId().equals(message.getReceiver().getId())) {
+            message.deleteByReceiver();
             if (message.isDeleted()) {
                 // 받은사람과 보낸 사람 모두 삭제했으면, 데이터베이스에서 삭제요청
                 messageRepository.delete(message);
-                return "양쪽 모두 삭제";
             }
-            return "한쪽만 삭제";
         } else {
-            return new IllegalArgumentException("유저 정보가 일치하지 않습니다.");
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
         }
 
+        return message.getId();
+    }
 
+    // 보낸 편지 삭제
+    @Transactional
+    public Long deleteMessageBySender(Long id, SessionMetaUser loginUser) {
+        Message message = messageRepository.findById(id).orElseThrow(() -> {
+            throw new CustomException(ErrorCode.MESSAGE_NOT_FOUND);
+        });
+
+        MetaUser metaUser = metaUserRepository.findById(loginUser.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if(metaUser.getId().equals(message.getSender().getId())) {
+            message.deleteBySender();
+            if (message.isDeleted()) {
+                // 받은사람과 보낸 사람 모두 삭제했으면, 데이터베이스에서 삭제요청
+                messageRepository.delete(message);
+            }
+        } else {
+            throw new CustomException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return message.getId();
     }
 }
