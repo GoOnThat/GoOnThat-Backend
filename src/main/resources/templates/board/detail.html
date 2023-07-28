@@ -175,7 +175,7 @@
 </table>
 <table align="center" width="500" border="1" id="rtb">
     <thead>
-    <td colspan="4"><b id="rCount">댓글목록</b></td>
+    <td colspan="4"><b>댓글 목록(<span id="commentCount" th:text="${boardDetail.commentList.size()}"></span>)</b></td>
     </thead>
     <tbody id="commentList">
     <tr>
@@ -207,10 +207,16 @@
 </table>
 
 <script>
+
     function submitComment(boardNo) {
         const replyContents = $("#replyContents").val();
         const csrfToken = $("meta[name='_csrf']").attr("content");
 
+        // 댓글 내용이 비어있는지 확인
+        if (!replyContents.trim()) {
+            alert("댓글 내용을 입력해주세요.");
+            return;
+        }
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             if (options['type'].toLowerCase() === "post") {
                 jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -229,9 +235,9 @@
                 console.log(data);
                 alert("댓글 등록이 완료되었습니다.");
                 location.reload();
-                // 댓글 목록을 다시 로딩하는 등의 작업 수행
             },
             error: function (data) {
+
                 // 등록 실패시 처리
                 console.log(data);
                 alert("권한이 없습니다.");
@@ -301,6 +307,7 @@
         updateButton.show();
         editButton.hide();
     }
+
 
 </script>
 </body>

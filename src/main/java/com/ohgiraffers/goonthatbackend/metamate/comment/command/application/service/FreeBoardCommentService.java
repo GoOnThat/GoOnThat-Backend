@@ -32,6 +32,10 @@ public class FreeBoardCommentService {
         MetaUser metaUser = metaUserRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+        if(freeBoardCommentWriteDTO.getCommentContent().isEmpty()) {
+            throw new CustomException(ErrorCode.USER_BAD_REQUEST);
+        }
+
         FreeBoardComment freeBoardComment = freeBoardCommentWriteDTO.toEntity(metaUser, freeBoardPost);
 
         freeBoardCommentRepository.save(freeBoardComment);
