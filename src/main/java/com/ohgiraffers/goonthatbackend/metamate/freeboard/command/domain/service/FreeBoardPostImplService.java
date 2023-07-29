@@ -7,6 +7,8 @@ import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUserRepository;
 import com.ohgiraffers.goonthatbackend.metamate.exception.CustomException;
 import com.ohgiraffers.goonthatbackend.metamate.exception.ErrorCode;
+import com.ohgiraffers.goonthatbackend.metamate.like.command.domain.aggregate.entity.Like;
+import com.ohgiraffers.goonthatbackend.metamate.like.command.infra.repository.LikeRepository;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity.MultiFiles;
@@ -31,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -43,6 +46,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     private final MetaUserRepository metaUserRepository;
     private final MultiFilesRepository multiFilesRepository;
     private final AccessService accessService;
+    private final LikeRepository likeRepository;
 
     //게시글 쓰기
     @Transactional
@@ -119,7 +123,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     //글번호별 세부조회
     @Transactional(readOnly = true)
     @Override
-    public FreeBoardDetailDTO getDetailPosts(Long boardNo) {
+    public FreeBoardDetailDTO getDetailPosts(Long boardNo, SessionMetaUser user) {
         //게시글 조회 로직
         FreeBoardPost boardPost = freeBoardPostRepository.findById(boardNo)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -141,7 +145,27 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
             commentReadList.add(freeBoardComment);
         }
 
-        return new FreeBoardDetailDTO().fromEntity(boardPost, commentReadList, multiFilesReadDTOList);
+        // 좋아요 정보 조회 로직
+        boolean isLiked = false;
+        int likeCount = 0;
+        Long likeNo = null;
+
+        MetaUser metaUser = metaUserRepository.findById(user.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        if (metaUser != null) {
+
+            Optional<Like> like = likeRepository.findByFreeBoardPostAndMetaUser(boardPost, metaUser);
+            if (like.isPresent()) {
+                isLiked = true;
+                likeNo = like.get().getLikeNo();
+            }
+        }
+
+        List<Like> likeList = likeRepository.findByFreeBoardPost(boardPost);
+        likeCount = likeList.size();
+
+        return new FreeBoardDetailDTO().fromEntity(boardPost, commentReadList, multiFilesReadDTOList, isLiked, likeCount, likeNo);
     }
 
     //조회수

@@ -120,7 +120,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
         //글 조회
-        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo, user);
         //조회수 up
         freeBoardService.hitsUp(boardNo, boardDetail);
 
@@ -145,7 +145,7 @@ public class FreeBoardController {
             model.addAttribute("user", user);
         }
 
-        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo, user);
         if (boardDetail.getMetaUser().getId().equals(user.getId())) {
             model.addAttribute("boardDetail", boardDetail);
             freeBoardEditDTO.setBoardTitle(boardDetail.getBoardTitle());
@@ -168,7 +168,7 @@ public class FreeBoardController {
         if (user != null) {
             model.addAttribute("user", user);
         }
-        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo);
+        FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo, user);
         if (bindingResult.hasErrors()) {
             model.addAttribute("validationErrors", bindingResult.getAllErrors());
             model.addAttribute("boardDetail", boardDetail);
