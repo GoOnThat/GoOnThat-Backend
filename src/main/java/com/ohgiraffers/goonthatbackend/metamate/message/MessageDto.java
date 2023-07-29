@@ -5,15 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class MessageDto {
 
     private Long id;
+    @NotBlank(message = "제목을 입력해주세요.")
     private String title;
+    @NotBlank(message = "내용을 입력해주세요.")
     private String content;
     private String senderNickname;
+    @NotBlank(message = "받는 사람 닉네임을 입력해주세요.")
     private String receiverNickname;
     private String createdAt;
 
