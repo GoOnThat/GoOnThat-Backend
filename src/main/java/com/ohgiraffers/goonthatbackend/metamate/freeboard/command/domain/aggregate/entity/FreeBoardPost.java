@@ -27,9 +27,8 @@ public class FreeBoardPost extends AuditingFields {
 
     private String boardTitle;
 
-    @OneToMany(mappedBy = "freeBoardPost",
-            cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "freeBoardPost", fetch = FetchType.LAZY)
+    @OrderBy("fileNo asc")
     private List<MultiFiles> multiFiles;
 
     @Column(columnDefinition = "TEXT")

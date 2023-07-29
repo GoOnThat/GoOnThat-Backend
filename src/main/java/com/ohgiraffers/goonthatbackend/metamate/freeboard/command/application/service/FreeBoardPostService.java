@@ -16,13 +16,15 @@ import java.util.List;
 public interface FreeBoardPostService {
 
 
-    void savePost(FreeBoardWriteDTO boardDTO, List<MultiFilesWriteDTO> multiFilesWriteDTOList,SessionMetaUser user);
+    void savePost(FreeBoardWriteDTO boardDTO, List<MultiFilesWriteDTO> multiFilesWriteDTOList, SessionMetaUser user);
 
     void updatePost(Long boardNo, FreeBoardEditDTO freeBoardEditDTO, SessionMetaUser user);
 
     void deletePost(Long boardNo, SessionMetaUser user);
 
     Page<FreeBoardListDTO> getAllPosts(Pageable pageable);
+
+    Page<FreeBoardListDTO> getCategoryPosts(String boardCategory, Pageable pageable);
 
     FreeBoardDetailDTO getDetailPosts(Long boardNo, SessionMetaUser user);
 

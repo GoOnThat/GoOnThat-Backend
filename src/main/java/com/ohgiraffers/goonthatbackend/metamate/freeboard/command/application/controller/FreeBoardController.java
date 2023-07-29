@@ -1,6 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.controller;
 
 import com.ohgiraffers.goonthatbackend.metamate.auth.LoginUser;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesReadDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.service.MultiFilesService;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto.FreeBoardDetailDTO;
@@ -12,18 +13,31 @@ import com.ohgiraffers.goonthatbackend.metamate.web.dto.user.SessionMetaUser;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
@@ -41,6 +55,7 @@ public class FreeBoardController {
     @GetMapping("/list")
     public String list(@RequestParam(required = false) String searchKeyword, //검색어
                        @RequestParam(required = false) String key, //검색선택
+                       @RequestParam(required =false) String category,//카테고리 선택
                        @PageableDefault(page = 0, size = 12, sort = "boardNo",
                                direction = Sort.Direction.DESC) Pageable pageable, //page정렬
                        Model model) {
@@ -49,7 +64,9 @@ public class FreeBoardController {
 
         if (searchKeyword != null && key != null) {
             boardList = freeBoardService.getSearchPosts(key, searchKeyword, pageable);
-        } else {
+        } else if (category !=null) {
+            boardList = freeBoardService.getCategoryPosts(category,pageable);
+        }else{
             boardList = freeBoardService.getAllPosts(pageable);
         }
 
@@ -112,17 +129,26 @@ public class FreeBoardController {
 
     /* 게시판 글 번호 별 세부 조회 */
     @GetMapping("/detail/{boardNo}")
-    public String detail(@PathVariable Long boardNo,
-                         @LoginUser SessionMetaUser user,
-                         Model model) {
+    public String detail(@PathVariable Long boardNo,HttpServletResponse response,
+                         @CookieValue(value = "viewedPosts", defaultValue = "") String viewedPosts,
+                         @LoginUser SessionMetaUser user, Model model) {
 
         if (user != null) {
             model.addAttribute("user", user);
         }
         //글 조회
         FreeBoardDetailDTO boardDetail = freeBoardService.getDetailPosts(boardNo, user);
-        //조회수 up
-        freeBoardService.hitsUp(boardNo, boardDetail);
+
+        // 해당 게시글을 조회한 적이 없는 경우 조회수 증가
+        if (!viewedPosts.contains("post" + boardNo)) {
+            freeBoardService.hitsUp(boardNo, boardDetail);
+
+            // 쿠키에 조회한 게시글 번호 추가
+            viewedPosts += "post" + boardNo + "|";
+            Cookie cookie = new Cookie("viewedPosts", viewedPosts);
+            cookie.setMaxAge(60 * 60 * 24); // 24시간 동안 유지
+            response.addCookie(cookie);
+        }
 
         //url 강제접근 방어
         if (boardDetail.isBoardIsDeleted()) {
@@ -200,32 +226,40 @@ public class FreeBoardController {
     }
 
     /* 첨부파일 다운로드 */
-//    @GetMapping("/download/{boardNo}")
-//    public ResponseEntity<Resource> fileDownload(@PathVariable("fileNo") Long fileNo) throws IOException {
-//        // 파일 정보 가져오기
-//        MultiFiles multiFiles = multiFilesRepository.findById(fileNo)
-//                .orElseThrow(() -> new IllegalArgumentException("파일을 찾을 수 없습니다."));
-//
-//        // 파일이 저장된 실제 경로 가져오기
-//        String filePath = multiFiles.getFilePath();
-//
-//        // 파일이 존재하는지 확인
-//        Path path = Paths.get(filePath);
-//        if (!Files.exists(path)) {
-//            return ResponseEntity.notFound().build();
-//        }
-//
-//        // 파일을 읽어서 InputStreamResource 생성
-//        Resource resource = new InputStreamResource(Files.newInputStream(path));
-//
-//        // 다운로드 응답을 위한 ResponseEntity 생성
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.setContentLength(Files.size(path));
-//        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + multiFiles.getOriginFileName() + "\"");
-//
-//        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
-//    }
+
+    public ResponseEntity<Resource> fileDownload(@RequestParam("boardNo") Long boardNo,
+                                                 @RequestParam("fileNo") Long fileNo) throws IOException {
+        // 파일 정보 목록 조회
+        List<MultiFilesReadDTO> filesList = multiFilesService.getFiles(boardNo);
+
+        // fileNo를 사용하여 해당 파일 정보를 찾습니다.
+        MultiFilesReadDTO targetFile = null;
+        for (MultiFilesReadDTO file : filesList) {
+            if (file.getFileNo().equals(fileNo)) {
+                targetFile = file;
+                break;
+            }
+        }
+
+        if (targetFile == null) {
+            throw new FileNotFoundException("File not found with fileNo: " + fileNo + " and boardNo: " + boardNo);
+        }
+
+        // 파일을 Resource로 변환
+        Path filePath = Paths.get(targetFile.getFilePath(), targetFile.getFileName());
+        Resource resource = new UrlResource(filePath.toUri());
+
+        // 파일 이름 인코딩
+        String originalFileName = targetFile.getOriginFileName();
+        String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
+        String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                .body(resource);
+    }
+
 }
 
 

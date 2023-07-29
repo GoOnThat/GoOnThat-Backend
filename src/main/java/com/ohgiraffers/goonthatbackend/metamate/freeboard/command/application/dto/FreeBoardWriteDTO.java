@@ -1,6 +1,7 @@
 package com.ohgiraffers.goonthatbackend.metamate.freeboard.command.application.dto;
 
 import com.ohgiraffers.goonthatbackend.metamate.domain.user.MetaUser;
+import com.ohgiraffers.goonthatbackend.metamate.multifile.command.application.dto.MultiFilesWriteDTO;
 import com.ohgiraffers.goonthatbackend.metamate.multifile.command.domain.aggregate.entity.MultiFiles;
 import com.ohgiraffers.goonthatbackend.metamate.freeboard.command.domain.aggregate.entity.FreeBoardPost;
 import lombok.*;

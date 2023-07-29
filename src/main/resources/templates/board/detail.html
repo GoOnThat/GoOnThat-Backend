@@ -116,15 +116,14 @@
                              th:text="${boardDetail.boardContent}"></div>
                     </td>
                 </tr>
-                <tr th:if="${boardDetail.multiFilesList!=null}">
+                <tr>
                     <td>첨부파일</td>
                     <td>
-                        <ul>
-                            <li th:each="file : ${boardDetail.multiFilesList}">
-                                <a class="card-text" th:href="@{/download/{boardNo}(boardNo=${file.fileNo})}"
-                                   th:text="${file.getOriginFileName()}"></a>
-                            </li>
-                        </ul>
+                        <div th:each="file : ${boardDetail.multiFilesList}">
+                            <a class="card-text"
+                               th:href="@{'/board/download?boardNo=' + ${boardDetail.boardNo} + '&fileNo=' + ${file.fileNo}}"
+                               th:text="${file.getOriginFileName()}"></a>
+                        </div>
                     </td>
                 </tr>
                 <tr>

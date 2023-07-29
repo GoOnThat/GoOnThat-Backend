@@ -31,7 +31,7 @@ public class MultiFilesService {
         //DTO 반환객체
         List<MultiFilesWriteDTO> multiFilesWriteDTOList = new ArrayList<>();
         //저장위치변수
-        String savePath = System.getProperty("user.home") + File.separator + "files";
+        String savePath = "C:\\metamate";
         //디렉토리생성
         File directory = new File(savePath);
         //디렉토리 없을경우 오류처리
@@ -45,35 +45,35 @@ public class MultiFilesService {
             }
         }
         for (MultipartFile file : files) { // 반복문
+            if (!file.isEmpty()) {
+                MultiFilesWriteDTO multiFilesWriteDTO = new MultiFilesWriteDTO(); // 파일마다 새로운 DTO 객체 생성
 
-            MultiFilesWriteDTO multiFilesWriteDTO = new MultiFilesWriteDTO(); // 파일마다 새로운 DTO 객체 생성
+                String originFileName = file.getOriginalFilename();
+                if (originFileName == null) {
+                    // 파일 이름이 null인 경우에 대한 예외 처리
+                    throw new IllegalArgumentException("파일 이름이 null입니다.");
+                }
 
-            String originFileName = file.getOriginalFilename();
-            if (originFileName == null) {
-                // 파일 이름이 null인 경우에 대한 예외 처리
-                throw new IllegalArgumentException("파일 이름이 null입니다.");
+                String fileName = new MD5Generator(originFileName).toString();
+                String filePath = savePath + File.separator + fileName;
+
+                try {
+                    file.transferTo(new File(filePath));
+                } catch (IOException e) {
+                    // 파일 전송 과정에서 발생한 예외 처리
+                    throw new IllegalArgumentException("파일 전송 중 오류가 발생했습니다.");
+                }
+                multiFilesWriteDTO.setOriginFileName(originFileName);
+                multiFilesWriteDTO.setFileName(fileName);
+                multiFilesWriteDTO.setFilePath(filePath);
+                multiFilesWriteDTOList.add(multiFilesWriteDTO);
             }
-
-            String fileName = new MD5Generator(originFileName).toString();
-            String filePath = savePath + File.separator + fileName;
-
-            try {
-                file.transferTo(new File(filePath));
-            } catch (IOException e) {
-                // 파일 전송 과정에서 발생한 예외 처리
-                throw new IllegalArgumentException("파일 전송 중 오류가 발생했습니다.");
-            }
-            multiFilesWriteDTO.setOriginFileName(originFileName);
-            multiFilesWriteDTO.setFileName(fileName);
-            multiFilesWriteDTO.setFilePath(filePath);
-            multiFilesWriteDTOList.add(multiFilesWriteDTO);
         }
-
         return multiFilesWriteDTOList;
     }
 
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<MultiFilesReadDTO> getFiles(Long boardNo) {
         List<MultiFiles> multiFilesList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
         List<MultiFilesReadDTO> multiFilesReadDTOList = new ArrayList<>();
@@ -84,6 +84,9 @@ public class MultiFilesService {
             multiFilesReadDTO.setOriginFileName(multiFiles.getOriginFileName());
             multiFilesReadDTO.setFileName(multiFiles.getFileName());
             multiFilesReadDTO.setFilePath(multiFiles.getFilePath());
+
+            String downloadUrl = "/board/download?boardNo=" + boardNo + "&fileNo=" + multiFiles.getFileNo();
+            multiFilesReadDTO.setDownloadUrl(downloadUrl);
 
             multiFilesReadDTOList.add(multiFilesReadDTO);
         }
