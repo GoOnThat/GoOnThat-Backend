@@ -24,7 +24,7 @@ public interface FreeBoardPostService {
 
     Page<FreeBoardListDTO> getAllPosts(Pageable pageable);
 
-    FreeBoardDetailDTO getDetailPosts(Long boardNo);
+    FreeBoardDetailDTO getDetailPosts(Long boardNo, SessionMetaUser user);
 
     void hitsUp(Long boardNo, FreeBoardDetailDTO freeBoardDetailDTO);
 
