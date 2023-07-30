@@ -97,10 +97,6 @@
         <td bgcolor=white>
             <table class="table2">
                 <tr>
-                    <td>작성자</td>
-                    <td th:text="${boardDetail.boardWriter}"></td>
-                </tr>
-                <tr>
                     <td>카테고리</td>
                     <td th:text="${boardDetail.boardCategory}"></td>
                 </tr>
@@ -116,6 +112,37 @@
                              th:text="${boardDetail.boardContent}"></div>
                     </td>
                 </tr>
+                <tr>
+                    <td>작성자</td>
+                    <td>
+                        <!-- 작성자 이름을 클릭하면 모달창을 띄우는 JavaScript 함수를 호출 -->
+                        <a href="#" onclick="openModal('${boardDetail.boardWriter}')">
+                            <span th:text="${boardDetail.boardWriter}"></span>
+                        </a>
+                    </td>
+
+                    <!-- 쪽지 보내기 모달창 -->
+                    <div class="modal" id="sendMessageModal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeModal()">&times;</span>
+                            <a id="sendMessageLink" href="#" th:href="@{/messages/sendForm(receiverNickname=${boardDetail.boardWriter})}">쪽지 보내기</a>
+                        </div>
+                    </div>
+
+                    <script>
+                        function openModal(boardWriter) {
+                            // 모달창 열기
+                            var modal = document.getElementById("sendMessageModal");
+                            modal.style.display = "block";
+                        }
+
+                        function closeModal() {
+                            var modal = document.getElementById("sendMessageModal");
+                            modal.style.display = "none";
+                        }
+                    </script>
+                </tr>
+
                 <tr th:if="${boardDetail.multiFilesList!=null}">
                     <td>첨부파일</td>
                     <td>

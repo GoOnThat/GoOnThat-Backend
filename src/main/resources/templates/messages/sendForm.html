@@ -112,27 +112,33 @@
                 </h2>
                 <br>
                 <input type="text" name="title" th:field="*{title}" id="title" size="60">
-                <div class="text-bg-warning" th:errors="*{title}"/>
+                <div class="text-bg-danger" th:errors="*{title}"/>
               </div>
+
+
               <div class="content">
                 <h2 class="title">
                   받는 사람
                 </h2>
                 <br>
-                <input type="text" name="receiverNickname" th:field="*{receiverNickname}" id="receiverNickname">
-                <div class="text-bg-warning" th:errors="*{receiverNickname}"/>
+                <input type="text" id="receiverNickname" name="receiverNickname" th:value="${param.receiverNickname}" required>
+                <div class="text-bg-danger" th:errors="*{receiverNickname}"/>
               </div>
+
               <div class="content">
                 <h2 class="title">
                   내용
                 </h2>
                 <br>
                 <textarea name="content" th:field="*{content}" id="content" cols="85" rows="15"></textarea>
-                <div class="text-bg-warning" th:errors="*{content}"/>
-                <div th:if="${#fields.hasGlobalErrors()}">
-                  <p class="text-bg-warning" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
-                </div>
-              </div><!-- End post content -->
+                <div class="text-bg-danger" th:errors="*{content}"/>
+              </div>
+
+              <div th:if="${#fields.hasGlobalErrors()}">
+                <br>
+                <p class="text-bg-danger" th:each="err : ${#fields.globalErrors()}" th:text="${err}">전체 오류 메시지</p>
+              </div>
+
             </article><!-- End blog post -->
             <br>
             <div class="center">
