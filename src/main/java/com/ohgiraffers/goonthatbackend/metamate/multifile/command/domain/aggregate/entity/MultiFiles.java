@@ -30,7 +30,8 @@ public class MultiFiles extends AuditingFields {
     @Column
     private String filePath;
 
-    //프로필 사진용
+
+    //프로필 사진용 아직 미사용
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id")
     private MetaUser metaUser;
@@ -44,8 +45,8 @@ public class MultiFiles extends AuditingFields {
     }
 
     @Builder
-    public MultiFiles(String originFileName, String fileName,
-                      String filePath, MetaUser metaUser, FreeBoardPost freeBoardPost) {
+    public MultiFiles(String originFileName, String fileName, String filePath,
+                      MetaUser metaUser, FreeBoardPost freeBoardPost) {
         this.originFileName = originFileName;
         this.fileName = fileName;
         this.filePath = filePath;

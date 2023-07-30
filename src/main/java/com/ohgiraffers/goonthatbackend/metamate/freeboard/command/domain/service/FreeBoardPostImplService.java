@@ -63,7 +63,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
         freeBoardPostRepository.save(freeBoardPost);
 
         // 파일 업로드가 있을 경우 파일 정보 저장
-        if (multiFilesWriteDTOList != null) {
+        if (!multiFilesWriteDTOList.isEmpty()) {
             List<MultiFiles> multiFiles = new ArrayList<>();
             for (MultiFilesWriteDTO multiFilesWriteDTO : multiFilesWriteDTOList) {
                 MultiFiles multiFile = multiFilesWriteDTO.toEntity();
@@ -79,6 +79,21 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
     @Override
     public Page<FreeBoardListDTO> getAllPosts(Pageable pageable) {
         Page<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardIsDeletedFalse(pageable);
+        List<FreeBoardListDTO> postList = new ArrayList<>();
+
+        for (FreeBoardPost boardPost : allPosts) {
+            FreeBoardListDTO freeBoardListDTO = FreeBoardListDTO.fromEntity(boardPost);
+            postList.add(freeBoardListDTO);
+        }
+
+        return new PageImpl<>(postList, pageable, allPosts.getTotalElements());
+    }
+
+    //카테고리별 조회
+    @Transactional(readOnly = true)
+    @Override
+    public Page<FreeBoardListDTO> getCategoryPosts(String boardCategory, Pageable pageable) {
+        Page<FreeBoardPost> allPosts = freeBoardPostRepository.findByBoardCategoryAndBoardIsDeletedFalse(boardCategory,pageable);
         List<FreeBoardListDTO> postList = new ArrayList<>();
 
         for (FreeBoardPost boardPost : allPosts) {
@@ -129,7 +144,7 @@ public class FreeBoardPostImplService implements FreeBoardPostService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         //파일 조회 로직
-        List<MultiFiles> fileList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
+        List<MultiFiles> fileList = multiFilesRepository.findByFreeBoardPostBoardNo(boardNo);
         List<MultiFilesReadDTO> multiFilesReadDTOList = new ArrayList<>();
         for (MultiFiles file : fileList) {
             MultiFilesReadDTO fileDTO = MultiFilesReadDTO.fromEntity(file);

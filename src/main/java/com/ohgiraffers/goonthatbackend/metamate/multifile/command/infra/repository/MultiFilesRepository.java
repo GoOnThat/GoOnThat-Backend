@@ -9,8 +9,10 @@ import java.util.List;
 @Repository
 public interface MultiFilesRepository extends JpaRepository<MultiFiles, Long> {
     //파일조회
+    List<MultiFiles> findByFreeBoardPostBoardNo(Long boardNo);
+
+    //게시글번호 기준 파일조회
     List<MultiFiles> findByFreeBoardPost_BoardNo(Long boardNo);
 
-    //보드번호가 같은 파일조회
 
 }
