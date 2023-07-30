@@ -157,7 +157,6 @@ public class FreeBoardController {
 
         //게시글, 파일 model 적재
         model.addAttribute("boardDetail", boardDetail);
-        model.addAttribute("boardFile",multiFilesService.getFiles(boardNo));
         return "board/detail";
     }
 
@@ -227,38 +226,36 @@ public class FreeBoardController {
 
     /* 첨부파일 다운로드 */
 
-    public ResponseEntity<Resource> fileDownload(@RequestParam("boardNo") Long boardNo,
-                                                 @RequestParam("fileNo") Long fileNo) throws IOException {
-        // 파일 정보 목록 조회
-        List<MultiFilesReadDTO> filesList = multiFilesService.getFiles(boardNo);
-
-        // fileNo를 사용하여 해당 파일 정보를 찾습니다.
-        MultiFilesReadDTO targetFile = null;
-        for (MultiFilesReadDTO file : filesList) {
-            if (file.getFileNo().equals(fileNo)) {
-                targetFile = file;
-                break;
-            }
-        }
-
-        if (targetFile == null) {
-            throw new FileNotFoundException("File not found with fileNo: " + fileNo + " and boardNo: " + boardNo);
-        }
-
-        // 파일을 Resource로 변환
-        Path filePath = Paths.get(targetFile.getFilePath(), targetFile.getFileName());
-        Resource resource = new UrlResource(filePath.toUri());
-
-        // 파일 이름 인코딩
-        String originalFileName = targetFile.getOriginFileName();
-        String encodedOriginalFileName = UriUtils.encode(originalFileName, StandardCharsets.UTF_8);
-        String contentDisposition = "attachment; filename=\"" + encodedOriginalFileName + "\"";
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
-                .body(resource);
-    }
+//    @GetMapping(path = "/download/{fileNo}")
+//    public ResponseEntity<Resource> fileDownload(@PathVariable("fileNo") Long fileNo) {
+//        // 파일 정보 조회
+//        MultiFilesReadDTO fileInfo = multiFilesService.getFileInfo(fileId);
+//
+//        // 파일이 존재하지 않을 경우 예외 처리
+//        if (fileInfo == null) {
+//            throw new RuntimeException("파일이 존재하지 않습니다.");
+//        }
+//
+//        String originFileName = fileInfo.getOriginFileName();
+//        String filePath = fileInfo.getFilePath();
+//        String contentType = "application/octet-stream"; // 바이너리 파일로 다운로드하도록 content type 설정
+//
+//        File file = new File(filePath);
+//        long fileLength = file.length();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.parseMediaType(contentType));
+//        headers.setContentDisposition(ContentDisposition.builder("attachment").filename(originFileName).build());
+//
+//        try {
+//            // 파일을 Resource로 변환하여 ResponseEntity에 담아서 반환
+//            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(file.toPath()));
+//
+//            return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+//        } catch (IOException e) {
+//            throw new RuntimeException("파일 로드 오류");
+//        }
+//    }
 
 }
 

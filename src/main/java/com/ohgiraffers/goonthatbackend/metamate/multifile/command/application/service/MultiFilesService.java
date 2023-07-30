@@ -73,26 +73,23 @@ public class MultiFilesService {
     }
 
 
-    @Transactional(readOnly = true)
-    public List<MultiFilesReadDTO> getFiles(Long boardNo) {
-        List<MultiFiles> multiFilesList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
-        List<MultiFilesReadDTO> multiFilesReadDTOList = new ArrayList<>();
-
-        for (MultiFiles multiFiles : multiFilesList) {
-            MultiFilesReadDTO multiFilesReadDTO = new MultiFilesReadDTO();
-            multiFilesReadDTO.setFileNo(multiFiles.getFileNo());
-            multiFilesReadDTO.setOriginFileName(multiFiles.getOriginFileName());
-            multiFilesReadDTO.setFileName(multiFiles.getFileName());
-            multiFilesReadDTO.setFilePath(multiFiles.getFilePath());
-
-            String downloadUrl = "/board/download?boardNo=" + boardNo + "&fileNo=" + multiFiles.getFileNo();
-            multiFilesReadDTO.setDownloadUrl(downloadUrl);
-
-            multiFilesReadDTOList.add(multiFilesReadDTO);
-        }
-
-        return multiFilesReadDTOList;
-    }
+//    @Transactional(readOnly = true)
+//    public List<MultiFilesReadDTO> getFiles(Long boardNo) {
+//        List<MultiFiles> multiFilesList = multiFilesRepository.findByFreeBoardPost_BoardNo(boardNo);
+//        List<MultiFilesReadDTO> multiFilesReadDTOList = new ArrayList<>();
+//
+//        for (MultiFiles multiFiles : multiFilesList) {
+//            MultiFilesReadDTO multiFilesReadDTO = new MultiFilesReadDTO();
+//            multiFilesReadDTO.setFileNo(multiFiles.getFileNo());
+//            multiFilesReadDTO.setOriginFileName(multiFiles.getOriginFileName());
+//            multiFilesReadDTO.setFileName(multiFiles.getFileName());
+//            multiFilesReadDTO.setFilePath(multiFiles.getFilePath());
+//
+//            multiFilesReadDTOList.add(multiFilesReadDTO);
+//        }
+//
+//        return multiFilesReadDTOList;
+//    }
 }
 
 

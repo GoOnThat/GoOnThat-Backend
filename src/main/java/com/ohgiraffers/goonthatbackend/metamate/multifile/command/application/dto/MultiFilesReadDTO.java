@@ -26,8 +26,6 @@ public class MultiFilesReadDTO {
 
     private FreeBoardPost freeBoardPost;
 
-    private String downloadUrl;
-
     public static MultiFilesReadDTO fromEntity(MultiFiles multiFiles) {
         MultiFilesReadDTO fileDTO = new MultiFilesReadDTO();
         fileDTO.setFileNo(multiFiles.getFileNo());
@@ -35,14 +33,6 @@ public class MultiFilesReadDTO {
         fileDTO.setFileName(multiFiles.getFileName());
         fileDTO.setFilePath(multiFiles.getFilePath());
         return fileDTO;
-    }
-
-    public String getDownloadUrl() {
-        return downloadUrl;
-    }
-
-    public void setDownloadUrl(String downloadUrl) {
-        this.downloadUrl = downloadUrl;
     }
 
     @Builder
