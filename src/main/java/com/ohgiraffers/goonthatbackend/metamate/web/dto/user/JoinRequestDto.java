@@ -48,7 +48,7 @@ public class JoinRequestDto {
                 .nickname(this.nickname)
                 .number(this.number)
                 .major(this.major)
-                .role(Role.USER)
+                .role(Role.ASSOCIATE)
                 .build();
     } // 가입에 성공한 모든 유저는 "ASSOCIATE" 권한 부여, 개발단계에서는 "USER" 부여
 

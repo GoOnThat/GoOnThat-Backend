@@ -28,6 +28,8 @@ public class MetaUserController {
 
     private final MetaUserService metaUserService;
 
+
+
     @GetMapping("/join")
     public String joinForm(@ModelAttribute("user") JoinRequestDto user) {
         return "auth/joinForm";
