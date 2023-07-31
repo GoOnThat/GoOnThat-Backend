@@ -43,11 +43,10 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-
                         .mvcMatchers("/assets/**","/auth/**", "/css/**", "/images/**", "/js/**",
                                 "/", "/index").permitAll()
                         .mvcMatchers("/admin/**", "/management/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().hasAnyRole("USER", "ADMIN"))
                 .formLogin(login -> login
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/loginProc")
@@ -58,7 +57,9 @@ public class SecurityConfig {
                         .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
                         .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                         .logoutSuccessUrl("/"))
-                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"));
+                .csrf(csrf -> csrf.ignoringAntMatchers("/api/**"))
+                .exceptionHandling()
+                .accessDeniedPage("/accessDenied");
         return http.build();
     }
 }

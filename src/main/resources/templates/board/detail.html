@@ -371,11 +371,6 @@
         const replyContents = $("#replyContents").val();
         const csrfToken = $("meta[name='_csrf']").attr("content");
 
-        // 댓글 내용이 비어있는지 확인
-        if (!replyContents.trim()) {
-            alert("댓글 내용을 입력해주세요.");
-            return;
-        }
         $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
             if (options['type'].toLowerCase() === "post") {
                 jqXHR.setRequestHeader('X-CSRF-TOKEN', csrfToken);

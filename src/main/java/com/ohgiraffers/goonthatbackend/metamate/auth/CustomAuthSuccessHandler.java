@@ -46,6 +46,7 @@ public class CustomAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHand
          * savedRequest 존재하는 경우 = 인증 권한이 없는 페이지 접근
          * Security Filter가 인터셉트하여 savedRequest에 세션 저장
          */
+
         if (savedRequest != null) {
             uri = savedRequest.getRedirectUrl();
         } else if (prevPage != null && !prevPage.equals("")) {
