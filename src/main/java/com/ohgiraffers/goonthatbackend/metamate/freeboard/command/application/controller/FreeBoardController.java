@@ -56,11 +56,16 @@ public class FreeBoardController {
     public String list(@RequestParam(required = false) String searchKeyword, //검색어
                        @RequestParam(required = false) String key, //검색선택
                        @RequestParam(required =false) String category,//카테고리 선택
+                       @LoginUser SessionMetaUser user,
                        @PageableDefault(page = 0, size = 12, sort = "boardNo",
                                direction = Sort.Direction.DESC) Pageable pageable, //page정렬
                        Model model) {
 
         Page<FreeBoardListDTO> boardList;
+
+        if (user != null) {
+            model.addAttribute("user", user);
+        }
 
         if (searchKeyword != null && key != null) {
             boardList = freeBoardService.getSearchPosts(key, searchKeyword, pageable);
