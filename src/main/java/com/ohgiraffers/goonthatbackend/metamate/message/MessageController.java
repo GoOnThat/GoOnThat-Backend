@@ -32,6 +32,10 @@ public class MessageController {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
 
+        if (loginUser != null) {
+            model.addAttribute("user", loginUser);
+        }
+
         model.addAttribute("receivedMessage", messageService.receivedMessage(metaUser));
 
         return "messages/received";
@@ -46,6 +50,9 @@ public class MessageController {
         if (loginUser == null) {
             return "redirect:/messages/sendForm";
         }
+        if (loginUser != null) {
+            model.addAttribute("user", loginUser);
+        }
         model.addAttribute("sessionUser", loginUser);
 
         return "messages/sendForm";
@@ -55,10 +62,14 @@ public class MessageController {
     public String sendMessage(
             @LoginUser SessionMetaUser loginUser,
             @Validated @ModelAttribute("messageDto") MessageDto messageDto,
-            BindingResult bindingResult) {
+            BindingResult bindingResult, Model model) {
         MetaUser user = metaUserRepository.findById(loginUser.getId()).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
+
+        if (loginUser != null) {
+            model.addAttribute("user", loginUser);
+        }
 
         // 쪽지 보내기 실패 (valid error)
         if (bindingResult.hasErrors()) {
@@ -84,6 +95,11 @@ public class MessageController {
         MetaUser user = metaUserRepository.findById(loginUser.getId()).orElseThrow(() -> {
             throw new CustomException(ErrorCode.USER_NOT_FOUND);
         });
+
+        if (loginUser != null) {
+            model.addAttribute("user", loginUser);
+        }
+
 
         model.addAttribute("sentMessage", messageService.sentMessage(user));
 
