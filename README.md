@@ -9,9 +9,9 @@
 ---
 ## Team Member Introduction
 |권은지|김태현|
-|-------------------------------------------------|-------------------------------------------------|--------------------------------------------------|
-|<img width="160px" src="https://avatars.githubusercontent.com/u/139085498?v=4" />|<img width="160px" src="https://avatars.githubusercontent.com/u/136583226?v=4" />|<img width="160px" src="https://avatars.githubusercontent.com/u/122511826?v=4" />|
-|<center>[@kej2971](https://github.com/kej2971)| <center>[@taedyyyyy](https://github.com/taedyyyyy)|<center>
+|-------------------------------------------------|-------------------------------------------------|
+|<img width="160px" src="https://avatars.githubusercontent.com/u/139085498?v=4" />|<img width="160px" src="https://avatars.githubusercontent.com/u/136583226?v=4" />|<img width="160px" 
+|<center>[@kej2971](https://github.com/kej2971)| <center>[@taedyyyyy](https://github.com/taedyyyyy)
 
 |정민호|정재민|
 |-------------------------------------------------|-------------------------------------------------|
